@@ -1,10 +1,11 @@
 <?php
-class Musique{
+class Musique implements Irender{
     private $titre;
     private $artiste;
     private $duree;
     private $dateAjout;
     private Album $album;
+
     public function __construct($titre,$artiste,$duree,$dateAjout,Album $album){
         $this->titre = $titre;
         $this->artiste = $artiste;

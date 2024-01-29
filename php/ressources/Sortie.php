@@ -1,6 +1,6 @@
 <?php
 
-abstract class Sortie{
+abstract class Sortie implements Irender{
     protected string $nom;
     protected DateTime $date;
     protected string $cover;
