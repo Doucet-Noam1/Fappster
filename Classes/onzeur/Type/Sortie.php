@@ -1,4 +1,9 @@
 <?php
+declare(strict_types=1);
+
+namespace Type\onzeur;
+
+
 
 abstract class Sortie implements Irender{
     protected string $nom;

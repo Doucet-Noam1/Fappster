@@ -1,10 +1,15 @@
 <?php 
-class PlayList extends Sortie{
+declare(strict_types=1);
+
+namespace Type\onzeur;
+
+
+class EP extends Sortie{
     public function __construct($nom,$liste,$date,$cover){
         parent::__construct($nom,$liste,$date,$cover);
     }
     public function render(){
-        echo '<div class="playlist">';
+        echo '<div class="ep">';
         echo '<img src=">'.$this->cover.'" </img>';
         echo "<h2>EP</h2>";
         echo "<h1>". $this->nom ."</h1>";
@@ -29,4 +34,5 @@ class PlayList extends Sortie{
     public function addMusique($song){
         $this->liste[] = $song;
     }
+
 }

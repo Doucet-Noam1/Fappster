@@ -1,16 +1,19 @@
 <?php
+declare(strict_types=1);
+
+namespace onzeur\Type;
+include 'create_bd.php';
+
 class BD{
-    private $instance = null;
-    private function __construct(){
+    public function __construct(){
         try {
             if (file_exists('onzeur.db')) {
                 unlink('onzeur.db');
                 echo "Base de données existante supprimée.<br>";
             }
         
-        
-            $bdd = new PDO('sqlite:onzeur.db');
-            $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            echo 'test';
+            $bdd = loadbd();
         
             $bdd ->exec('CREATE TABLE IF NOT EXISTS ARTISTE ( 
                 id_artiste INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -109,13 +112,6 @@ class BD{
                 die('Erreur : ' . $e->getMessage());
         }
     }
-    public function get_Instances() {
-        if ($instance == null){
-            $instance = new BD();
-        }
-        return $instance;
-    }
-
 }
 
 

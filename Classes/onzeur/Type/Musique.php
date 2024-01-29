@@ -1,4 +1,9 @@
 <?php
+declare(strict_types=1);
+
+namespace Type\onzeur;
+
+
 class Musique implements Irender{
     private $titre;
     private $artiste;
