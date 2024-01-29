@@ -27,7 +27,3 @@ abstract class Sortie implements Irender{
     }
 
 }
-
-
-
-?>

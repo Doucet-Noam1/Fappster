@@ -2,4 +2,3 @@
 interface Irender{
     public function render();
 }
-?>
