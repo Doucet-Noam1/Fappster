@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 namespace Type\onzeur;
-
-
+use Datetime;
+use ArrayObject;
 
 abstract class Sortie implements Irender{
     protected string $nom;
@@ -12,8 +12,8 @@ abstract class Sortie implements Irender{
     protected ArrayObject $liste;
 
     public function __construct( string $nom,ArrayObject $liste,DateTime $date,string $cover){
-        $this->label = $nom;
-        $this->id = $date;
+        $this->nom = $nom;
+        $this->date = $date;
         $this->cover = $cover;
         $this->liste = $liste;
 

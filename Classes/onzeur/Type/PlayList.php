@@ -2,13 +2,11 @@
 declare(strict_types=1);
 
 namespace Type\onzeur;
-
-
+use ArrayObject;
+use DateTime;
 class PlayList extends Sortie{
-    public function __construct($nom,$liste,$date,$cover){
+    public function __construct($nom,ArrayObject $liste,$date,$cover){
         parent::__construct($nom,$liste,$date,$cover);
-        $queryAddAlbum= $bdd->prepare("INSERT INTO SORTIE(nom,annee,cover,id_type) VALUES (?,?,?,2)");
-        $queryAddAlbum->execute([$nom,$date,$cover]);
     }
     public function render(){
         echo '<div class="playlist">';
@@ -21,16 +19,16 @@ class PlayList extends Sortie{
         echo "<p>".$this->date."</p>";
         echo '</div>';
     }
-    public function getNom(){
+    public function getNom() : string{
         return $this->nom;
     }
-    public function getCover(){
+    public function getCover() : string{
         return $this->cover;
     }
-    public function getDate(){
+    public function getDate() : DateTime{
         return $this->date;
     }
-    public function getListe(){
+    public function getListe() : ArrayObject{
         return $this->liste;
     }
     public function addMusique($song){
