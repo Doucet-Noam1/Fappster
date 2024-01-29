@@ -16,6 +16,8 @@ abstract class Sortie implements Irender{
         $this->id = $date;
         $this->cover = $cover;
         $this->liste = $liste;
+
+        
     }
     public abstract function render();
     public function getNom(): string{

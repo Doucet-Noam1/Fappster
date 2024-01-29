@@ -17,6 +17,9 @@ class Musique implements Irender{
         $this->duree = $duree;
         $this->dateAjout = $dateAjout;
         $this->album = $album;
+
+        $queryAddAlbum= $bdd->prepare("INSERT INTO TITRE(duree) VALUES (?)");
+        $queryAddAlbum->execute([$duree]);
     }
     public function render(){
         echo '<div class="musique">';

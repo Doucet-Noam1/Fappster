@@ -3,19 +3,19 @@ declare(strict_types=1);
 namespace Type\onzeur;
 
 
-
 class Artiste {
     private $nom;
-    private $password;
+    private $mdp;
     private $PlaylistLikes;
     private $litesNotes;
 
 
-    public function __construct($nom,$password,$PlaylistLikes,$litesNotes){
+    public function __construct($nom,$mdp,$PlaylistLikes,$litesNotes){
         $this->nom = $nom;
-        $this->password = $password;
+        $this->mdp = $mdp;
         $this->PlaylistLikes = $PlaylistLikes;
         $this->litesNotes = $litesNotes;
+
     }
     public function render(){
         echo '<div class="artiste">';
@@ -30,8 +30,8 @@ class Artiste {
     public function addNote($song){
         $this->litesNotes->append($song);
     }
-    public function getPassword(){
-        return $this->password;
+    public function getMdp(){
+        return $this->mdp;
     }
     public function getNom(){
         return $this->nom;
