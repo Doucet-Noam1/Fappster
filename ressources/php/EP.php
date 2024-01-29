@@ -2,6 +2,8 @@
 class EP extends Sortie{
     public function __construct($nom,$liste,$date,$cover){
         parent::__construct($nom,$liste,$date,$cover);
+        $queryAddAlbum= $bdd->prepare("INSERT INTO SORTIE(nom,annee,cover,id_type) VALUES (?,?,?,3)");
+        $queryAddAlbum->execute([$nom,$date,$cover]);
     }
     public function render(){
         echo '<div class="ep">';
