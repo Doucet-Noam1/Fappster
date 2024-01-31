@@ -1,4 +1,9 @@
 <?php 
+declare(strict_types=1);
+
+namespace Type\onzeur;
+
+
 class EP extends Sortie{
     public function __construct($nom,$liste,$date,$cover){
         parent::__construct($nom,$liste,$date,$cover);

@@ -1,5 +1,6 @@
 <?php
-
+declare(strict_types=1);
+namespace Type\onzeur;
 
 
 class Artiste {
@@ -14,9 +15,6 @@ class Artiste {
         $this->mdp = $mdp;
         $this->PlaylistLikes = $PlaylistLikes;
         $this->litesNotes = $litesNotes;
-
-        $queryAddArtiste = $bdd->prepare("INSERT INTO ARTISTE (nom,mdp) VALUES (?,?)");
-        $queryAddArtiste->execute([$nom,$mdp]);
 
     }
     public function render(){

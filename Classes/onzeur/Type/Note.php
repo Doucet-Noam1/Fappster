@@ -1,4 +1,9 @@
 <?php 
+declare(strict_types=1);
+
+namespace Type\onzeur;
+
+
 class Note{
     private $album;
     private $note;
