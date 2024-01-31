@@ -1,29 +1,28 @@
 <?php
 declare(strict_types=1);
-
-namespace Type\onzeur;
-
+namespace onzeur\Type;
 
 class Musique implements Irender{
     private $titre;
     private $artiste;
     private $duree;
     private $dateAjout;
-    private Album $album;
+    private $sortie;
+    private $bdd;
 
-    public function __construct($titre,$artiste,$duree,$dateAjout,Album $album){
+    public function __construct($titre,$artiste,$duree,$dateAjout,$sortie = null){
         $this->titre = $titre;
         $this->artiste = $artiste;
         $this->duree = $duree;
         $this->dateAjout = $dateAjout;
-        $this->album = $album;
-
-        $queryAddAlbum= $bdd->prepare("INSERT INTO TITRE(duree) VALUES (?)");
-        $queryAddAlbum->execute([$duree]);
+        $this->sortie = $sortie;
+        $bdd = BD::getInstance();
+        $queryAddAlbum= $bdd->prepare("INSERT INTO TITRE(duree,titre) VALUES (?,?)");
+        $queryAddAlbum->execute([$duree,$titre]);
     }
     public function render(){
         echo '<div class="musique">';
-        echo '<img src=">'.$this->album->getCover().'" </img>';
+        echo '<img src=">'.$this->sortie->getCover().'" </img>';
         echo "<h3>".$this->titre."</h3>";
         echo "<p>". $this->artiste ."</p>";
         echo "<p>".$this->dateAjout."</p>";
@@ -43,7 +42,10 @@ class Musique implements Irender{
         return $this->dateAjout;
     }
     public function getAlbum(){
-        return $this->album;
+        return $this->sortie;
+    }
+    public function setAlbum($sortie){
+        $this->sortie = $sortie;
     }
     
 }

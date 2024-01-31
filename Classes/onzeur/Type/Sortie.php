@@ -1,17 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Type\onzeur;
-use Datetime;
-use ArrayObject;
+namespace onzeur\Type;
+
 
 abstract class Sortie implements Irender{
     protected string $nom;
-    protected DateTime $date;
+    protected string $date;
     protected string $cover;
-    protected ArrayObject $liste;
+    protected $liste;
 
-    public function __construct( string $nom,ArrayObject $liste,DateTime $date,string $cover){
+    public function __construct( string $nom,$liste,string $date,string $cover){
         $this->nom = $nom;
         $this->date = $date;
         $this->cover = $cover;
@@ -23,13 +22,13 @@ abstract class Sortie implements Irender{
     public function getNom(): string{
         return $this->nom;
     }
-    public function getDate(): DateTime{
+    public function getDate():string{
         return $this->date;
     }
     public function getCover(): string{
         return $this->cover;
     }
-    public function getListe(): ArrayObject{
+    public function getListe(){
         return $this->liste;
     }
 

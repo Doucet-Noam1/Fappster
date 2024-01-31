@@ -1,9 +1,10 @@
 <?php 
 declare(strict_types=1);
 
-namespace Type\onzeur;
-use ArrayObject;
-use DateTime;
+namespace onzeur\Type;
+use Sortie;
+
+
 class PlayList extends Sortie{
     public function __construct($nom,ArrayObject $liste,$date,$cover){
         parent::__construct($nom,$liste,$date,$cover);
@@ -25,10 +26,10 @@ class PlayList extends Sortie{
     public function getCover() : string{
         return $this->cover;
     }
-    public function getDate() : DateTime{
+    public function getDate() : string{
         return $this->date;
     }
-    public function getListe() : ArrayObject{
+    public function getListe() : string{
         return $this->liste;
     }
     public function addMusique($song){

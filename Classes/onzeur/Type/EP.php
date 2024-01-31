@@ -1,7 +1,8 @@
 <?php 
 declare(strict_types=1);
 
-namespace Type\onzeur;
+namespace onzeur\Type;
+
 
 
 class EP extends Sortie{

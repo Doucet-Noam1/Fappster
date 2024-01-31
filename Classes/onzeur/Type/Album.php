@@ -1,14 +1,16 @@
 <?php
 declare(strict_types=1);
-
-namespace Type\onzeur;
+namespace onzeur\Type;
+include 'BD.php';
+use onzeur\Type\BD;
 
 
 class Album extends Sortie{
     public function __construct($nom,$liste,$date,$cover){
         parent::__construct($nom,$liste,$date,$cover);
-        
-        $queryAddAlbum= $bdd->prepare("INSERT INTO SORTIE(nom,annee,cover,id_type) VALUES (?,?,?,1)");
+        $bdd = BD::getInstance();
+
+        $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom,annee,cover,id_type) VALUES (?,?,?,1)");
         $queryAddAlbum->execute([$nom,$date,$cover]);
     }
     public function render(){
@@ -16,20 +18,22 @@ class Album extends Sortie{
         echo '<img src=">'.$this->cover.'" </img>';
         echo "<h2>Album</h2>";
         echo "<h1>". $this->nom ."</h1>";
+        echo '<div id="musiques">';
         for ($i= 0;$i<count($this->liste);$i++){
             $this->liste[$i]->render();
         }
+        echo '</div>';
         echo "<p>".$this->date."</p>";
         echo '</div>';
     }
 
-    public function getNom(){
+    public function getNom(): string{
         return $this->nom;
     }
-    public function getCover(){
+    public function getCover() : string{
         return $this->cover;
     }
-    public function getDate(){
+    public function getDate() : string{
         return $this->date;
     }
     public function getListe(){
