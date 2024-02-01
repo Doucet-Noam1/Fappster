@@ -12,11 +12,18 @@ class Album extends Sortie{
         $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom,annee,cover,id_type) VALUES (?,?,?,1)");
         $queryAddAlbum->execute([$nom,$date,$cover]);
 
-        $queryIDAlbum = $this->bdd->prepare("SELECT id FROM SORTIE WHERE nom = ? AND annee = ? AND cover = ? AND id_type = 1");
-        $queryIDAlbum->execute([$nom,$date,$cover]);
-        $idAlbum = $queryIDAlbum->fetch();
-        $idAlbum = $idAlbum['id'];
-        
+        for ($i= 0;$i<count($liste);$i++){
+            $queryIDMusique = $this->bdd->prepare("SELECT id_titre FROM TITRE WHERE titre = ? AND duree = ?");
+            $queryIDMusique->execute([$liste[$i]->getTitre(),$liste[$i]->getDuree()]);
+            $idMusique = $queryIDMusique->fetch();
+            $idMusique = $idMusique['id_titre'];
+    
+            $querAddContient = $this->bdd->prepare("INSERT INTO CONTIENT(id_sortie,id_titre,position) VALUES (?,?,?)");
+            $querAddContient->execute([$this->getID(),$idMusique,$i+1]);
+            $querAddContient = $querAddContient->fetch();
+
+
+        }
 
 
     }
@@ -48,6 +55,14 @@ class Album extends Sortie{
     }
     public function addMusique($song){
         $this->liste[] = $song;
+    }
+
+    public function getID(){
+        $queryIDAlbum = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom = ? AND annee = ? AND cover = ? AND id_type = 1");
+        $queryIDAlbum->execute([$this->nom,$this->date,$this->cover]);
+        $idAlbum = $queryIDAlbum->fetch();
+        $idAlbum = $idAlbum['id_sortie'];
+        return $idAlbum;
     }
 
 }
