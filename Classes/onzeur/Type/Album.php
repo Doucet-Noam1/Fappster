@@ -11,6 +11,14 @@ class Album extends Sortie{
 
         $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom,annee,cover,id_type) VALUES (?,?,?,1)");
         $queryAddAlbum->execute([$nom,$date,$cover]);
+
+        $queryIDAlbum = $this->bdd->prepare("SELECT id FROM SORTIE WHERE nom = ? AND annee = ? AND cover = ? AND id_type = 1");
+        $queryIDAlbum->execute([$nom,$date,$cover]);
+        $idAlbum = $queryIDAlbum->fetch();
+        $idAlbum = $idAlbum['id'];
+        
+
+
     }
     public function render(){
         echo '<div class="album">';
