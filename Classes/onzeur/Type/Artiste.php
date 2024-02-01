@@ -11,7 +11,7 @@ class Artiste {
     private $litesNotes;
 
 
-    public function __construct($nom,$mdp,$PlaylistLikes,$litesNotes){
+    public function __construct($nom,$mdp=null,$PlaylistLikes,$litesNotes){
         $this->nom = $nom;
         $this->mdp = $mdp;
         $this->PlaylistLikes = $PlaylistLikes;

@@ -7,16 +7,14 @@ namespace onzeur\Type;
 abstract class Sortie implements Irender{
     protected string $nom;
     protected string $date;
-    protected string $cover;
+    protected string|null $cover;
     protected $liste;
 
-    public function __construct( string $nom,$liste,string $date,string $cover){
+    public function __construct( string $nom,$liste,string $date,string|null $cover){
         $this->nom = $nom;
         $this->date = $date;
         $this->cover = $cover;
         $this->liste = $liste;
-
-        
     }
     public abstract function render();
     public function getNom(): string{

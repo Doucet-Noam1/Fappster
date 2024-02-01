@@ -1,14 +1,13 @@
 <?php
 declare(strict_types=1);
 namespace onzeur\Type;
-include 'BD.php';
-use onzeur\Type\BD;
-
+include_once 'BD.php';
 
 class Album extends Sortie{
+    private $bdd;
     public function __construct($nom,$liste,$date,$cover){
         parent::__construct($nom,$liste,$date,$cover);
-        $bdd = BD::getInstance();
+        $this->bdd = BD::getInstance();
 
         $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom,annee,cover,id_type) VALUES (?,?,?,1)");
         $queryAddAlbum->execute([$nom,$date,$cover]);
