@@ -64,5 +64,9 @@ class Album extends Sortie{
         $idAlbum = $idAlbum['id_sortie'];
         return $idAlbum;
     }
+    public function setArtiste($artiste){
+        $queryAddAlbum= $this->bdd->prepare("INSERT INTO CREE(id_sortie,id_artiste) VALUES (?,?)");
+        $queryAddAlbum->execute([$this->getID(),$artiste->getID()]);
+    }
 
 }

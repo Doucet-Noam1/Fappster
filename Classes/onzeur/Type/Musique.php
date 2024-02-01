@@ -16,13 +16,13 @@ class Musique implements Irender{
         $this->duree = $duree;
         $this->dateAjout = $dateAjout;
         $this->sortie = $sortie;
-        $bdd = BD::getInstance();
-        $queryAddAlbum= $bdd->prepare("INSERT INTO TITRE(duree,titre) VALUES (?,?)");
+        $this->bdd = BD::getInstance();
+        $queryAddAlbum= $this->bdd ->prepare("INSERT INTO TITRE(duree,titre) VALUES (?,?)");
         $queryAddAlbum->execute([$duree,$titre]);
 
         for($i=0;$i<count($lstartiste);$i++){
-            $queryAddArtiste= $bdd->prepare("INSERT INTO INTERPRETE(id_titre,id_artiste) VALUES (?,?)");
-            $queryAddArtiste->execute([$titre,$lstartiste[$i]->getNom()]);
+            $queryAddArtiste= $this->bdd ->prepare("INSERT INTO CHANTER_PAR(id_titre,id_artiste) VALUES (?,?)");
+            $queryAddArtiste->execute([$this->getID(),$lstartiste[$i]->getID()]);
         }
 
 
@@ -59,12 +59,16 @@ class Musique implements Irender{
         $this->sortie = $sortie;
     }
     public function getID(){
-        $bdd = BD::getInstance();
-        $queryIDMusique = $bdd->prepare("SELECT id_titre FROM TITRE WHERE titre = ? AND duree = ?");
+        $queryIDMusique = $this->bdd->prepare("SELECT id_titre FROM TITRE WHERE titre = ? AND duree = ?");
         $queryIDMusique->execute([$this->titre,$this->duree]);
         $idMusique = $queryIDMusique->fetch();
         $idMusique = $idMusique['id_titre'];
         return $idMusique;
+    }
+    public function addArtiste($artiste){
+        $queryAddMusique= $this->bdd->prepare("INSERT INTO CHANTER_PAR(id_artiste,id_titre) VALUES (?,?)");
+        $queryAddMusique->execute([$artiste->getID(),$this->getID()]);
+        $this->lstartiste[] =$artiste;
     }
     
 }

@@ -51,6 +51,14 @@ class Artiste {
     public function getLitesNotes(){
         return $this->litesNotes;
     }
+    public function getId(){
+        $bdd = BD::getInstance();
+        $queryIDArtiste = $bdd->prepare("SELECT id_artiste FROM ARTISTE WHERE nom = ? AND mdp = ?");
+        $queryIDArtiste->execute([$this->nom,$this->mdp]);
+        $idArtiste = $queryIDArtiste->fetch();
+        $idArtiste = $idArtiste['id_artiste'];
+        return $idArtiste;
+    }
 
     
 

@@ -120,12 +120,7 @@ class BD
     static function getInstance()
     {
         if (is_null(self::$instance)) {
-            print_r("test");
             self::$instance = new BD();
-            print_r(gettype(self::$instance) . ' instance <br>');
-            print_r(gettype(self::$bdd) . ' bd <br>');
-            print_r(self::$instance);
-            print_r(self::$bdd);
 
         }
         return self::$bdd;
