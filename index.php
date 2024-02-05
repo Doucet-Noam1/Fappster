@@ -23,7 +23,7 @@ $musique2->setAlbum($album);
 
 <head>
     <title>Onzeur</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="Css/index.css">
 </head>
 
 <body>

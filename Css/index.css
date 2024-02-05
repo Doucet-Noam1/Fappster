@@ -1,0 +1,31 @@
+.album{
+    background-color: rgb(51, 15, 85);
+    margin: auto;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 5vh;
+    width: 15vw;
+}
+
+.album img{
+    width: 10vw;
+    height: 10vw;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: 0.3s;
+    text-align: center;
+    margin: 10%;
+}
+
+#albums{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+body{
+    background-color: #32343b;
+}
+
+a{
+    color: violet;
+}

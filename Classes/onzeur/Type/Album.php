@@ -24,7 +24,7 @@ class Album extends Sortie{
             echo '<img src="'.str_replace("%","%25",$this->cover).'"/>';
         else 
             echo '<img src="data/images/covers/null.jpg"/>';
-        echo "<h1>". $this->nom ."</h1>";
+        echo "<h1>".$this->nom."</h1>";
         echo "<p>".$this->date."</p>";
         echo '</a>';
         echo '</div>';
