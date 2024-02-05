@@ -27,7 +27,6 @@ abstract class Sortie implements Irender
         for ($i= 0;$i<count($liste);$i++){
             $idMusique = $liste[$i]->getID();
             $querAddContient = $this->bdd->prepare("INSERT INTO CONTIENT(id_sortie,id_titre,position) VALUES (?,?,?)");
-            print_r([$this->getID(),$idMusique,$i+1]);
             $querAddContient->execute([$this->getID(),$idMusique,$i+1]);
             $querAddContient = $querAddContient->fetch();
         }
