@@ -19,7 +19,7 @@ class Album extends Sortie{
     }
     public function render(){
         echo '<a class="album" href="album.php?id=$this->idAlbum">';
-        if ($this->cover != null)
+        if ($this->cover != null && file_exists($this->cover))
             echo '<img src="'.str_replace("%","%25",$this->cover).'"/>';
         else 
             echo '<img src="data/images/covers/null.jpg"/>';

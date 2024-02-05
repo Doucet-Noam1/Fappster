@@ -34,10 +34,6 @@ $musique2->setAlbum($album);
             $value->render();
         }
         $album->render();
-        $album->render();
-
-        $album->render();
-
         ?>
     </div>
 </body>
