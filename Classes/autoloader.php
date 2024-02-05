@@ -1,5 +1,6 @@
 <?php
 require_once 'Classes/Debug/dd.php';
+require_once 'vendor/autoload.php';
 /**
  * Class Autoloader
  */

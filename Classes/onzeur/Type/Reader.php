@@ -3,36 +3,28 @@ declare(strict_types=1);
 
 namespace onzeur\Type;
 
-class Reader implements Irender{
-    private $source;
-    private $donnees;
-    public function __construct($source=null){
-        $this->source = $source;
-        if ($source != null){
-            $this->donnees = yaml_parse_file($source);
-        }
-    }
-    public function getAlbums(){
-        if ($this->donnees == null){
-            return null;
-        }
-        $albums = array();
-        foreach ($this->donnees as $key => $value) {
-            $album = new Album($value["title"],array(),strval($value["releaseYear"]),$value["img"]);
-            $albums[] = $album;
-        }
-        return $albums;
-    }
+use Symfony\Component\Yaml\Yaml;
 
-    public function render(){
-        echo '<div class="reader" style="border:1px solid black;">';
-        echo '<h1>Reader</h1>';
-        echo '<form action="upload.php" method="post" enctype="multipart/form-data">';
-        echo '<input type="file" name="fileToUpload" id="fileToUpload"/>';
-        echo '<input type="submit" value="Upload Image" name="submit">';
-        echo '</form>';
-        echo '</div>';
-        echo $this->source;
+class Reader
+{
+    private $donnees;
+    public function __construct(string $source)
+    {
+        $this->donnees = Yaml::parseFile($source);
+    }
+    public function getData(): array
+    {
+        $data = array();
+        if ($this->donnees != null) {
+            foreach ($this->donnees as $key => $value) {
+                $img = null;
+                if ($value["img"] != null)
+                    $img = "data/images/covers/" . $value["img"];
+                $album = new Album($value["by"],$value["title"], array(), strval($value["releaseYear"]), $img);
+                $data[] = $album;
+            }
+        }
+        return $data;
     }
 }
 ?>
