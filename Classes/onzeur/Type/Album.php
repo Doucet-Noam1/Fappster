@@ -9,20 +9,20 @@ class Album extends Sortie{
         parent::__construct($nom,$liste,$date,$cover);
         $this->bdd = BD::getInstance();
 
-        $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom,annee,cover,id_type) VALUES (?,?,?,1)");
+        $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom,date_sortie,cover,id_type) VALUES (?,?,?,1)");
         $queryAddAlbum->execute([$nom,$date,$cover]);
 
-        $queryIDAlbum = $this->bdd->prepare("SELECT id FROM SORTIE WHERE nom = ? AND annee = ? AND cover = ? AND id_type = 1");
+        $queryIDAlbum = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom = ? AND date_sortie = ? AND cover = ? AND id_type = 1");
         $queryIDAlbum->execute([$nom,$date,$cover]);
         $idAlbum = $queryIDAlbum->fetch();
-        $idAlbum = $idAlbum['id'];
-        
-
-
+        $idAlbum = $idAlbum['id_sortie'];
     }
     public function render(){
-        echo '<div class="album">';
-        echo '<img src=">'.$this->cover.'" </img>';
+        echo '<a class="album" href="album.php?id=$this->idAlbum">';
+        if ($this->cover != null)
+            echo '<img src="'.str_replace("%","%25",$this->cover).'"/>';
+        else 
+            echo '<img src="data/images/covers/null.jpg"/>';
         echo "<h2>Album</h2>";
         echo "<h1>". $this->nom ."</h1>";
         echo '<div id="musiques">';
@@ -31,7 +31,7 @@ class Album extends Sortie{
         }
         echo '</div>';
         echo "<p>".$this->date."</p>";
-        echo '</div>';
+        echo '</a>';
     }
 
     public function getNom(): string{
@@ -49,5 +49,4 @@ class Album extends Sortie{
     public function addMusique($song){
         $this->liste[] = $song;
     }
-
 }

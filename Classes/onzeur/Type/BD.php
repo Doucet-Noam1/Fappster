@@ -22,26 +22,25 @@ class BD
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS ARTISTE ( 
                 id_artiste INTEGER PRIMARY KEY AUTOINCREMENT,
                 nom TEXT,
-                mdp TEXT default NULL)'
-            );
-            echo "Artiste Créé <br>";
+                mdp TEXT default NULL
+            )');
+            echo "Table ARTISTE Créée <br>";
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS TYPE_SORTIE (
                 id_type INTEGER PRIMARY KEY AUTOINCREMENT,
                 libelle TEXT
             )');
-            echo "TYPE_SORTIE Créé <br>";
+            echo "Table TYPE_SORTIE Créée <br>";
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS SORTIE (
                 id_sortie INTEGER PRIMARY KEY AUTOINCREMENT,
                 nom TEXT,
-                annee DATETIME,
+                date_sortie DATE,
                 cover TEXT,
                 id_type INTEGER NOT NULL,
                 FOREIGN KEY(id_type) REFERENCES TYPE_SORTIE(id_type)
             )');
-
-            echo "SORTIE Créé <br>";
+            echo "Table SORTIE Créée <br>";
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS PREFERENCES (
                 id_sortie INTEGER,
@@ -52,7 +51,6 @@ class BD
                 FOREIGN KEY(id_artiste) REFERENCES SORTIE(id_groupe),
                 PRIMARY KEY(id_sortie,id_artiste)
             )');
-
             echo "PREFERENCES créé <br>";
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS CREE (
