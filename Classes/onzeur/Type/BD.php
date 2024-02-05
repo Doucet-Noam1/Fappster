@@ -117,7 +117,14 @@ class BD
         }
         return self::$bdd;
     }
+    static function verifie_utilisateur($nom_utilisateur, $password) {
 
+        $query = self::$bdd->prepare("SELECT * FROM Utilisateur WHERE nom = ? AND mmdp = ?");
+        $query->execute([$nom_utilisateur,$password ]);
+        $user = $query->fetch(PDO::FETCH_ASSOC);
+        return ($user !== false);
+        }
+        
 
 }
 
