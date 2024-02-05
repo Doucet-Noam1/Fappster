@@ -18,7 +18,20 @@ class Album extends Sortie{
         $idAlbum = $idAlbum['id_sortie'];
     }
     public function render(){
+        echo '<div class="album">';
         echo '<a class="album" href="album.php?id=$this->idAlbum">';
+        if ($this->cover != null && file_exists($this->cover))
+            echo '<img src="'.str_replace("%","%25",$this->cover).'"/>';
+        else 
+            echo '<img src="data/images/covers/null.jpg"/>';
+        echo "<h1>". $this->nom ."</h1>";
+        echo "<p>".$this->date."</p>";
+        echo '</a>';
+        echo '</div>';
+    }
+
+    public function renderDetail(){
+        echo '<a class="albumDetail" href="album.php?id=$this->idAlbum">';
         if ($this->cover != null && file_exists($this->cover))
             echo '<img src="'.str_replace("%","%25",$this->cover).'"/>';
         else 
@@ -33,6 +46,9 @@ class Album extends Sortie{
         echo "<p>".$this->date."</p>";
         echo '</a>';
     }
+
+
+
 
     public function getNom(): string{
         return $this->nom;
