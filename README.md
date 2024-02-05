@@ -8,6 +8,8 @@
 A partir des données que vous trouverez dans le fichier fixtures.zip dans Celene, il vous est demandé de  
 réaliser une application présentant le contenu de cette base d'albums de musique. Le fichier fixtures.zip  
 contient quelques albums et artistes avec des pochettes d'albums.
+### Installation
+composer require symfony/yaml
 
 ## 2 - Fonctionnalités attendues
 - [ ] 2.1 Affichage des albums
