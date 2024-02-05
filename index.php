@@ -15,8 +15,8 @@ $bdd = BD::getInstance();
 $artiste = new Artiste('naps','test');
 $artiste2 = new Artiste('gazo','test');
 
-$musique = new Musique('la mala est gangx', $artiste, 120, '13-02-2005');
-$musique2 = new Musique('la mala est gangxxxxxxxx', $artiste, 120, '13-02-2005');
+$musique = new Musique('la mala est gangx', $artiste, 120, '13-02-2005','/data/audios/MICHOU - M2LT (Clip Officiel).mp3');
+$musique2 = new Musique('la mala est gangxxxxxxxx', $artiste, 120, '13-02-2005','/data/audios/MICHOU - M2LT (Clip Officiel).mp3');
 $ep = new EP($artiste,'test', [$musique, $musique2], '2024', 'aaa.png');
 $album = new Album($artiste,'test', [$musique, $musique2], '2024', 'aaa.png');
 $album -> addArtiste($artiste);
@@ -30,7 +30,7 @@ $musique2 -> addArtiste($artiste2);
 
 <head>
     <title>Onzeur</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="Css/index.css">
 </head>
 
 <body>

@@ -10,12 +10,24 @@ class EP extends Sortie{
         parent::__construct($artiste,$nom,$liste,$date,$cover,3);
     }
     public function render(){
+        echo '<div class="album">';
         echo '<a class="album" href="album.php?id=$this->idAlbum">';
-        if ($this->cover != null)
+        if ($this->cover != null && file_exists($this->cover))
+            echo '<img src="'.str_replace("%","%25",$this->cover).'"/>';
+        else 
+            echo '<img src="data/images/covers/null.jpg"/>';
+        echo "<h1>".$this->nom."</h1>";
+        echo "<p>".$this->date." • EP</p>";
+        echo '</a>';
+        echo '</div>';
+    }
+
+    public function renderDetail(){
+        echo '<a class="albumDetail" href="album.php?id=$this->idAlbum">';
+        if ($this->cover != null && file_exists($this->cover))
             echo '<img src="'.str_replace("%","%25",$this->cover).'"/>';
         else 
             echo '<img src="data/images/covers/null.png"/>';
-        echo "<h2>EP</h2>";
         echo "<h1>". $this->nom ."</h1>";
         echo '<div id="musiques">';
         for ($i= 0;$i<count($this->liste);$i++){
