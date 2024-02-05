@@ -20,7 +20,7 @@ class Reader
                 $img = null;
                 if ($value["img"] != null)
                     $img = "data/images/covers/" . $value["img"];
-                $album = new Album($value["title"], array(), strval($value["releaseYear"]), $img);
+                $album = new Album($value["by"],$value["title"], array(), strval($value["releaseYear"]), $img);
                 $data[] = $album;
             }
         }

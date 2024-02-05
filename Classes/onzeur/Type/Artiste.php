@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 namespace onzeur\Type;
-
+include_once 'BD.php';
 
 
 class Artiste {
@@ -10,12 +10,20 @@ class Artiste {
     private $PlaylistLikes;
     private $litesNotes;
 
+    private $bdd;
 
-    public function __construct($nom,$mdp=null,$PlaylistLikes,$litesNotes){
+    public function __construct($nom,$mdp=null){
+        $bdd = BD::getInstance();
+
         $this->nom = $nom;
         $this->mdp = $mdp;
-        $this->PlaylistLikes = $PlaylistLikes;
-        $this->litesNotes = $litesNotes;
+        $this->PlaylistLikes = [];
+        $this->litesNotes = [];
+
+        $queryAddArtiste= $bdd->prepare("INSERT INTO ARTISTE(nom,mdp) VALUES (?,?)");
+        $queryAddArtiste->execute([$nom,$mdp]);
+
+
 
     }
     public function render(){
@@ -43,5 +51,15 @@ class Artiste {
     public function getLitesNotes(){
         return $this->litesNotes;
     }
+    public function getId(){
+        $bdd = BD::getInstance();
+        $queryIDArtiste = $bdd->prepare("SELECT id_artiste FROM ARTISTE WHERE nom = ? AND mdp = ?");
+        $queryIDArtiste->execute([$this->nom,$this->mdp]);
+        $idArtiste = $queryIDArtiste->fetch();
+        $idArtiste = $idArtiste['id_artiste'];
+        return $idArtiste;
+    }
+
+    
 
 }
