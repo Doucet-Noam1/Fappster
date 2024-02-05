@@ -15,7 +15,7 @@ class Album extends Sortie{
         else 
             echo '<img src="data/images/covers/null.jpg"/>';
         echo "<h1>".$this->nom."</h1>";
-        echo "<p>".$this->date."</p>";
+        echo "<p>".$this->date." • Album</p>";
         echo '</a>';
         echo '</div>';
     }
@@ -26,7 +26,6 @@ class Album extends Sortie{
             echo '<img src="'.str_replace("%","%25",$this->cover).'"/>';
         else 
             echo '<img src="data/images/covers/null.png"/>';
-        echo "<h2>Album</h2>";
         echo "<h1>". $this->nom ."</h1>";
         echo '<div id="musiques">';
         for ($i= 0;$i<count($this->liste);$i++){
@@ -36,10 +35,6 @@ class Album extends Sortie{
         echo "<p>".$this->date."</p>";
         echo '</a>';
     }
-
-
-
-
     public function getNom(): string{
         return $this->nom;
     }

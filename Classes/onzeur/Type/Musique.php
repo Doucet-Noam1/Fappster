@@ -19,8 +19,8 @@ class Musique implements Irender{
         $this->dateAjout = $dateAjout;
         $this->sortie = $sortie;
         $this->song =$song;
-        $bdd = BD::getInstance();
-        $queryAddAlbum= $bdd->prepare("INSERT INTO TITRE(duree,titre) VALUES (?,?)");
+        $this->bdd = BD::getInstance();
+        $queryAddAlbum= $this->bdd->prepare("INSERT INTO TITRE(duree,titre) VALUES (?,?)");
         $queryAddAlbum->execute([$duree,$titre]);
         for($i=0;$i<count($this->lstartiste);$i++){
             $queryAddArtiste= $this->bdd ->prepare("INSERT INTO CHANTER_PAR(id_titre,id_artiste) VALUES (?,?)");
