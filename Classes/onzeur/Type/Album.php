@@ -8,8 +8,21 @@ class Album extends Sortie{
         parent::__construct($artiste,$nom,$liste,$date,$cover,1);
     }
     public function render(){
+        echo '<div class="album">';
         echo '<a class="album" href="album.php?id=$this->idAlbum">';
-        if ($this->cover != null)
+        if ($this->cover != null && file_exists($this->cover))
+            echo '<img src="'.str_replace("%","%25",$this->cover).'"/>';
+        else 
+            echo '<img src="data/images/covers/null.jpg"/>';
+        echo "<h1>". $this->nom ."</h1>";
+        echo "<p>".$this->date."</p>";
+        echo '</a>';
+        echo '</div>';
+    }
+
+    public function renderDetail(){
+        echo '<a class="albumDetail" href="album.php?id=$this->idAlbum">';
+        if ($this->cover != null && file_exists($this->cover))
             echo '<img src="'.str_replace("%","%25",$this->cover).'"/>';
         else 
             echo '<img src="data/images/covers/null.png"/>';
@@ -23,6 +36,9 @@ class Album extends Sortie{
         echo "<p>".$this->date."</p>";
         echo '</a>';
     }
+
+
+
 
     public function getNom(): string{
         return $this->nom;
