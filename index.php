@@ -11,8 +11,8 @@ use onzeur\Type\Reader;
 $reader = new Reader("extrait.yml");
 
 $bdd = BD::getInstance();
-$musique = new Musique('la mala est gangx', 'caca', 120, '13-02-2005');
-$musique2 = new Musique('la mala est gangxxxxxxxx', 'caca', 120, '13-02-2005');
+$musique = new Musique('la mala est gangx', 'caca', 120, '13-02-2005', '/data/audios/MICHOU - M2LT (Clip Officiel).mp3');
+$musique2 = new Musique('la mala est gangxxxxxxxx', 'caca', 120, '13-02-2005','/data/audios/MICHOU - M2LT (Clip Officiel).mp3');
 $album = new Album('test', [$musique, $musique2], '2024', 'aaa.png');
 $musique->setAlbum($album);
 $musique2->setAlbum($album);

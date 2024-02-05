@@ -9,13 +9,15 @@ class Musique implements Irender{
     private $dateAjout;
     private $sortie;
     private $bdd;
+    private $song;
 
-    public function __construct($titre,$artiste,$duree,$dateAjout,$sortie = null){
+    public function __construct($titre,$artiste,$duree,$dateAjout,$song,$sortie = null){
         $this->titre = $titre;
         $this->artiste = $artiste;
         $this->duree = $duree;
         $this->dateAjout = $dateAjout;
         $this->sortie = $sortie;
+        $this->song =$song;
         $bdd = BD::getInstance();
         $queryAddAlbum= $bdd->prepare("INSERT INTO TITRE(duree,titre) VALUES (?,?)");
         $queryAddAlbum->execute([$duree,$titre]);
@@ -24,6 +26,7 @@ class Musique implements Irender{
         echo '<div class="musique">';
         echo '<img src=">'.$this->sortie->getCover().'" </img>';
         echo "<h3>".$this->titre."</h3>";
+        echo '<audio controls src="'.$this->song.'"></audio>';
         echo "<p>". $this->artiste ."</p>";
         echo "<p>".$this->dateAjout."</p>";
         echo "<p>".$this->duree."</p>";
