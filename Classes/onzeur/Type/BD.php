@@ -97,6 +97,14 @@ class BD
             PRIMARY KEY(id_artiste,id_titre)
         )');
 
+            self::$bdd-> exec('INSERT INTO TYPE_SORTIE(libelle) VALUES ("Album")');
+            self::$bdd-> exec('INSERT INTO TYPE_SORTIE(libelle) VALUES ("Single")');
+            self::$bdd-> exec('INSERT INTO TYPE_SORTIE(libelle) VALUES ("EP")');
+            self::$bdd-> exec('INSERT INTO TYPE_SORTIE(libelle) VALUES ("Playlist")');
+
+
+
+
         } catch (PDOException $e) {
             die('Erreur : ' . $e->getMessage());
         }
