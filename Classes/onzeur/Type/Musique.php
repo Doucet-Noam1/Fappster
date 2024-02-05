@@ -4,7 +4,7 @@ namespace onzeur\Type;
 
 class Musique implements Irender{
     private $titre;
-    private $artiste;
+    private $lstartiste;
     private $duree;
     private $dateAjout;
     private $sortie;
@@ -13,7 +13,8 @@ class Musique implements Irender{
 
     public function __construct($titre,$artiste,$duree,$dateAjout,$song,$sortie = null){
         $this->titre = $titre;
-        $this->artiste = $artiste;
+        $this-> lstartiste =[];
+        $this->lstartiste[] = $artiste;
         $this->duree = $duree;
         $this->dateAjout = $dateAjout;
         $this->sortie = $sortie;
@@ -21,13 +22,22 @@ class Musique implements Irender{
         $bdd = BD::getInstance();
         $queryAddAlbum= $bdd->prepare("INSERT INTO TITRE(duree,titre) VALUES (?,?)");
         $queryAddAlbum->execute([$duree,$titre]);
+        for($i=0;$i<count($this->lstartiste);$i++){
+            $queryAddArtiste= $this->bdd ->prepare("INSERT INTO CHANTER_PAR(id_titre,id_artiste) VALUES (?,?)");
+            $queryAddArtiste->execute([$this->getID(),$this->lstartiste[$i]->getID()]);
+        }
+
+
     }
     public function render(){
         echo '<div class="musique">';
         echo '<img src=">'.$this->sortie->getCover().'" </img>';
         echo "<h3>".$this->titre."</h3>";
-        echo '<audio controls src="'.$this->song.'"></audio>';
-        echo "<p>". $this->artiste ."</p>";
+        echo "div id='artistes'>";
+        for ($i= 0;$i<count($this->lstartiste);$i++){
+            echo "<p>".$this->lstartiste[$i]->getNom()."</p>";
+        }
+        echo "</div>";
         echo "<p>".$this->dateAjout."</p>";
         echo "<p>".$this->duree."</p>";
         echo '</div>';
@@ -36,7 +46,7 @@ class Musique implements Irender{
         return $this->titre;
     }
     public function getArtiste(){
-        return $this->artiste;
+        return $this->lstartiste;
     }
     public function getDuree(){
         return $this->duree;
@@ -49,6 +59,18 @@ class Musique implements Irender{
     }
     public function setAlbum($sortie){
         $this->sortie = $sortie;
+    }
+    public function getID(){
+        $queryIDMusique = $this->bdd->prepare("SELECT id_titre FROM TITRE WHERE titre = ? AND duree = ?");
+        $queryIDMusique->execute([$this->titre,$this->duree]);
+        $idMusique = $queryIDMusique->fetch();
+        $idMusique = $idMusique['id_titre'];
+        return $idMusique;
+    }
+    public function addArtiste($artiste){
+        $queryAddMusique= $this->bdd->prepare("INSERT INTO CHANTER_PAR(id_artiste,id_titre) VALUES (?,?)");
+        $queryAddMusique->execute([$artiste->getID(),$this->getID()]);
+        $this->lstartiste[] =$artiste;
     }
     
 }
