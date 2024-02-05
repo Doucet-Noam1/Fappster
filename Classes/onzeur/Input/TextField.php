@@ -1,0 +1,17 @@
+<?php
+declare(strict_types=1);
+namespace onzeur\Input;
+
+class TextField{
+    private $id;
+    private $label;
+    public function __construct(string $id,string $label){
+        $this->id = $id;
+        $this->label = $label;
+    }
+
+    public function render(){
+        echo "<label for=".$this->id.">".$this->label." : </label></br>";
+        echo "<input type='text'></br>";
+    }
+}
