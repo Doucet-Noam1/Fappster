@@ -15,7 +15,7 @@ class EP extends Sortie{
         if ($this->cover != null && file_exists($this->cover))
             echo '<img src="'.str_replace("%","%25",$this->cover).'"/>';
         else 
-            echo '<img src="data/images/covers/null.jpg"/>';
+            echo '<img src="data/images/covers/null.png"/>';
         echo "<h1>".$this->nom."</h1>";
         echo "<p>".$this->date." • EP</p>";
         echo '</a>';
