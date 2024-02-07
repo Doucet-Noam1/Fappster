@@ -3,17 +3,16 @@ declare(strict_types=1);
 
 namespace onzeur\Type;
 
-include 'create_bd.php';
+include 'loadbd.php';
 
 class BD
 {
-    private static $instance = null;
     private static $bdd;
     private function __construct()
     {
         try {
-            if (file_exists('onzeur.db')) {
-                unlink('onzeur.db');
+            if (file_exists('fappster.db')) {
+                unlink('fappster.db');
             }
 
             self::$bdd = loadbd();
@@ -95,7 +94,7 @@ class BD
         )');
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS CHANTER_PAR(
             id_artiste INTEGER ,
-            id_titre INTEGER  ,
+            id_titre INTEGER ,
             FOREIGN KEY(id_artiste) REFERENCES ARTISTE(id_artiste),
             FOREIGN KEY(id_titre) REFERENCES TITRE(id_titre),
             PRIMARY KEY(id_artiste,id_titre)
@@ -105,7 +104,7 @@ class BD
             self::$bdd-> exec('INSERT INTO TYPE_SORTIE(libelle) VALUES ("Single")');
             self::$bdd-> exec('INSERT INTO TYPE_SORTIE(libelle) VALUES ("EP")');
             self::$bdd-> exec('INSERT INTO TYPE_SORTIE(libelle) VALUES ("Playlist")');
-
+            var_dump(self::$bdd);
 
 
 
@@ -115,21 +114,14 @@ class BD
     }
     static function getInstance()
     {
-        if (is_null(self::$instance)) {
-            self::$instance = new BD();
-
+        if (!(file_exists('fappster.db'))){
+            echo 'creation';
+            new BD;
         }
-        return self::$bdd;
+        return loadbd();
     }
-
-
-}
-
-
-
-
-
-
+    
+    }
 
 
 ?>

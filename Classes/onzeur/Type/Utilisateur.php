@@ -19,9 +19,10 @@ class Utilisateur {
         $this->mdp = $mdp;
         $this->PlaylistLikes = [];
         $this->litesNotes = [];
-
-        $queryAddArtiste= $this->bdd->prepare("INSERT INTO UTILISATEUR(nom,mdp) VALUES (?,?)");
-        $queryAddArtiste->execute([$nom,$mdp]);
+        if($this->getID() == null){
+            $queryAddArtiste= $this->bdd->prepare("INSERT INTO UTILISATEUR(nom,mdp) VALUES (?,?)");
+            $queryAddArtiste->execute([$nom,$mdp]);
+        }
 
 
 
@@ -51,7 +52,7 @@ class Utilisateur {
     public function getLitesNotes(){
         return $this->litesNotes;
     }
-    public function getId(){
+    public function getID(){
         $this->bdd = BD::getInstance();
         $queryIDArtiste = $this->bdd->prepare("SELECT id_utilisateur FROM UTILISATEUR WHERE nom = ? AND mdp = ?");
         $queryIDArtiste->execute([$this->nom,$this->mdp]);
