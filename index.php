@@ -9,13 +9,15 @@ use onzeur\Type\Musique;
 use onzeur\Type\Reader;
 use onzeur\Type\Artiste;
 use onzeur\Type\EP;
-if (!isset($_SESSION['bdd'])) {
-    $_SESSION['bdd'] = BD::getInstance();;
-}
+
+print_r($_SESSION);
+var_dump($_SESSION['pseudo']);
+print($_SESSION['pseudo']);
+$bdd = BD::getInstance();
 $reader = new Reader("extrait.yml");
 
-$artiste = new Artiste('naps','test');
-$artiste2 = new Artiste('gazo','test');
+$artiste = new Artiste('naps','LE','Goat','test');
+$artiste2 = new Artiste('gazo','LE','Goat','test');
 
 $musique = new Musique('la mala est gangx', $artiste, 120, '13-02-2005','/data/audios/MICHOU - M2LT (Clip Officiel).mp3');
 $musique2 = new Musique('la mala est gangxxxxxxxx', $artiste, 120, '13-02-2005','/data/audios/MICHOU - M2LT (Clip Officiel).mp3');

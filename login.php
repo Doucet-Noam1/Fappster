@@ -5,20 +5,24 @@ use onzeur\Type\Utilisateur;
 use onzeur\Type\BD;
 session_start();
 if ($_POST) {
-$nom_utilisateur = $_POST['nom_utilisateur'];
+$pseudo = $_POST['pseudo'];
+$nom = $_POST['nom'];
+$prenom = $_POST['prenom'];
 $password = $_POST['password'];
 if ($_POST['signup'] == 'false'){
-if (BD::verifie_utilisateur($nom_utilisateur, $password)) {
-$_SESSION['username'] = $nom_utilisateur; 
+if (BD::verifie_utilisateur($pseudo)) {
+$_SESSION['pseudo'] = $pseudo; 
 exit();
 } else {
 echo "Nom d'utilisateur ou mot de passe incorrect.";
 }
 }
 else{
-$artiste = new Utilisateur($nom_utilisateur, $password);
+$artiste = new Utilisateur($pseudo,$prenom,$nom, $password);
 $_SESSION['artiste'] = $artiste;
-$_SESSION['username'] = $nom_utilisateur;
+$_SESSION['prenom'] = $prenom;
+$_SESSION['nom'] = $nom;
+$_SESSION['pseudo'] = $pseudo;
 header('Location: index.php');
 }
 }
@@ -33,8 +37,8 @@ header('Location: index.php');
 <body>
 <h2>Connexion/Inscription</h2>
 <form method="post" action="login.php">
-<label for="nom_utilisateur">Nom d'utilisateur:</label>
-<input type="text" name="nom_utilisateur" required><br>
+<label for="pseudo">Nom d'utilisateur:</label>
+<input type="text" name="pseudo" required><br>
 <input type = "Hidden" name= "signup" value="false">
 
 <label for="password">Mot de passe:</label>
@@ -43,12 +47,22 @@ header('Location: index.php');
 <button type="submit">Se connecter</button>
 </form>
 <form method="post" action="login.php">
-<label for="nom_utilisateur">Nom d'utilisateur:</label>
-<input type="text" name="nom_utilisateur" required><br>
+    
+<label for="pseudo">Pseudo:</label>
+<input type="text" name="pseudo" required><br>
+
+<label for="nom">Nom :</label>
+<input type="text" name="nom" required><br>
+
+<label for="nom">Prenom:</label>
+<input type="text" name="prenom" required><br>
+
 
 <label for="password">Mot de passe:</label>
 <input type="password" name="password" required><br>
+
 <input type = "Hidden" name= "signup" value="true">
+
 <button type="submit">S'inscrire</button>
 </form>
 </body>

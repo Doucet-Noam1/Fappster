@@ -14,7 +14,7 @@ abstract class Sortie implements Irender
     protected $bdd;
     protected $id_type;
 
-    public function __construct($artiste,string $nom, $liste, string $date, string|null $cover,int $id_type)
+    public function __construct($artiste,string $nom, $liste, string $date, string|null $cover,int $id_type, $id=null)
     {
         $this->nom = $nom;
         $this->date = $date;
@@ -26,6 +26,7 @@ abstract class Sortie implements Irender
         if($this->getID() == null){
             $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom,date_sortie,cover,id_type) VALUES (?,?,?,?)");
         $queryAddAlbum->execute([$nom,$date,$cover,$id_type]);
+        $this->addArtiste($artiste);
 
         for ($i= 0;$i<count($liste);$i++){
             $idMusique = $liste[$i]->getID();
@@ -62,4 +63,18 @@ abstract class Sortie implements Irender
         return $idSortie['id_sortie'];
     }
 
+    public function getArtiste()
+    {
+        return $this->artiste;
+    }
+    public function addArtiste($artiste){
+        $queryIDAlbum = $this->bdd->prepare("SELECT id_sortie FROM CREE WHERE id_sortie = ? AND nom_artiste = ?");
+        $queryIDAlbum->execute([$this->getID(),$artiste->getPseudo()]);
+        $idAlbum = $queryIDAlbum->fetch();
+        if ($idAlbum == null){
+            $queryAddAlbum= $this->bdd->prepare("INSERT INTO CREE(id_sortie,nom_artiste) VALUES (?,?)");
+            $queryAddAlbum->execute([$this->getID(),$artiste->getPseudo()]);
+        }
+        $this->artiste[] = $artiste;
+    }
 }

@@ -18,14 +18,15 @@ class BD
             self::$bdd = loadbd();
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS UTILISATEUR ( 
-                id_utilisateur INTEGER PRIMARY KEY AUTOINCREMENT,
-                nom TEXT,
+                pseudo VARCHAR(30) PRIMARY KEY,
+                nom TEXT default NULL,
+                prenom TEXT default NULL,
                 mdp TEXT default NULL
             )');
             self::$bdd -> exec('CREATE TABLE IF NOT EXISTS ARTISTE(
-                id_artiste INTEGER PRIMARY KEY,
+                nom_artiste VARCHAR(30) PRIMARY KEY,
                 verifie BOOLEAN DEFAULT FALSE,
-                FOREIGN KEY(id_artiste) REFERENCES Utilisateur(id_utilisateur)
+                FOREIGN KEY(nom_artiste) REFERENCES Utilisateur(pseudo)
             )');
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS TYPE_SORTIE (
                 id_type INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,28 +44,28 @@ class BD
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS AVIS (
                 id_sortie INTEGER,
-                id_utilisateur INTEGER,
+                pseudo INTEGER,
                 notes INTEGER,
                 likes BOOLEAN default false,
                 FOREIGN KEY(id_sortie) REFERENCES ARTISTE(id_sortie),
-                FOREIGN KEY(id_utilisateur) REFERENCES SORTIE(id_groupe),
-                PRIMARY KEY(id_sortie,id_utilisateur)
+                FOREIGN KEY(pseudo) REFERENCES SORTIE(id_groupe),
+                PRIMARY KEY(id_sortie,pseudo)
             )');
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS CREE (
             id_sortie INTEGER,
-            id_artiste INTEGER,
+            nom_artiste VARCHAR(30),
             FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie),
-            FOREIGN KEY(id_artiste) REFERENCES ARTISTE(id_artiste),
-            PRIMARY KEY(id_sortie,id_artiste)
+            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste),
+            PRIMARY KEY(id_sortie,nom_artiste)
         )');
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS PRODUIT (
             id_sortie INTEGER,
-            id_artiste INTEGER,
+            nom_artiste VARCHAR(30),
             FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie),
-            FOREIGN KEY(id_artiste) REFERENCES ARTISTE(id_artiste),
-            PRIMARY KEY(id_sortie,id_artiste)
+            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste),
+            PRIMARY KEY(id_sortie,nom_artiste)
         )');
 
 
@@ -93,11 +94,11 @@ class BD
             PRIMARY KEY(id_sortie,id_titre)
         )');
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS CHANTER_PAR(
-            id_artiste INTEGER ,
+            nom_artiste VARCHAR(30),
             id_titre INTEGER ,
-            FOREIGN KEY(id_artiste) REFERENCES ARTISTE(id_artiste),
+            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste),
             FOREIGN KEY(id_titre) REFERENCES TITRE(id_titre),
-            PRIMARY KEY(id_artiste,id_titre)
+            PRIMARY KEY(nom_artiste,id_titre)
         )');
 
             self::$bdd-> exec('INSERT INTO TYPE_SORTIE(libelle) VALUES ("Album")');
@@ -120,6 +121,33 @@ class BD
         }
         return loadbd();
     }
+
+    static function getArtiste($id){
+        $queryArtiste = BD::getInstance()->prepare("SELECT * FROM ARTISTE WHERE nom_artiste = ?");
+        $queryArtiste->execute([$id]);
+        $artiste = $queryArtiste->fetch();
+        return new Artiste($artiste['nom_artiste'],$artiste['verifie']);
+    }
+
+    static function getAlbum($id){
+        
+        $queryAlbum = BD::getInstance()->prepare("SELECT * FROM SORTIE NATURAL JOIN CREE WHERE id_sortie = ? AND id_type = 1");
+        $queryAlbum->execute([$id]);
+        $album = $queryAlbum->fetch();
+        return new Album(self::getArtiste($album['nom_artiste']),$album['nom'],[],strval($album['date_sortie']),$album['cover'],);
+    }
+
+    static function getSortiesBy(Artiste $artiste){
+        $querySorties = BD::getInstance()->prepare("SELECT * FROM SORTIE NATURAL JOIN CREE WHERE nom_artiste = ?");
+        $querySorties->execute([$artiste->getPseudo()]);
+        $sorties = $querySorties->fetchAll();
+        $res = [];
+        foreach($sorties as $sortie){
+            $res[] = new Album($artiste,$sortie['nom'],[],strval($sortie['date_sortie']),$sortie['cover']);
+        }
+        return $res;
+    }
+    
     static function getSortie($artiste,string $nom, $liste, string $date, string|null $cover,int $id_type){
         switch($id_type){
             case 1:
@@ -132,10 +160,10 @@ class BD
                 return new Playlist($artiste, $nom, $liste, $date,  $cover, $id_type);
         }
     }
-    static function verifie_utilisateur($nom_utilisateur, $password) {
+    static function verifie_utilisateur($pseudo) {
 
-        $query = self::$bdd->prepare("SELECT * FROM Utilisateur WHERE nom = ? AND mmdp = ?");
-        $query->execute([$nom_utilisateur,$password ]);
+        $query = self::$bdd->prepare("SELECT * FROM UTILISATEUR WHERE pseudo = ?");
+        $query->execute([$pseudo ]);
         $user = $query->fetch(PDO::FETCH_ASSOC);
         return ($user !== false);
         }   

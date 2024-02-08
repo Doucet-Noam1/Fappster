@@ -5,6 +5,8 @@ include_once 'BD.php';
 
 
 class Utilisateur {
+    protected $pseudo;
+    protected $prenom;
     protected $nom;
     protected $mdp;
     protected $PlaylistLikes;
@@ -12,16 +14,17 @@ class Utilisateur {
 
     protected $bdd;
 
-    public function __construct($nom,$mdp=null){
+    public function __construct($pseudo,$prenom =null,$nom=null,$mdp=null){
         $this->bdd = BD::getInstance();
-
+        $this -> prenom = $prenom;
+        $this -> pseudo = $pseudo;
         $this->nom = $nom;
         $this->mdp = $mdp;
         $this->PlaylistLikes = [];
         $this->litesNotes = [];
-        if($this->getID() == null){
-            $queryAddArtiste= $this->bdd->prepare("INSERT INTO UTILISATEUR(nom,mdp) VALUES (?,?)");
-            $queryAddArtiste->execute([$nom,$mdp]);
+        if($this->getPseudo() == null){
+            $queryAddArtiste= $this->bdd->prepare("INSERT INTO UTILISATEUR(pseudo,prenom,nom,mdp) VALUES (?,?,?,?)");
+            $queryAddArtiste->execute([$pseudo,$prenom,$nom,$mdp]);
         }
 
 
@@ -32,6 +35,9 @@ class Utilisateur {
         echo "<h1>". $this->nom ."</h1>";
         for ($i= 0;$i<count($this->litesNotes);$i++){
             $this->litesNotes[$i]->render();
+        }
+        foreach(BD::getSortiesBy($this) as $sortie){
+            $sortie->render();
         }
         echo '</div>';
 
@@ -52,13 +58,15 @@ class Utilisateur {
     public function getLitesNotes(){
         return $this->litesNotes;
     }
-    public function getID(){
+    public function getPseudo(){
         $this->bdd = BD::getInstance();
-        $queryIDArtiste = $this->bdd->prepare("SELECT id_utilisateur FROM UTILISATEUR WHERE nom = ? AND mdp = ?");
-        $queryIDArtiste->execute([$this->nom,$this->mdp]);
+        $queryIDArtiste = $this->bdd->prepare("SELECT pseudo FROM UTILISATEUR WHERE pseudo = ?");
+        $queryIDArtiste->execute([$this->pseudo]);
         $idArtiste = $queryIDArtiste->fetch();
-        $idArtiste = $idArtiste['id_utilisateur'];
-        return $idArtiste;
+        if ($idArtiste == null){
+            return null;
+        }
+        return $idArtiste['pseudo'];
     }
 
     
