@@ -11,7 +11,7 @@ class EP extends Sortie{
     }
     public function render(){
         echo '<div class="album">';
-        echo '<a class="album" href="album.php?id=$this->idAlbum">';
+        echo '<a class="albumDetail" href="sortie.php?id='.$this->getID().'">';
         if ($this->cover != null && file_exists($this->cover))
             echo '<img src="'.str_replace("%","%25",$this->cover).'"/>';
         else 
@@ -23,7 +23,7 @@ class EP extends Sortie{
     }
 
     public function renderDetail(){
-        echo '<a class="albumDetail" href="album.php?id=$this->idAlbum">';
+        echo '<a class="albumDetail" href="sortie.php?id='.$this->getID().'">';
         if ($this->cover != null && file_exists($this->cover))
             echo '<img src="'.str_replace("%","%25",$this->cover).'"/>';
         else 
@@ -52,8 +52,19 @@ class EP extends Sortie{
     public function addMusique($song){
         $this->liste[] = $song;
     }
+
+    public function getID(){
+        $queryIDEP = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom = ? AND date_sortie = ? AND cover = ? AND id_type = 3");
+        $queryIDEP->execute([$this->nom,$this->date,$this->cover]);
+        $idEP = $queryIDEP->fetch();
+        if ($idEP == null){
+            return null;
+        }
+        return $idEP['id_sortie'];
+    }
+  
     public function addArtiste($artiste){
-        $queryIDEP= $this->bdd->prepare("INSERT INTO CREE(id_sortie,id_artiste) VALUES (?,?)");
+        $queryIDEP= $this->bdd->prepare("INSERT INTO CREE(id_sortie,nom_artiste) VALUES (?,?)");
         $queryIDEP->execute([$this->getID(),$artiste->getID()]);
         $this->artiste[] = $artiste;
     }
