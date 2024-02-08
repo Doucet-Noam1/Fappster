@@ -36,9 +36,11 @@ class Titre implements Irender{
         echo '<img src=">'.$this->sortie->getCover().'" </img>';
         echo "<h3>".$this->titre."</h3>";
         echo "div id='artistes'>";
+        echo "ul";
         for ($i= 0;$i<count($this->lstartiste);$i++){
             echo "<p>".$this->lstartiste[$i]->getPseudo()."</p>";
         }
+        echo "/ul";
         echo "</div>";
         echo "<p>".$this->dateAjout."</p>";
         echo "<p>".$this->duree."</p>";
