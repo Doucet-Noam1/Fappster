@@ -62,15 +62,15 @@ class Album extends Sortie{
             return null;
         }
         return $idAlbum['id_sortie'];
+    }
     
     public function addArtiste($artiste){
-        $queryIDAlbum = $this->bdd->prepare("SELECT id_sortie FROM CREE WHERE id_sortie = ? AND id_artiste = ?");
-        $queryIDAlbum->execute([$this->getID(),$artiste->getID()]);
+        $queryIDAlbum = $this->bdd->prepare("SELECT id_sortie FROM CREE WHERE id_sortie = ? AND nom_artiste = ?");
+        $queryIDAlbum->execute([$this->getID(),$artiste->getPseudo()]);
         $idAlbum = $queryIDAlbum->fetch();
-        if ($idAlbum['id_sortie'] == null){
-            $queryAddAlbum= $this->bdd->prepare("INSERT INTO CREE(id_sortie,id_artiste) VALUES (?,?)");
-            $queryAddAlbum->execute([$this->getID(),$artiste->getID()]);
+        if ($idAlbum == null){
+            $queryAddAlbum= $this->bdd->prepare("INSERT INTO CREE(id_sortie,nom_artiste) VALUES (?,?)");
+            $queryAddAlbum->execute([$this->getID(),$artiste->getPseudo()]);
         }
-        return $idAlbum['id_sortie'];
     }
 }
