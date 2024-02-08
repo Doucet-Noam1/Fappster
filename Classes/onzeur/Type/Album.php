@@ -50,13 +50,7 @@ class Album extends Sortie{
     public function addMusique($song){
         $this->liste[] = $song;
     }
-    public function getID(){
-        $queryIDAlbum = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom = ? AND date_sortie = ? AND cover = ? AND id_type = 1");
-        $queryIDAlbum->execute([$this->nom,$this->date,$this->cover]);
-        $idAlbum = $queryIDAlbum->fetch();
-        $idAlbum = $idAlbum['id_sortie'];
-        return $idAlbum;
-    }
+    
     public function addArtiste($artiste){
         $queryIDAlbum = $this->bdd->prepare("SELECT id_sortie FROM CREE WHERE id_sortie = ? AND id_artiste = ?");
         $queryIDAlbum->execute([$this->getID(),$artiste->getID()]);
