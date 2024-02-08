@@ -23,9 +23,6 @@ class Utilisateur {
             $queryAddArtiste= $this->bdd->prepare("INSERT INTO UTILISATEUR(pseudo,mdp) VALUES (?,?)");
             $queryAddArtiste->execute([$nom,$mdp]);
         }
-
-
-
     }
     public function render(){
         echo '<div class="artiste">';

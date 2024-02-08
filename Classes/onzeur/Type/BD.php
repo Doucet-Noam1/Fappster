@@ -35,7 +35,7 @@ class BD
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS SORTIE (
                 id_sortie INTEGER PRIMARY KEY AUTOINCREMENT,
-                nom TEXT,
+                nom_sortie TEXT,
                 date_sortie DATE,
                 cover TEXT,
                 id_type INTEGER NOT NULL,
@@ -70,14 +70,16 @@ class BD
 
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS GENRE(
-            id_genre INTEGER PRIMARY KEY AUTOINCREMENT,
-            nom TEXT
+            nom_genre TEXT PRIMARY KEY
         )');
 
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS A_POUR_STYLE(
-            id_genre INTEGER PRIMARY KEY AUTOINCREMENT,
-            libelle_genre TEXT
+            nom_genre TEXT,
+            id_sortie INTEGER,
+            FOREIGN KEY(nom_genre) REFERENCES GENRE(nom_genre),
+            FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie),
+            PRIMARY KEY(nom_genre,id_sortie)
         )');
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS TITRE(
@@ -130,11 +132,12 @@ class BD
     }
 
     static function getAlbum($id){
-        
         $queryAlbum = BD::getInstance()->prepare("SELECT * FROM SORTIE NATURAL JOIN CREE WHERE id_sortie = ? AND id_type = 1");
         $queryAlbum->execute([$id]);
         $album = $queryAlbum->fetch();
-        return new Album(self::getArtiste($album['nom_artiste']),$album['nom'],[],strval($album['date_sortie']),$album['cover'],);
+        $artiste = self::getArtiste($album['nom_artiste']);
+        print_r($album);
+        return new Album($artiste,$album['nom_sortie'],[],strval($album['date_sortie']),$album['cover']);
     }
 
     static function getSortiesBy(Artiste $artiste){
@@ -143,12 +146,12 @@ class BD
         $sorties = $querySorties->fetchAll();
         $res = [];
         foreach($sorties as $sortie){
-            $res[] = new Album($artiste,$sortie['nom'],[],strval($sortie['date_sortie']),$sortie['cover']);
+            $res[] = new Album($artiste,$sortie['nom_artiste'],[],strval($sortie['date_sortie']),$sortie['cover']);
         }
         return $res;
     }
     
-    static function getSortie($artiste,string $nom, $liste, string $date, string|null $cover,int $id_type){
+    static function getSortie($artiste,string $nom, $liste, string $date, string|null $cover,int $id_type) : Sortie|null{
         switch($id_type){
             case 1:
                 return new Album($artiste, $nom, $liste, $date,  $cover);
@@ -158,7 +161,28 @@ class BD
                 return new EP($artiste, $nom, $liste, $date,  $cover, $id_type);
             case 4:
                 return new Playlist($artiste, $nom, $liste, $date,  $cover, $id_type);
+            default:
+                return null;
         }
+    }
+    static function addGenre(Album $album,string $genre){
+        $queryGenre = BD::getInstance()->prepare("SELECT nom_genre FROM GENRE WHERE nom_genre = ?");
+        $queryGenre->execute([$genre]);
+        $resGenre = $queryGenre->fetch();
+        if (!$resGenre){
+            $queryAddGenre = BD::getInstance()->prepare("INSERT INTO GENRE(nom_genre) VALUES (?)");
+            $queryAddGenre->execute([$genre]);
+            $queryGenre = BD::getInstance()->prepare("SELECT nom_genre FROM GENRE WHERE nom_genre = ?");
+            $queryGenre->execute([$genre]);
+            $resGenre = $queryGenre->fetch();
+        }
+        // $id = $album->getID();
+        // $queryLinkGenre= BD::getInstance()->prepare("INSERT INTO A_POUR_STYLE(nom_genre,id_sortie) VALUES (?,?)");
+        // $queryLinkGenre->execute([$resGenre['nom_genre'],$id]);
+        // $queryLinkGenre = BD::getInstance()->prepare("INSERT INTO A_POUR_STYLE(nom_genre,id_sortie) VALUES (?,?)");
+        // print_r($resGenre['nom_genre']);
+        // print_r($id);
+        // $queryLinkGenre->execute([$resGenre['nom_genre'],$id]);
     }
 }
 ?>

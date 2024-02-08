@@ -5,7 +5,7 @@ include_once 'BD.php';
 
 class Album extends Sortie{
     public function __construct($artiste,$nom,$liste,$date,$cover,$id=null){
-        parent::__construct($artiste,$nom,$liste,$date,$cover,1);
+        parent::__construct($artiste,$nom,$liste,$date,$cover,1,$id);
     }
     public function render(){
         echo '<div class="album">';
@@ -55,8 +55,8 @@ class Album extends Sortie{
     }
 
     public function getID(){
-        $queryIDAlbum = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom = ? AND date_sortie = ? AND cover = ? AND id_type = 1");
-        $queryIDAlbum->execute([$this->nom,$this->date,$this->cover]);
+        $queryIDAlbum = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom_sortie = ? AND date_sortie = ? AND id_type = 1");
+        $queryIDAlbum->execute([$this->nom,$this->date]);
         $idAlbum = $queryIDAlbum->fetch();
         if ($idAlbum == null){
             return null;
@@ -72,5 +72,9 @@ class Album extends Sortie{
             $queryAddAlbum= $this->bdd->prepare("INSERT INTO CREE(id_sortie,nom_artiste) VALUES (?,?)");
             $queryAddAlbum->execute([$this->getID(),$artiste->getPseudo()]);
         }
+    }
+
+    public function addGenre($genre){
+        BD::addGenre($this,$genre);
     }
 }

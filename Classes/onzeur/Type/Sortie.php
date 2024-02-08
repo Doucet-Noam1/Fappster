@@ -24,7 +24,7 @@ abstract class Sortie implements Irender
         $this->artiste = [$artiste];
         $this->id_type = $id_type;
         if($this->getID() == null){
-            $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom,date_sortie,cover,id_type) VALUES (?,?,?,?)");
+            $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom_sortie,date_sortie,cover,id_type) VALUES (?,?,?,?)");
         $queryAddAlbum->execute([$nom,$date,$cover,$id_type]);
         $this->addArtiste($artiste);
 
@@ -57,7 +57,7 @@ abstract class Sortie implements Irender
     }
     public function getID()
     {
-        $queryIDSortie = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom = ? AND date_sortie = ? AND id_type = ?");
+        $queryIDSortie = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom_sortie = ? AND date_sortie = ? AND id_type = ?");
         $queryIDSortie->execute([$this->nom,$this->date,$this->id_type]);
         $idSortie = $queryIDSortie->fetch();
         return $idSortie['id_sortie'];

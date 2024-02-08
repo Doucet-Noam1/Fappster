@@ -54,7 +54,7 @@ class EP extends Sortie{
     }
 
     public function getID(){
-        $queryIDEP = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom = ? AND date_sortie = ? AND cover = ? AND id_type = 3");
+        $queryIDEP = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom_sortie = ? AND date_sortie = ? AND cover = ? AND id_type = 3");
         $queryIDEP->execute([$this->nom,$this->date,$this->cover]);
         $idEP = $queryIDEP->fetch();
         if ($idEP == null){
