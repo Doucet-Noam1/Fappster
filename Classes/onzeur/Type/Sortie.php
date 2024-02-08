@@ -21,7 +21,8 @@ abstract class Sortie implements Irender
         $this->liste = $liste;
         $this->bdd = BD::getInstance();
         $this->artiste = [$artiste];
-        $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom,date_sortie,cover,id_type) VALUES (?,?,?,?)");
+        if($this->getID() == null){
+            $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom,date_sortie,cover,id_type) VALUES (?,?,?,?)");
         $queryAddAlbum->execute([$nom,$date,$cover,$id_type]);
 
         for ($i= 0;$i<count($liste);$i++){
@@ -30,6 +31,8 @@ abstract class Sortie implements Irender
             $querAddContient->execute([$this->getID(),$idMusique,$i+1]);
             $querAddContient = $querAddContient->fetch();
         }
+        }
+        
     
     }
     public abstract function render();

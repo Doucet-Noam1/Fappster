@@ -3,27 +3,30 @@ declare(strict_types=1);
 
 namespace onzeur\Type;
 
-include 'create_bd.php';
+include 'loadbd.php';
 
 class BD
 {
-    private static $instance = null;
     private static $bdd;
     private function __construct()
     {
         try {
-            if (file_exists('onzeur.db')) {
-                unlink('onzeur.db');
+            if (file_exists('fappster.db')) {
+                unlink('fappster.db');
             }
 
             self::$bdd = loadbd();
 
-            self::$bdd->exec('CREATE TABLE IF NOT EXISTS ARTISTE ( 
-                id_artiste INTEGER PRIMARY KEY AUTOINCREMENT,
+            self::$bdd->exec('CREATE TABLE IF NOT EXISTS UTILISATEUR ( 
+                id_utilisateur INTEGER PRIMARY KEY AUTOINCREMENT,
                 nom TEXT,
                 mdp TEXT default NULL
             )');
-
+            self::$bdd -> exec('CREATE TABLE IF NOT EXISTS ARTISTE(
+                id_artiste INTEGER PRIMARY KEY,
+                verifie BOOLEAN DEFAULT FALSE,
+                FOREIGN KEY(id_artiste) REFERENCES Utilisateur(id_utilisateur)
+            )');
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS TYPE_SORTIE (
                 id_type INTEGER PRIMARY KEY AUTOINCREMENT,
                 libelle TEXT
@@ -38,29 +41,29 @@ class BD
                 FOREIGN KEY(id_type) REFERENCES TYPE_SORTIE(id_type)
             )');
 
-            self::$bdd->exec('CREATE TABLE IF NOT EXISTS PREFERENCES (
+            self::$bdd->exec('CREATE TABLE IF NOT EXISTS AVIS (
                 id_sortie INTEGER,
-                id_artiste INTEGER,
+                id_utilisateur INTEGER,
                 notes INTEGER,
                 likes BOOLEAN default false,
                 FOREIGN KEY(id_sortie) REFERENCES ARTISTE(id_sortie),
-                FOREIGN KEY(id_artiste) REFERENCES SORTIE(id_groupe),
-                PRIMARY KEY(id_sortie,id_artiste)
+                FOREIGN KEY(id_utilisateur) REFERENCES SORTIE(id_groupe),
+                PRIMARY KEY(id_sortie,id_utilisateur)
             )');
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS CREE (
             id_sortie INTEGER,
             id_artiste INTEGER,
-            FOREIGN KEY(id_sortie) REFERENCES ARTISTE(id_sortie),
-            FOREIGN KEY(id_artiste) REFERENCES SORTIE(id_groupe),
+            FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie),
+            FOREIGN KEY(id_artiste) REFERENCES ARTISTE(id_artiste),
             PRIMARY KEY(id_sortie,id_artiste)
         )');
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS PRODUIT (
             id_sortie INTEGER,
             id_artiste INTEGER,
-            FOREIGN KEY(id_sortie) REFERENCES ARTISTE(id_sortie),
-            FOREIGN KEY(id_artiste) REFERENCES SORTIE(id_groupe),
+            FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie),
+            FOREIGN KEY(id_artiste) REFERENCES ARTISTE(id_artiste),
             PRIMARY KEY(id_sortie,id_artiste)
         )');
 
@@ -91,7 +94,7 @@ class BD
         )');
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS CHANTER_PAR(
             id_artiste INTEGER ,
-            id_titre INTEGER  ,
+            id_titre INTEGER ,
             FOREIGN KEY(id_artiste) REFERENCES ARTISTE(id_artiste),
             FOREIGN KEY(id_titre) REFERENCES TITRE(id_titre),
             PRIMARY KEY(id_artiste,id_titre)
@@ -101,7 +104,7 @@ class BD
             self::$bdd-> exec('INSERT INTO TYPE_SORTIE(libelle) VALUES ("Single")');
             self::$bdd-> exec('INSERT INTO TYPE_SORTIE(libelle) VALUES ("EP")');
             self::$bdd-> exec('INSERT INTO TYPE_SORTIE(libelle) VALUES ("Playlist")');
-
+            var_dump(self::$bdd);
 
 
 
@@ -111,21 +114,14 @@ class BD
     }
     static function getInstance()
     {
-        if (is_null(self::$instance)) {
-            self::$instance = new BD();
-
+        if (!(file_exists('fappster.db'))){
+            echo 'creation';
+            new BD;
         }
-        return self::$bdd;
+        return loadbd();
     }
-
-
-}
-
-
-
-
-
-
+    
+    }
 
 
 ?>
