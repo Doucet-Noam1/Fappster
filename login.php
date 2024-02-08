@@ -1,31 +1,28 @@
-
 <?php
 require 'Classes/autoloader.php';
 Autoloader::register();
-use onzeur\Type\Artiste;
+use onzeur\Type\Utilisateur;
+use onzeur\Type\BD;
 session_start();
-
 if ($_POST) {
 $nom_utilisateur = $_POST['nom_utilisateur'];
 $password = $_POST['password'];
-var_dump($nom_utilisateur. "m<br>");
-var_dump($password. "mdp<br>");
 if ($_POST['signup'] == 'false'){
 if (BD::verifie_utilisateur($nom_utilisateur, $password)) {
-$_SESSION['nom_utilisateur'] = $nom_utilisateur; 
+$_SESSION['username'] = $nom_utilisateur; 
 exit();
 } else {
 echo "Nom d'utilisateur ou mot de passe incorrect.";
 }
 }
 else{
-$artiste = new Artiste($nom_utilisateur, $password);
+$artiste = new Utilisateur($nom_utilisateur, $password);
 $_SESSION['artiste'] = $artiste;
-$_SESSION['nom_utilisateur'] = $nom_utilisateur;
+$_SESSION['username'] = $nom_utilisateur;
+header('Location: index.php');
 }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

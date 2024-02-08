@@ -1,6 +1,6 @@
 <?php
+session_start();
 require 'Classes/autoloader.php';
-
 Autoloader::register();
 use onzeur\Type\Sortie;
 use onzeur\Type\BD;
@@ -9,9 +9,11 @@ use onzeur\Type\Musique;
 use onzeur\Type\Reader;
 use onzeur\Type\Artiste;
 use onzeur\Type\EP;
+if (!isset($_SESSION['bdd'])) {
+    $_SESSION['bdd'] = BD::getInstance();;
+}
 $reader = new Reader("extrait.yml");
 
-$bdd = BD::getInstance();
 $artiste = new Artiste('naps','test');
 $artiste2 = new Artiste('gazo','test');
 
@@ -44,6 +46,7 @@ $musique2 -> addArtiste($artiste2);
         $ep -> render();
         ?>
     </div>
+    <a href = 'login.php'> Connexion </a>
 </body>
 
 </html>

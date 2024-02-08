@@ -12,6 +12,7 @@ abstract class Sortie implements Irender
     protected $liste;
     protected $artiste;
     protected $bdd;
+    protected $id_type;
 
     public function __construct($artiste,string $nom, $liste, string $date, string|null $cover,int $id_type)
     {
@@ -21,7 +22,9 @@ abstract class Sortie implements Irender
         $this->liste = $liste;
         $this->bdd = BD::getInstance();
         $this->artiste = [$artiste];
-        $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom,date_sortie,cover,id_type) VALUES (?,?,?,?)");
+        $this->id_type = $id_type;
+        if($this->getID() == null){
+            $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom,date_sortie,cover,id_type) VALUES (?,?,?,?)");
         $queryAddAlbum->execute([$nom,$date,$cover,$id_type]);
 
         for ($i= 0;$i<count($liste);$i++){
@@ -30,6 +33,8 @@ abstract class Sortie implements Irender
             $querAddContient->execute([$this->getID(),$idMusique,$i+1]);
             $querAddContient = $querAddContient->fetch();
         }
+        }
+        
     
     }
     public abstract function render();
@@ -48,6 +53,13 @@ abstract class Sortie implements Irender
     public function getListe()
     {
         return $this->liste;
+    }
+    public function getID()
+    {
+        $queryIDSortie = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom = ? AND date_sortie = ? AND id_type = ?");
+        $queryIDSortie->execute([$this->nom,$this->date,$this->id_type]);
+        $idSortie = $queryIDSortie->fetch();
+        return $idSortie['id_sortie'];
     }
 
 }

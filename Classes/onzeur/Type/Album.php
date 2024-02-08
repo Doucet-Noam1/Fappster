@@ -50,16 +50,16 @@ class Album extends Sortie{
     public function addMusique($song){
         $this->liste[] = $song;
     }
-    public function getID(){
-        $queryIDAlbum = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom = ? AND date_sortie = ? AND cover = ? AND id_type = 1");
-        $queryIDAlbum->execute([$this->nom,$this->date,$this->cover]);
-        $idAlbum = $queryIDAlbum->fetch();
-        $idAlbum = $idAlbum['id_sortie'];
-        return $idAlbum;
-    }
+    
     public function addArtiste($artiste){
-        $queryAddAlbum= $this->bdd->prepare("INSERT INTO CREE(id_sortie,id_artiste) VALUES (?,?)");
-        $queryAddAlbum->execute([$this->getID(),$artiste->getID()]);
+        $queryIDAlbum = $this->bdd->prepare("SELECT id_sortie FROM CREE WHERE id_sortie = ? AND id_artiste = ?");
+        $queryIDAlbum->execute([$this->getID(),$artiste->getID()]);
+        $idAlbum = $queryIDAlbum->fetch();
+        if ($idAlbum['id_sortie'] == null){
+            $queryAddAlbum= $this->bdd->prepare("INSERT INTO CREE(id_sortie,id_artiste) VALUES (?,?)");
+            $queryAddAlbum->execute([$this->getID(),$artiste->getID()]);
+            
+        }
         $this->artiste[] = $artiste;
     }
 
