@@ -19,8 +19,8 @@ class Utilisateur {
         $this->mdp = $mdp;
         $this->PlaylistLikes = [];
         $this->litesNotes = [];
-        if($this->getID() == null){
-            $queryAddArtiste= $this->bdd->prepare("INSERT INTO UTILISATEUR(nom,mdp) VALUES (?,?)");
+        if($this->getPseudo() == null){
+            $queryAddArtiste= $this->bdd->prepare("INSERT INTO UTILISATEUR(pseudo,mdp) VALUES (?,?)");
             $queryAddArtiste->execute([$nom,$mdp]);
         }
 
@@ -32,6 +32,9 @@ class Utilisateur {
         echo "<h1>". $this->nom ."</h1>";
         for ($i= 0;$i<count($this->litesNotes);$i++){
             $this->litesNotes[$i]->render();
+        }
+        foreach(BD::getSortiesBy($this) as $sortie){
+            $sortie->render();
         }
         echo '</div>';
 
@@ -52,13 +55,15 @@ class Utilisateur {
     public function getLitesNotes(){
         return $this->litesNotes;
     }
-    public function getID(){
+    public function getPseudo(){
         $this->bdd = BD::getInstance();
-        $queryIDArtiste = $this->bdd->prepare("SELECT id_utilisateur FROM UTILISATEUR WHERE nom = ? AND mdp = ?");
-        $queryIDArtiste->execute([$this->nom,$this->mdp]);
+        $queryIDArtiste = $this->bdd->prepare("SELECT pseudo FROM UTILISATEUR WHERE pseudo = ?");
+        $queryIDArtiste->execute([$this->nom]);
         $idArtiste = $queryIDArtiste->fetch();
-        $idArtiste = $idArtiste['id_utilisateur'];
-        return $idArtiste;
+        if ($idArtiste == null){
+            return null;
+        }
+        return $idArtiste['pseudo'];
     }
 
     

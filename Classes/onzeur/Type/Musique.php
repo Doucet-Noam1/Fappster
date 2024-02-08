@@ -24,8 +24,8 @@ class Musique implements Irender{
         {$queryAddAlbum= $this->bdd->prepare("INSERT INTO TITRE(duree,titre) VALUES (?,?)");
             $queryAddAlbum->execute([$duree,$titre]);
             for($i=0;$i<count($this->lstartiste);$i++){
-                $queryAddArtiste= $this->bdd ->prepare("INSERT INTO CHANTER_PAR(id_titre,id_artiste) VALUES (?,?)");
-                $queryAddArtiste->execute([$this->getID(),$this->lstartiste[$i]->getID()]);
+                $queryAddArtiste= $this->bdd ->prepare("INSERT INTO CHANTER_PAR(id_titre,nom_artiste) VALUES (?,?)");
+                $queryAddArtiste->execute([$this->getID(),$this->lstartiste[$i]->getPseudo()]);
             }}
         
 
@@ -66,16 +66,18 @@ class Musique implements Irender{
         $queryIDMusique = $this->bdd->prepare("SELECT id_titre FROM TITRE WHERE titre = ? AND duree = ?");
         $queryIDMusique->execute([$this->titre,$this->duree]);
         $idMusique = $queryIDMusique->fetch();
-        $idMusique = $idMusique['id_titre'];
-        return $idMusique;
+        if ($idMusique == null){
+            return null;
+        }
+        return $idMusique['id_titre'];
     }
     public function addArtiste($artiste){
-        $queryIDAlbum = $this->bdd->prepare("SELECT id_titre FROM CHANTER_PAR WHERE id_titre = ? AND id_artiste = ?");
-        $queryIDAlbum->execute([$this->getID(),$artiste->getID()]);
+        $queryIDAlbum = $this->bdd->prepare("SELECT id_titre FROM CHANTER_PAR WHERE id_titre = ? AND nom_artiste = ?");
+        $queryIDAlbum->execute([$this->getID(),$artiste->getPseudo()]);
         $idAlbum = $queryIDAlbum->fetch();
         if($idAlbum == null){
-            $queryAddMusique= $this->bdd->prepare("INSERT INTO CHANTER_PAR(id_artiste,id_titre) VALUES (?,?)");
-            $queryAddMusique->execute([$artiste->getID(),$this->getID()]);
+            $queryAddMusique= $this->bdd->prepare("INSERT INTO CHANTER_PAR(nom_artiste,id_titre) VALUES (?,?)");
+            $queryAddMusique->execute([$artiste->getPseudo(),$this->getID()]);
             $this->lstartiste[] =$artiste;
         }
     }

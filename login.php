@@ -9,8 +9,8 @@
 <body>
 <h2>Connexion/Inscription</h2>
 <form method="post" action="gestionlogin.php">
-<label for="nom_utilisateur">Nom d'utilisateur:</label>
-<input type="text" name="nom_utilisateur" required><br>
+<label for="pseudo">Nom d'utilisateur:</label>
+<input type="text" name="pseudo" required><br>
 <input type = "Hidden" name= "signup" value="false">
 
 <label for="password">Mot de passe:</label>
@@ -19,8 +19,8 @@
 <button type="submit">Se connecter</button>
 </form>
 <form method="post" action="gestionlogin.php">
-<label for="nom_utilisateur">Nom d'utilisateur:</label>
-<input type="text" name="nom_utilisateur" required><br>
+<label for="pseudo">Nom d'utilisateur:</label>
+<input type="text" name="pseudo" required><br>
 
 <label for="password">Mot de passe:</label>
 <input type="password" name="password" required><br>
