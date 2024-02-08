@@ -148,7 +148,17 @@ class BD
         return $res;
     }
     
+    static function getSortie($artiste,string $nom, $liste, string $date, string|null $cover,int $id_type){
+        switch($id_type){
+            case 1:
+                return new Album($artiste, $nom, $liste, $date,  $cover);
+            case 2:
+                return new Single($artiste, $nom, $liste, $date,  $cover);
+            case 3:
+                return new EP($artiste, $nom, $liste, $date,  $cover, $id_type);
+            case 4:
+                return new Playlist($artiste, $nom, $liste, $date,  $cover, $id_type);
+        }
     }
-
-
+}
 ?>

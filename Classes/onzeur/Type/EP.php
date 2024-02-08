@@ -52,6 +52,7 @@ class EP extends Sortie{
     public function addMusique($song){
         $this->liste[] = $song;
     }
+
     public function getID(){
         $queryIDEP = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom = ? AND date_sortie = ? AND cover = ? AND id_type = 3");
         $queryIDEP->execute([$this->nom,$this->date,$this->cover]);
@@ -61,6 +62,7 @@ class EP extends Sortie{
         }
         return $idEP['id_sortie'];
     }
+  
     public function addArtiste($artiste){
         $queryIDEP= $this->bdd->prepare("INSERT INTO CREE(id_sortie,nom_artiste) VALUES (?,?)");
         $queryIDEP->execute([$this->getID(),$artiste->getID()]);

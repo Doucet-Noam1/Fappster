@@ -9,8 +9,6 @@ use onzeur\Type\Musique;
 use onzeur\Type\Reader;
 use onzeur\Type\Artiste;
 use onzeur\Type\EP;
-$username = $_SESSION['username'];
-var_dump($username);
 if (!isset($_SESSION['bdd'])) {
     $_SESSION['bdd'] = BD::getInstance();;
 }
