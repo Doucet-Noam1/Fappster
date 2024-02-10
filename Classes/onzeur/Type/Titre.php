@@ -37,8 +37,8 @@ class Titre implements Irender{
         echo "<h3>".$this->titre."</h3>";
         echo "div id='artistes'>";
         echo "ul";
-        for ($i= 0;$i<count($this->lstartiste);$i++){
-            echo "<p>".$this->lstartiste[$i]->getPseudo()."</p>";
+        foreach($this->lstartiste as $artiste){
+            echo "<li>".$artiste->getPseudo()."</li>";
         }
         echo "/ul";
         echo "</div>";
