@@ -5,7 +5,7 @@ namespace onzeur\Type;
 
 
 
-class Note{
+class Note implements Irender{
     private $album;
     private $note;
     public function __construct($album,$note){

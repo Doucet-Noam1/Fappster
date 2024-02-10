@@ -6,16 +6,20 @@ use onzeur\Type\BD;
 <html>
 <head>
     <title>Onzeur</title>
-    <link rel="stylesheet" href="Css/index.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
-    <h1>Onzeur</h1>
+    <?php
+    require 'nav.php';
+    ?>
+    <div id="contenu">
     <div id="albums">
         <?php
-        $album = BD::getAlbum($_GET['id']);
-        $album->renderDetail();
+        $album = BD::getSortie($_GET['id']);
+        $album->renderdetail();
         ?>
+    </div>
     </div>
 </body>
 

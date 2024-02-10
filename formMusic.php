@@ -5,7 +5,7 @@ Autoloader::register();
 use onzeur\Type\Sortie;
 use onzeur\Type\BD;
 use onzeur\Type\Album;
-use onzeur\Type\Musique;
+use onzeur\Type\Titre;
 use onzeur\Type\Reader;
 use onzeur\Type\Artiste;
 use onzeur\Type\EP;
@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submitButton'])) {
 
 <head>
     <title>Création d'une musique</title>
-    <!-- <link rel="stylesheet" href="Css/formMusic.css"> -->
+    <!-- <link rel="stylesheet" href="css/formMusic.css"> -->
 </head>
 
 <body>
