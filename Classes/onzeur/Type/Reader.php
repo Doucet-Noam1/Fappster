@@ -17,17 +17,10 @@ class Reader
         $data = array();
         if ($this->donnees != null) {
             foreach ($this->donnees as $key => $value) {
-                $img = is_null($value["img"]) ? null : "data/images/covers/".$value["img"];
+                $img = is_null($value["img"]) ? null : $value["img"];
                 $artiste = new Artiste($value["by"], null);
                 $value["entryId"];
-                $album = new Album($artiste,$value["title"], array(), strval($value["releaseYear"]), $img);
-                foreach ($value["genre"] as $genre) {
-                    $genre = mb_convert_case($genre, MB_CASE_TITLE, "UTF-8");
-                    $genre = str_replace(["-"," ","_"],"",$genre);
-                    $album->addGenre($genre);
-                    $queryLinkGenre= BD::getInstance()->prepare("INSERT INTO A_POUR_STYLE(nom_genre,id_sortie) VALUES (?,?)");
-                    $queryLinkGenre->execute([$genre,$album->getID()]);
-                }
+                $album = new Album($artiste,$value["title"], array(), strval($value["releaseYear"]), $img,$value["genre"]);
                 $data[] = $album;
             }
         }

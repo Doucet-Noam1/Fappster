@@ -5,9 +5,9 @@ namespace onzeur\Type;
 
 
 
-class EP extends Sortie{
-    public function __construct($artiste,$nom,$liste,$date,$cover){
-        parent::__construct($artiste,$nom,$liste,$date,$cover,3);
+class EP extends SortieCommerciale{
+    public function __construct(Artiste $artiste,string $nom,array $listeTitres,string $date,string|null $cover,array $genres, int $id = null){
+        parent::__construct($artiste,$nom,$listeTitres,$date,$cover,3,$genres);
     }
     public function render(){
         echo '<div class="album">';
@@ -30,42 +30,11 @@ class EP extends Sortie{
             echo '<img src="data/images/covers/null.png"/>';
         echo "<h1>". $this->nom ."</h1>";
         echo '<div id="musiques">';
-        for ($i= 0;$i<count($this->liste);$i++){
-            $this->liste[$i]->render();
+        for ($i= 0;$i<count($this->listeTitres);$i++){
+            $this->listeTitres[$i]->render();
         }
         echo '</div>';
         echo "<p>".$this->date."</p>";
         echo '</a>';
-    }
-    public function getNom(): string{
-        return $this->nom;
-    }
-    public function getCover() : string{
-        return $this->cover;
-    }
-    public function getDate() : string{
-        return $this->date;
-    }
-    public function getListe(){
-        return $this->liste;
-    }
-    public function addMusique($song){
-        $this->liste[] = $song;
-    }
-
-    public function getID(){
-        $queryIDEP = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom_sortie = ? AND date_sortie = ? AND cover = ? AND id_type = 3");
-        $queryIDEP->execute([$this->nom,$this->date,$this->cover]);
-        $idEP = $queryIDEP->fetch();
-        if ($idEP == null){
-            return null;
-        }
-        return $idEP['id_sortie'];
-    }
-  
-    public function addArtiste($artiste){
-        $queryIDEP= $this->bdd->prepare("INSERT INTO CREE(id_sortie,nom_artiste) VALUES (?,?)");
-        $queryIDEP->execute([$this->getID(),$artiste->getPseudo()]);
-        $this->artiste[] = $artiste;
     }
 }

@@ -1,32 +1,97 @@
-.album{
-    background-color: rgb(51, 15, 85);
-    margin: auto;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.album {
+    padding: 1vw;
+    background-color: #1f1f1f;
     border-radius: 10px;
-    text-align: center;
     margin-bottom: 5vh;
-    width: 15vw;
-    height: 46vh;
+    width: 12vw;
+    height: 17vw;
+    position: relative;
 }
 
-.album img{
+.album:hover {
+    transition: all 0.3s;
+    background-color: #2f2f2f;
+}
+
+.album p:first-of-type {
+    color: white;
+    font-size: 1.5rem;
+    position: relative;
+    margin-top: 1vw;
+    bottom: unset;
+}
+
+.album p{
+    color: rgb(154, 154, 154);
+    position: absolute;
+    bottom: 1vw;
+}
+
+.album img {
     width: 10vw;
-    height: 10vw;
+    aspect-ratio: 1/1;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     transition: 0.3s;
-    text-align: center;
-    margin: 10%;
 }
 
-#albums{
+#albums {
     display: flex;
     flex-wrap: wrap;
+    overflow-y: scroll;
+    justify-content: space-around;
 }
 
-body{
-    background-color: #32343b;
+genre {
+    display: none;
 }
 
-a{
+body {
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
+    padding: 5px;
+}
+
+body>* {
+    border-radius: 10px;
+    margin: 5x;
+    padding: 10px;
+    height: calc(100% - 10px);
+}
+
+#contenu {
+    flex-grow: 1;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+#contenu::-webkit-scrollbar {
+    display: none;
+}
+
+a {
     color: violet;
 }

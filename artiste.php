@@ -6,16 +6,20 @@ use onzeur\Type\BD;
 <html>
 <head>
     <title>Onzeur</title>
-    <link rel="stylesheet" href="Css/index.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
-    <h1>Onzeur</h1>
+    <?php
+    require 'nav.php';
+    ?>
+    <div id="contenu">
     <div id="albums">
         <?php
         $artiste = BD::getArtiste($_GET['id']);
         $artiste->render();
         ?>
+    </div>
     </div>
 </body>
 

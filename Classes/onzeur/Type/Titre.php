@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace onzeur\Type;
 
-class Musique implements Irender{
+class Titre implements Irender{
     private $titre;
     private $lstartiste;
     private $duree;
@@ -37,7 +37,7 @@ class Musique implements Irender{
         echo "<h3>".$this->titre."</h3>";
         echo "div id='artistes'>";
         for ($i= 0;$i<count($this->lstartiste);$i++){
-            echo "<p>".$this->lstartiste[$i]->getNom()."</p>";
+            echo "<p>".$this->lstartiste[$i]->getPseudo()."</p>";
         }
         echo "</div>";
         echo "<p>".$this->dateAjout."</p>";
@@ -62,24 +62,16 @@ class Musique implements Irender{
     public function setAlbum($sortie){
         $this->sortie = $sortie;
     }
-    public function getID(){
-        $queryIDMusique = $this->bdd->prepare("SELECT id_titre FROM TITRE WHERE titre = ? AND duree = ?");
-        $queryIDMusique->execute([$this->titre,$this->duree]);
-        $idMusique = $queryIDMusique->fetch();
-        if ($idMusique == null){
-            return null;
-        }
-        return $idMusique['id_titre'];
+    public function getPosition()
+    {
+        return 1; // pas bien
     }
-    public function addArtiste($artiste){
-        $queryIDAlbum = $this->bdd->prepare("SELECT id_titre FROM CHANTER_PAR WHERE id_titre = ? AND nom_artiste = ?");
-        $queryIDAlbum->execute([$this->getID(),$artiste->getPseudo()]);
-        $idAlbum = $queryIDAlbum->fetch();
-        if($idAlbum == null){
-            $queryAddMusique= $this->bdd->prepare("INSERT INTO CHANTER_PAR(nom_artiste,id_titre) VALUES (?,?)");
-            $queryAddMusique->execute([$artiste->getPseudo(),$this->getID()]);
-            $this->lstartiste[] =$artiste;
-        }
+    public function getID():int{
+        return BD::getIdTitre($this);
+    }
+    public function addArtiste(Artiste $artiste){
+        BD::addArtisteToTitre($this,$artiste);
+        $this->lstartiste[] = $artiste;
     }
     
 }
