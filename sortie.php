@@ -2,32 +2,24 @@
 require 'Classes/autoloader.php';
 Autoloader::register();
 use onzeur\Type\BD;
-
 ?>
 <html>
-
 <head>
     <title>Onzeur</title>
-    <link rel="stylesheet" href="css/sortie.css">
     <link rel="stylesheet" href="css/index.css">
 </head>
+
 <body>
     <?php
-    require 'base.php';
+    require 'nav.php';
     ?>
     <div id="contenu">
+    <div id="albums">
         <?php
-        $sortie = BD::getSortie($_GET['id']);
-        $sortie->renderdetail();
+        $album = BD::getSortie($_GET['id']);
+        $album->renderdetail();
         ?>
-        <script src="js/sortie.js"></script>
-        <div id="recommandations">
-            <h1>Recommandations</h1>
-            <?php
-            foreach (BD::getRecommandations($sortie) as $recommandation) {
-                $recommandation->render();
-            }
-            ?>
+    </div>
     </div>
 </body>
 

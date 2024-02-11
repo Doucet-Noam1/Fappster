@@ -14,13 +14,13 @@ abstract class Sortie implements Irender
     protected array $artiste;
     protected int $id_type;
 
-    public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, string|null $cover, int $id_type, int $id = null)
+    public function __construct(Artiste $artiste, string $nom, array $listeTitres, string $date, string|null $cover, int $id_type, int $id = null)
     {
         $this->nom = $nom;
         $this->date = $date;
         $this->cover = $cover;
         $this->listeTitres = $listeTitres;
-        is_array($artiste) ? $this->artiste = $artiste : $this->artiste = [$artiste];
+        $this->artiste = [$artiste];
         $this->id_type = $id_type;
         BD::addSortie($this);
     }
@@ -60,15 +60,9 @@ abstract class Sortie implements Irender
     public function addArtiste(Artiste $artiste)
     {
         BD::addArtisteToSortie($this, $artiste);
-        $this->artiste[] = $artiste;
     }
 
-    public function getNombreDeTitres(): int
-    {
-        return count($this->listeTitres);
-    }
-
-    static function factory(Artiste|array $artiste, string $nom, array $listeTitres, string $date, string|null $cover, int $id_type, array $listeGenres, int $id = null): Sortie
+    static function factory(Artiste $artiste, string $nom, array $listeTitres, string $date, string|null $cover, int $id_type, array $listeGenres, int $id = null): Sortie
     {
         $id =null;
         switch ($id_type) {

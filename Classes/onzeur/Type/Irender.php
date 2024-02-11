@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace onzeur\Type;
 
-interface Irender
-{
+
+
+interface Irender{
     public function render();
-    public function renderDetail();
 }

@@ -18,9 +18,6 @@ class Note implements Irender{
         echo "<p>".$this->note."</p>";
         echo '</div>';
     }
-    public function renderDetail(){
-        $this->render();
-    }
 
     public function getAlbum(){
         return $this->album;

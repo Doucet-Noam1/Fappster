@@ -1,4 +1,24 @@
-.sortie {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.album {
     padding: 1vw;
     background-color: #1f1f1f;
     border-radius: 10px;
@@ -8,12 +28,12 @@
     position: relative;
 }
 
-.sortie:hover {
+.album:hover {
     transition: all 0.3s;
     background-color: #2f2f2f;
 }
 
-.sortie p:first-of-type {
+.album p:first-of-type {
     color: white;
     font-size: 1.5rem;
     position: relative;
@@ -21,31 +41,55 @@
     bottom: unset;
 }
 
-.sortie p{
+.album p{
     color: rgb(154, 154, 154);
     position: absolute;
     bottom: 1vw;
 }
 
-.sortie img {
+.album img {
     width: 10vw;
     aspect-ratio: 1/1;
     border-radius: 10px;
     transition: 0.3s;
 }
 
-#albums, #eps, #singles, #recommandations {
+#albums {
     display: flex;
     flex-wrap: wrap;
     overflow-y: scroll;
     justify-content: space-around;
 }
 
-#contenu>*>h1 {
-    color: white;
-    text-align: center;
-    width: 100%;
-    margin-bottom: 10px;
+genre {
+    display: none;
+}
+
+body {
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
+    padding: 5px;
+}
+
+body>* {
+    border-radius: 10px;
+    margin: 5x;
+    padding: 10px;
+    height: calc(100% - 10px);
+}
+
+#contenu {
+    flex-grow: 1;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+#contenu::-webkit-scrollbar {
+    display: none;
 }
 
 a {
