@@ -22,4 +22,7 @@ class PlayList extends Sortie
         echo "<p>" . $this->date . "</p>";
         echo '</div>';
     }
+    public function renderDetail(){
+        $this->render();
+    }
 }
