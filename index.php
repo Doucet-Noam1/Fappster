@@ -11,7 +11,7 @@ if (isset($_SESSION['pseudo'])){
 <html>
 
 <head>
-    <title>Onzeur</title>
+    <title>Fappster</title>
     <link rel="stylesheet" href="css/index.css">
     <link rel="icon" href="data/images/logo.png">
 </head>
