@@ -45,12 +45,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submitButton'])) {
 
 <head>
     <title>Création d'une musique</title>
-    <!-- <link rel="stylesheet" href="css/formMusic.css"> -->
+    <link rel="stylesheet" href="./Css/unifiedForm.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
+    <nav>
+        <img id='logo' src="./data/images/logo.png" alt="Logo">
+    </nav>
     <div id="panel">
-        <h1>Créer une musique</h1>
+        <h2>Créer une musique</h2>
+        <div class='separator'></div>
         <form action="POST">
             <?php
             $textField->render();
