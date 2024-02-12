@@ -19,6 +19,10 @@ $pseudo = $_SESSION['pseudo'];
             <li>
                 <a href="login.php"><object type="image/svg+xml"
                         data="data/images/connexion.svg">Connexion</object><span>Connexion</span></a>
+                </li> 
+            <li>
+                <a href="logout.php"><object type="image/svg+xml"
+                        data="data/images/connexion.svg">Deconnexion</object><span>Deconnexion</span></a>
                 </li>
                 <li>
                 <a href="profil.php"><object type="image/svg+xml"

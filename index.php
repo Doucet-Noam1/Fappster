@@ -26,11 +26,6 @@ $album = new Album($artiste, 'test', [$musique, $musique2], '2024', 'aaa.png', [
 $album->addArtiste($artiste);
 $musique2->addArtiste($artiste2);
 $pseudo = $_SESSION['pseudo'];
-if ($_SESSION['bdExiste'] == null){
-    deletebd();
-    BD::getInstance();
-    $_SESSION['bdExiste'] = true;
-}
 ?>
 <html>
 
