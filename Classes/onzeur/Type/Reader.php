@@ -17,11 +17,10 @@ class Reader
         $data = array();
         if ($this->donnees != null) {
             foreach ($this->donnees as $key => $value) {
-                $img = null;
-                if ($value["img"] != null)
-                    $img = "data/images/covers/" . $value["img"];
+                $img = is_null($value["img"]) ? null : $value["img"];
                 $artiste = new Artiste($value["by"], null);
-                $album = new Album($artiste,$value["title"], array(), strval($value["releaseYear"]), $img, $value["entryId"]);
+                $value["entryId"];
+                $album = new Album($artiste,$value["title"], array(), strval($value["releaseYear"]), $img,$value["genre"]);
                 $data[] = $album;
             }
         }

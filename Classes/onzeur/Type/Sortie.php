@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace onzeur\Type;
+
 include_once 'BD.php';
 
 abstract class Sortie implements Irender
@@ -9,34 +10,19 @@ abstract class Sortie implements Irender
     protected string $nom;
     protected string $date;
     protected string|null $cover;
-    protected $liste;
-    protected $artiste;
-    protected $bdd;
-    protected $id_type;
+    protected array $listeTitres;
+    protected array $artiste;
+    protected int $id_type;
 
-    public function __construct($artiste,string $nom, $liste, string $date, string|null $cover,int $id_type, $id=null)
+    public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, string|null $cover, int $id_type, int $id = null)
     {
         $this->nom = $nom;
         $this->date = $date;
         $this->cover = $cover;
-        $this->liste = $liste;
-        $this->bdd = BD::getInstance();
-        $this->artiste = [$artiste];
+        $this->listeTitres = $listeTitres;
+        is_array($artiste) ? $this->artiste = $artiste : $this->artiste = [$artiste];
         $this->id_type = $id_type;
-        if($this->getID() == null){
-            $queryAddAlbum= $this->bdd->prepare("INSERT INTO SORTIE(nom,date_sortie,cover,id_type) VALUES (?,?,?,?)");
-        $queryAddAlbum->execute([$nom,$date,$cover,$id_type]);
-        $this->addArtiste($artiste);
-
-        for ($i= 0;$i<count($liste);$i++){
-            $idMusique = $liste[$i]->getID();
-            $querAddContient = $this->bdd->prepare("INSERT INTO CONTIENT(id_sortie,id_titre,position) VALUES (?,?,?)");
-            $querAddContient->execute([$this->getID(),$idMusique,$i+1]);
-            $querAddContient = $querAddContient->fetch();
-        }
-        }
-        
-    
+        BD::addSortie($this);
     }
     public abstract function render();
     public function getNom(): string
@@ -47,34 +33,59 @@ abstract class Sortie implements Irender
     {
         return $this->date;
     }
-    public function getCover(): string
+    public function getCover(): string|null
     {
         return $this->cover;
     }
-    public function getListe()
+    public function getListeTitres(): array
     {
-        return $this->liste;
+        return $this->listeTitres;
     }
-    public function getID()
+    public function getType(): int
     {
-        $queryIDSortie = $this->bdd->prepare("SELECT id_sortie FROM SORTIE WHERE nom = ? AND date_sortie = ? AND id_type = ?");
-        $queryIDSortie->execute([$this->nom,$this->date,$this->id_type]);
-        $idSortie = $queryIDSortie->fetch();
-        return $idSortie['id_sortie'];
+        return $this->id_type;
+    }
+    public function getID(): int|null
+    {
+        return BD::getIdSortie($this);
     }
 
-    public function getArtiste()
+    /**
+     * @return Artiste[] liste de tout les artistes ayant participé à la sortie
+     */
+    public function getArtiste(): array
     {
         return $this->artiste;
     }
-    public function addArtiste($artiste){
-        $queryIDAlbum = $this->bdd->prepare("SELECT id_sortie FROM CREE WHERE id_sortie = ? AND nom_artiste = ?");
-        $queryIDAlbum->execute([$this->getID(),$artiste->getPseudo()]);
-        $idAlbum = $queryIDAlbum->fetch();
-        if ($idAlbum == null){
-            $queryAddAlbum= $this->bdd->prepare("INSERT INTO CREE(id_sortie,nom_artiste) VALUES (?,?)");
-            $queryAddAlbum->execute([$this->getID(),$artiste->getPseudo()]);
-        }
+    public function addArtiste(Artiste $artiste)
+    {
+        BD::addArtisteToSortie($this, $artiste);
         $this->artiste[] = $artiste;
+    }
+
+    public function getNombreDeTitres(): int
+    {
+        return count($this->listeTitres);
+    }
+
+    static function factory(Artiste|array $artiste, string $nom, array $listeTitres, string $date, string|null $cover, int $id_type, array $listeGenres, int $id = null): Sortie
+    {
+        $id =null;
+        switch ($id_type) {
+            case 1:
+                return new Album($artiste, $nom, $listeTitres, $date, $cover, $listeGenres, $id);
+            case 2:
+                return new Single($artiste, $nom, $listeTitres, $date, $cover, $listeGenres, $id);
+            case 3:
+                return new EP($artiste, $nom, $listeTitres, $date, $cover, $listeGenres, $id);
+            case 4:
+                return new PlayList($artiste, $nom, $listeTitres, $date, $cover, $id_type, $id);
+            default:
+                throw new \Exception("Type de sortie inconnu");
+        }
+    }
+    public function addTitre($song)
+    {
+        $this->listeTitres[] = $song;
     }
 }

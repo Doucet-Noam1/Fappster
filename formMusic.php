@@ -5,7 +5,7 @@ Autoloader::register();
 use onzeur\Type\Sortie;
 use onzeur\Type\BD;
 use onzeur\Type\Album;
-use onzeur\Type\Musique;
+use onzeur\Type\Titre;
 use onzeur\Type\Reader;
 use onzeur\Type\Artiste;
 use onzeur\Type\EP;
@@ -49,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submitButton'])) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap" rel="stylesheet">
+
 </head>
 
 <body>

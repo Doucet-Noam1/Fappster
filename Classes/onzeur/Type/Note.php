@@ -5,7 +5,7 @@ namespace onzeur\Type;
 
 
 
-class Note{
+class Note implements Irender{
     private $album;
     private $note;
     public function __construct($album,$note){
@@ -17,6 +17,9 @@ class Note{
         echo "<h1>".$this->album."</h1>";
         echo "<p>".$this->note."</p>";
         echo '</div>';
+    }
+    public function renderDetail(){
+        $this->render();
     }
 
     public function getAlbum(){

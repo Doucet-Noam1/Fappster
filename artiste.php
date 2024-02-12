@@ -2,20 +2,27 @@
 require 'Classes/autoloader.php';
 Autoloader::register();
 use onzeur\Type\BD;
+
 ?>
 <html>
+
 <head>
     <title>Onzeur</title>
-    <link rel="stylesheet" href="Css/index.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
-    <h1>Onzeur</h1>
-    <div id="albums">
+    <?php
+    require 'base.php';
+    ?>
+    <div id="contenu">
+        <div id="albums">
+            <h1>Artiste</h1>
         <?php
         $artiste = BD::getArtiste($_GET['id']);
         $artiste->render();
         ?>
+        </div>
     </div>
 </body>
 

@@ -5,67 +5,51 @@ include_once 'BD.php';
 
 
 class Utilisateur {
-    protected $nom;
-    protected $mdp;
-    protected $PlaylistLikes;
-    protected $litesNotes;
+    protected string $pseudo;
+    protected string $nom;
+    protected string $prenom;
+    protected string|null $mdp;
+    protected array $listeNotes;
+    protected array $PlaylistLikes;
 
-    protected $bdd;
-
-    public function __construct($nom,$mdp=null){
-        $this->bdd = BD::getInstance();
-
+    public function __construct($pseudo,$nom="John",$prenom="Doe",$mdp=null){
+        $this->pseudo = $pseudo;
         $this->nom = $nom;
+        $this->prenom = $prenom;
         $this->mdp = $mdp;
         $this->PlaylistLikes = [];
-        $this->litesNotes = [];
-        if($this->getPseudo() == null){
-            $queryAddArtiste= $this->bdd->prepare("INSERT INTO UTILISATEUR(pseudo,mdp) VALUES (?,?)");
-            $queryAddArtiste->execute([$nom,$mdp]);
-        }
-
-
-
+        $this->listeNotes = [];
+        BD::addUtilisateur($this);
     }
     public function render(){
-        echo '<div class="artiste">';
-        echo "<h1>". $this->nom ."</h1>";
-        for ($i= 0;$i<count($this->litesNotes);$i++){
-            $this->litesNotes[$i]->render();
+        echo "<h1>". $this->pseudo ."</h1>";
+        for ($i= 0;$i<count($this->listeNotes);$i++){
+            $this->listeNotes[$i]->render();
         }
         foreach(BD::getSortiesBy($this) as $sortie){
             $sortie->render();
         }
-        echo '</div>';
-
     } 
 
-    public function addNote($song){
-        $this->litesNotes->append($song);
+    public function addNote(Titre $song){
+        $this->listeNotes[] = $song;
     }
     public function getMdp(){
         return $this->mdp;
     }
+    public function getPseudo(){
+        return $this->pseudo;
+    }
     public function getNom(){
         return $this->nom;
+    }
+    public function getPrenom(){
+        return $this->prenom;
     }
     public function getPlaylistLikes(){
         return $this->PlaylistLikes;
     }
-    public function getLitesNotes(){
-        return $this->litesNotes;
+    public function getListeNotes(){
+        return $this->listeNotes;
     }
-    public function getPseudo(){
-        $this->bdd = BD::getInstance();
-        $queryIDArtiste = $this->bdd->prepare("SELECT pseudo FROM UTILISATEUR WHERE pseudo = ?");
-        $queryIDArtiste->execute([$this->nom]);
-        $idArtiste = $queryIDArtiste->fetch();
-        if ($idArtiste == null){
-            return null;
-        }
-        return $idArtiste['pseudo'];
-    }
-
-    
-
 }
