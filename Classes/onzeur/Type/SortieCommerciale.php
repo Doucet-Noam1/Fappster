@@ -47,6 +47,7 @@ abstract class SortieCommerciale extends Sortie
         $image = self::PATH . $this->cover;
         echo '<img src="' . (($image != self::PATH && file_exists($image)) ? self::PATH . str_replace("%", "%25", $this->cover) : self::PATH . 'null.png') . '"/>';
         echo "<div id='informations'>";
+        echo '<button action = "window.location.href = "> Like </button>';
         $splitNameSpace = explode("\\", get_class($this));
         $splitNameSpace = end($splitNameSpace);
         echo "<p>" . $splitNameSpace . "</p>";

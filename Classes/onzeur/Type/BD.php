@@ -42,8 +42,8 @@ class BD
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS AVIS (
                 id_sortie INTEGER,
                 pseudo INTEGER,
-                notes INTEGER,
-                likes BOOLEAN default false,
+                note INTEGER,
+                favori BOOLEAN default false,
                 FOREIGN KEY(id_sortie) REFERENCES ARTISTE(id_sortie),
                 FOREIGN KEY(pseudo) REFERENCES SORTIE(id_groupe),
                 PRIMARY KEY(id_sortie,pseudo)
@@ -482,5 +482,28 @@ class BD
         return true;
         
     }
+    static function likeSortie(string $pseudo,Sortie $sortie){
+        $bdd = BD::getInstance();
+        $bdd->beginTransaction();
+        $valeurActuelle = self::getLike($pseudo,$sortie);
+        $querryInsert = $bdd->prepare('INSERT INTO AVIS(pseudo,id_sortie) VALUES(?,?)');
+        $querryInsert->execute([!$valeurActuelle]);
+        $bdd ->commit();
+    }
+    static function getLike(string $pseudo,Sortie $sortie):bool{
+        $bdd = BD::getInstance();
+        $queryEstLike = $bdd -> prepare('SELECT favori FROM AVIS WHERE pseudo = ? AND id_sortie = ?');
+        $queryEstLike -> execute([$pseudo,$sortie->getID()]);
+        $like = $queryEstLike -> fetch();
+        return $like['favori'];
+    }
+    static function getNote(string $pseudo,Sortie $sortie):int|null{
+        $bdd = BD::getInstance();
+        $queryNote = $bdd -> prepare('SELECT note FROM AVIS WHERE pseudo = ? AND id_sortie = ?');
+        $queryNote -> execute([$pseudo,$sortie->getID()]);
+        $note = $queryNote -> fetch();
+        return $note['note'];
+    }
+                    
 }
 ?>
