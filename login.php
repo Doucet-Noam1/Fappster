@@ -45,7 +45,8 @@ if (BD::getUtilisateur($pseudo,$nom,$prenom, $password) == null){
 </head>
 <body>
     <nav>
-        <img id='logo' src="./data/images/logo.png" alt="Logo">
+        <a href = 'index.php'>
+        <img id='logo' src="./data/images/logo.png" alt="Logo"> </a>
     </nav>
     <div id="panel">
         <div>

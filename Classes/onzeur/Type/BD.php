@@ -11,9 +11,6 @@ class BD
     private function __construct()
     {
         try {
-            if (file_exists('fappster.db')) {
-                unlink('fappster.db');
-            }
 
             self::$bdd = loadbd();
 
@@ -116,13 +113,12 @@ class BD
         }
     }
     static function getInstance()
-    {
+    { 
         if (!(file_exists('fappster.db'))) {
             new BD;
         }
         return loadbd();
     }
-
     static function addArtiste(Artiste $artiste)
     {
         $bdd = BD::getInstance();
@@ -163,7 +159,8 @@ class BD
         $resUtilisateur = $queryUtilisateur->fetch();
         if (!$resUtilisateur) {
             $queryAddUtilisateur = $bdd->prepare("INSERT INTO UTILISATEUR(pseudo,mdp) VALUES (?,?)");
-            $queryAddUtilisateur->execute([$utilisateur->getPseudo(), hash('sha256',$utilisateur->getMdp())]);
+            $mdp=$utilisateur->getMdp() == null ? $utilisateur->getMdp() : hash('sha256',$utilisateur->getMdp());
+            $queryAddUtilisateur->execute([$utilisateur->getPseudo(), $mdp]);
         }
         $bdd->commit();
     }

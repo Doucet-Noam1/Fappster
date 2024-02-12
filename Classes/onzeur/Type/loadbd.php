@@ -5,3 +5,7 @@ function loadbd(){
     $bdd->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     return $bdd;
 }
+function deletebd(){
+    echo 'creation';
+    unlink('fappster.db');
+}

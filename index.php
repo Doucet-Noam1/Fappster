@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'loadbd.php';
 require 'Classes/autoloader.php';
 Autoloader::register();
 use onzeur\Type\Sortie;
@@ -10,9 +11,6 @@ use onzeur\Type\Reader;
 use onzeur\Type\Artiste;
 use onzeur\Type\EP;
 
-// if (!isset($_SESSION['bdd'])) {
-//     $_SESSION['bdd'] = BD::getInstance();;
-// }
 $reader = new Reader("extrait.yml");
 $reader->getData();
 $artiste = new Artiste('naps', 'test');
@@ -28,7 +26,11 @@ $album = new Album($artiste, 'test', [$musique, $musique2], '2024', 'aaa.png', [
 $album->addArtiste($artiste);
 $musique2->addArtiste($artiste2);
 $pseudo = $_SESSION['pseudo'];
-
+if ($_SESSION['bdExiste'] == null){
+    deletebd();
+    BD::getInstance();
+    $_SESSION['bdExiste'] = true;
+}
 ?>
 <html>
 
