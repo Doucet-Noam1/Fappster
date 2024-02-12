@@ -12,9 +12,9 @@ contient quelques albums et artistes avec des pochettes d'albums.
 composer require symfony/yaml
 
 ## 2 - Fonctionnalités attendues
-- [ ] 2.1 Affichage des albums
-- [ ] 2.2 Détail des albums
-- [ ] 2.3 Détail d’un artiste avec ses albums
+- [x] 2.1 Affichage des albums
+- [x] 2.2 Détail des albums
+- [x] 2.3 Détail d’un artiste avec ses albums
 - [ ] 2.4 Recherche avancée dans les albums (par artiste, par genre, par année, etc.)
 
 ## 3 - Fonctionnalités souhaitées
@@ -29,13 +29,13 @@ composer require symfony/yaml
 - [ ] 4.3 Système de notation des albums
 
 ## 5 - Contraintes
-- [ ] 5.1 Organisation du code dans une arborescence cohérente
-- [ ] 5.2 Utilisation des namespaces
-- [ ] 5.3 Utilisation d’un provider pour charger le fichier YAML
-- [ ] 5.4 Utilisation d'un autoloader pour charger les classes d’objets nécessaires
-- [ ] 5.5 Utilisation de PDO avec base de données sqlite
+- [x] 5.1 Organisation du code dans une arborescence cohérente
+- [x] 5.2 Utilisation des namespaces
+- [x] 5.3 Utilisation d’un provider pour charger le fichier YAML
+- [x] 5.4 Utilisation d'un autoloader pour charger les classes d’objets nécessaires
+- [x] 5.5 Utilisation de PDO avec base de données sqlite
 - [ ] 5.6 Utilisation de sessions
-- [ ] 5.7 Mise en place CSS
+- [x] 5.7 Mise en place CSS
 
 ## 6 - Documentations
 - [x] 6.1 Modèle Conceptuel de Données pour la BDD
