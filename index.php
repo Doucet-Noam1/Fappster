@@ -27,7 +27,7 @@ $ep = new EP($artiste, 'test', [$musique, $musique2], '2024', 'aaa.png', ['Rap']
 $album = new Album($artiste, 'test', [$musique, $musique2], '2024', 'aaa.png', ['Rap']);
 $album->addArtiste($artiste);
 $musique2->addArtiste($artiste2);
-
+$pseudo = $_SESSION['pseudo'];
 
 ?>
 <html>
@@ -45,6 +45,7 @@ $musique2->addArtiste($artiste2);
     <div id="contenu">
         <select>
             <?php
+           
             echo '<option value="all">Tous</option>';
             foreach (BD::getAllGenres() as $value) {
                 $genre = $value;

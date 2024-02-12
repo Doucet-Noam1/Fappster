@@ -163,7 +163,7 @@ class BD
         $resUtilisateur = $queryUtilisateur->fetch();
         if (!$resUtilisateur) {
             $queryAddUtilisateur = $bdd->prepare("INSERT INTO UTILISATEUR(pseudo,mdp) VALUES (?,?)");
-            $queryAddUtilisateur->execute([$utilisateur->getPseudo(), $utilisateur->getMdp()]);
+            $queryAddUtilisateur->execute([$utilisateur->getPseudo(), hash('sha256',$utilisateur->getMdp())]);
         }
         $bdd->commit();
     }
@@ -283,6 +283,24 @@ class BD
         foreach ($artistes as $artiste) {
             $res->addArtiste($artiste);
         }
+        return $res;
+    }
+
+    static function getUtilisateur(string $pseudo): Utilisateur|null
+    {
+        $queryUtilisateur = BD::getInstance()->prepare("SELECT * FROM UTILISATEUR WHERE pseudo = ?");
+        $queryUtilisateur->execute([$pseudo]);
+        $utilisateur = $queryUtilisateur->fetch();
+        if ($utilisateur == null) {
+            return null;
+        }
+        $utilisateur['nom']=$utilisateur['nom'] != null ? $utilisateur['nom'] : "Doe";
+        $utilisateur['prenom']=$utilisateur['prenom'] != null ? $utilisateur['prenom'] : "John";
+        $utilisateur['mdp']=$utilisateur['mdp'] != null ? $utilisateur['mdp'] : null;
+        print_r($utilisateur['nom']);
+        print_r($utilisateur['prenom']);
+        print_r($utilisateur['mdp']);
+        $res = new Utilisateur($pseudo, $utilisateur['nom'], $utilisateur['prenom'],$utilisateur['mdp']);
         return $res;
     }
 
@@ -455,6 +473,17 @@ class BD
             $res[] = self::getSortie($reco['id_sortie']);
         }
         return $res;
+    }
+    static function verifie_utilisateur(string $pseudo,string $mdp) : bool{
+        $bdd= BD::getInstance();
+        $connexion = $bdd -> prepare('SELECT * FROM UTILISATEUR WHERE pseudo = ?');
+        $connexion-> execute([$pseudo]);
+        $login = $connexion -> fetch();
+        if ($login == null || $login['mdp'] != hash('sha256',$mdp)){
+            return false;
+        }
+        return true;
+        
     }
 }
 ?>

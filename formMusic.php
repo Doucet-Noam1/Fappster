@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submitButton'])) {
 
 <head>
     <title>Création d'une musique</title>
-    <link rel="stylesheet" href="./Css/unifiedForm.css">
+    <link rel="stylesheet" href="./css/unifiedForm.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap" rel="stylesheet">

@@ -13,6 +13,8 @@
             <li>
                 <a href="login.php"><object type="image/svg+xml"
                         data="data/images/connexion.svg">Connexion</object><span>Connexion</span></a>
+                </li>
+
         </ul>
     </nav>
 </aside>
