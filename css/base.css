@@ -80,3 +80,20 @@ nav object{
     height: var(--size);
     margin: 1rem;
 }
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+nav ul li {
+    margin-bottom: 10px;
+}
+nav ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+}
+nav ul li a object {
+    margin-right: 10px;
+}

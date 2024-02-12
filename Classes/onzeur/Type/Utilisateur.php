@@ -48,6 +48,9 @@ class Utilisateur {
     public function getPrenom(){
         return $this->prenom;
     }
+    public function getPhoto(){
+        return $this->photoDeProfil;
+    }
     public function getPlaylistLikes(){
         return $this->PlaylistLikes;
     }

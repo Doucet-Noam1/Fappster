@@ -28,12 +28,12 @@ if ($_POST) {
                 $fileName = $_FILES['photo']['name'];
                 
                 $uploadDirectory = './data/images/photoDeProfils/';
-                $destPath = $uploadDirectory . $fileName;
+                $destPath = $uploadDirectory.$pseudo. '.jpg';
 
                 // Déplacer le fichier téléchargé vers le répertoire de destination
                 if (move_uploaded_file($fileTmpPath, $destPath)) {
                     // Création de l'utilisateur
-                    $artiste = new Utilisateur($pseudo, $nom, $prenom, $password, $destPath);
+                    $artiste = new Utilisateur($pseudo, $nom, $prenom,$destPath, $password);
                     $_SESSION['artiste'] = $artiste;
                     $_SESSION['pseudo'] = $pseudo;
                     header('Location: index.php');
