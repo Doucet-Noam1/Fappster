@@ -1,49 +1,45 @@
 <?php
 require 'Classes/autoloader.php';
-
 Autoloader::register();
-use onzeur\Type\Sortie;
-use onzeur\Type\BD;
-use onzeur\Type\Album;
 use onzeur\Type\Titre;
-use onzeur\Type\Reader;
 use onzeur\Type\Artiste;
-use onzeur\Type\EP;
-use onzeur\Input\input;
-use onzeur\Input\TextField;
-use onzeur\Input\FileChoserField;
-use onzeur\Input\NumberField;
-use onzeur\Input\SubmitButton;
-
 session_start();
-$artiste = $_SESSION['pseudo'] ?? '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submitButton'])) {
     $nomTitre = $_POST['nomTitre'] ?? '';
     $nbField = $_POST['nbField'] ?? '';
-    $file = $_FILES['file']['tmp_name'] ?? ''; // Utilisez $_FILES pour récupérer le fichier audio temporaire.
     $featsList = $_POST['feats'] ?? '';
 
-    $date = date('d-m-Y');
+    // Vérifie si le fichier MP3 a été correctement téléchargé
+    echo $_FILES['file']['error']['tmp_name'];
+    if ($_FILES['file']['error'] === UPLOAD_ERR_OK) {
+        $file = $_FILES['file']['tmp_name'];
+        $fileName = $_FILES['file']['name'];
+        
+        $date = date('d-m-Y');
 
-    // Définir le chemin de destination du fichier audio
-    $destination = './data/audio/' . $_FILES['file']['name'];
+        // Définir le chemin de destination du fichier audio
+        $destination = './data/audios/' . $fileName;
 
-    // Déplacer le fichier audio téléchargé vers le dossier de destination
-    if (move_uploaded_file($file, $destination)) {
-        // Créer l'objet Titre
-        $musique = new Titre($nomTitre, $artiste, $nbField, $date, $destination);
+        // Déplacer le fichier audio téléchargé vers le dossier de destination
+        if (move_uploaded_file($file, $destination)) {
+            // Créer l'objet Titre
+            $musique = new Titre($nomTitre, $_SESSION['pseudo'], $nbField, $date, $destination);
 
-        // Ajouter les artistes en feat
-        $feats = explode(",", $featsList);
-        foreach ($feats as $feat) {
-            $musique->addArtiste(new Artiste($feat));
+            // Ajouter les artistes en feat
+            $feats = explode(",", $featsList);
+            foreach ($feats as $feat) {
+                $musique->addArtiste(new Artiste($feat));
+            }
+
+            echo "Le fichier MP3 a été téléchargé avec succès.";
+        } else {
+            echo "Erreur lors du déplacement du fichier MP3.";
         }
     } else {
-        echo "Erreur lors du téléchargement du fichier.";
+        echo "Une erreur s'est produite lors du téléchargement du fichier MP3.";
     }
 }
-
 ?>
 
 <html>
@@ -77,6 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submitButton'])) {
             <input type="file" id="file" name="file" accept="audio/*" required><br>
 
             <input type="submit" name="submitButton" value="Valider">
+            <input type="hidden" name="MAX_FILE_SIZE" value="59000000" />
         </form>
     </div>
 </body>
