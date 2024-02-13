@@ -1,12 +1,8 @@
 <?php
-session_start();
 require 'Classes/autoloader.php';
 Autoloader::register();
 use onzeur\Type\BD;
 
-if (isset($_SESSION['pseudo'])){
-    $pseudo = $_SESSION['pseudo'];
-}
 ?>
 <html>
 
@@ -19,6 +15,9 @@ if (isset($_SESSION['pseudo'])){
 <body>
     <?php
     require 'base.php';
+    if (isset($_SESSION['pseudo'])){
+        $pseudo = $_SESSION['pseudo'];
+    }
     ?>
     <div id="contenu">
         <select>

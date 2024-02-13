@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <link rel="stylesheet" href="css/base.css">
 <aside>
     <nav>
@@ -22,7 +25,9 @@
                 <a href="profil.php"><object type="image/svg+xml"
                         data="data/images/connexion.svg">profil</object><span>Profil</span></a>
                 </li>
-
+                <?php if(isset($_SESSION['pseudo'])){
+                    echo '<li> <p> <span>'.$_SESSION['pseudo'].' </span> </p></li>';
+                }?>
         </ul>
     </nav>
 </aside>

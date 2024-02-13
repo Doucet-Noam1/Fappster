@@ -79,7 +79,7 @@ class Titre implements Irender
     {
         return array_search($this, $this->sortie->getListeTitres())+1;
     }
-    public function getID(): int|null
+    public function getID(): ?int
     {
         return BD::getIdTitre($this);
     }

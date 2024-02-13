@@ -1,18 +1,21 @@
 <?php
 declare(strict_types=1);
 namespace onzeur\Type;
+
 include_once 'BD.php';
 
 
-class Utilisateur {
+class Utilisateur
+{
     protected string $pseudo;
     protected string $nom;
     protected string $prenom;
-    protected string|null $mdp;
+    protected ?string $mdp;
     protected array $listeNotes;
     protected array $PlaylistLikes;
 
-    public function __construct($pseudo,$nom="John",$prenom="Doe",$mdp=null){
+    public function __construct($pseudo, $nom = "John", $prenom = "Doe", $mdp = null)
+    {
         $this->pseudo = $pseudo;
         $this->nom = $nom;
         $this->prenom = $prenom;
@@ -21,35 +24,43 @@ class Utilisateur {
         $this->listeNotes = [];
         BD::addUtilisateur($this);
     }
-    public function render(){
-        echo "<h1>". $this->pseudo ."</h1>";
-        for ($i= 0;$i<count($this->listeNotes);$i++){
+    public function render()
+    {
+        echo "<h1>" . $this->pseudo . "</h1>";
+        for ($i = 0; $i < count($this->listeNotes); $i++) {
             $this->listeNotes[$i]->render();
         }
-        foreach(BD::getSortiesBy($this) as $sortie){
+        foreach (BD::getSortiesBy($this) as $sortie) {
             $sortie->render();
         }
-    } 
+    }
 
-    public function addNote(Titre $song){
+    public function addNote(Titre $song)
+    {
         $this->listeNotes[] = $song;
     }
-    public function getMdp(){
+    public function getMdp()
+    {
         return $this->mdp;
     }
-    public function getPseudo(){
+    public function getPseudo()
+    {
         return $this->pseudo;
     }
-    public function getNom(){
+    public function getNom()
+    {
         return $this->nom;
     }
-    public function getPrenom(){
+    public function getPrenom()
+    {
         return $this->prenom;
     }
-    public function getPlaylistLikes(){
+    public function getPlaylistLikes()
+    {
         return $this->PlaylistLikes;
     }
-    public function getListeNotes(){
+    public function getListeNotes()
+    {
         return $this->listeNotes;
     }
 }

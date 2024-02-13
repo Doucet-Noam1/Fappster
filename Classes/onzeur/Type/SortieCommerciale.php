@@ -10,7 +10,7 @@ abstract class SortieCommerciale extends Sortie
     protected array $listeGenres;
     const PATH = "data/images/covers/";
 
-    public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, string|null $cover, int $id_type, array|null $listeGenres, $id = null)
+    public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, ?array $listeGenres, $id = null)
     {
         parent::__construct($artiste, $nom, $listeTitres, $date, $cover, $id_type, $id);
         $this->listeGenres = [];
@@ -59,7 +59,33 @@ abstract class SortieCommerciale extends Sortie
         echo "</span>";
         echo "<p>" . $this->date . "</p>";
         echo "<p>" . count($this->listeTitres) . " titres</p>";
-        echo '</div></div><table><thead><tr><th>Position</th><th>Titre</th><th>Artistes</th><th>Durée</th></tr></thead>'; // On ferme les divs et on commence le tableau |Postion|Titre|Artistes|Durée|
+        $moy = BD::getMoyenneNote($this);
+        $resultat = $moy == null ? "?" : substr(number_format($moy, 3, '.', ''), 0, 3);
+        echo '<p class="moyenne">' . ($resultat) . '</p>';
+        echo '</div>';
+        echo '<div id="avis">';
+        if (isset($_SESSION['pseudo'])) {
+            echo '<form method="post" id="like">';
+            $like = BD::getLike($_SESSION['pseudo'], $this);
+            echo '<input type="hidden" name="like" value="' . !boolval($like) . '">';
+            echo '<button action="submit">' . Avis::getCoeur($like) . '</button>';
+            echo '</form>';
+            echo '<form method="post" id="note">';
+            foreach (Avis::getEtoiles(BD::getNote($_SESSION['pseudo'], $this)) as $index => $etoile) {
+                echo '<button value="' . strval($index + 1) . '" name="note" action="submit">' . $etoile . '</button>';
+            }
+            echo '</form>';
+        }
+        echo '</div>';
+        echo '</div>
+        <table><thead>
+            <tr>
+                <th>Position</th>
+                <th>Titre</th>
+                <th>Artistes</th>
+                <th>Durée</th>
+            </tr>
+        </thead>'; // On ferme les divs et on commence le tableau |Postion|Titre|Artistes|Durée|
         echo "<tbody>";
         foreach ($this->listeTitres as $titre) {
             $titre->renderDetail();
