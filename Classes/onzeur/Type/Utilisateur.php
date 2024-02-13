@@ -26,42 +26,13 @@ class Utilisateur
     }
     public function render()
     {
-        echo "<div id='profil'>";
         echo "<h1>" . $this->pseudo . "</h1>";
-        echo '<img src="'.$this->getPhoto().'" id="imageDeProfil">';
-        echo "</div>";
-        if(BD::getArtiste($this->pseudo)){
-            echo "<h2>Sorties de l'artiste</h2>";
-            echo "<div id='sorties'>";
-            $sorties = BD::getSortiesBy(BD::getArtiste($this->pseudo));
-            foreach ($sorties as $sortie) {
-                $sortie->render();
-            }
-            if(count($sorties)==0){
-                echo "<p>Cet artiste n'a aucune sortie...</p>";
-            }
-            echo "</div>";
+        for ($i = 0; $i < count($this->listeNotes); $i++) {
+            $this->listeNotes[$i]->render();
         }
-        echo "<h2>Playlists</h2>";
-        echo "<div id='playlists'>";
-        $playlists = BD::getPlaylistsBy($this);
-        foreach ($playlists as $playlist) {
-            $playlist->render();
-        }
-        if(count($playlists)==0){
-            echo "<p>Aucune playlist...</p>";
-        }
-        echo "</div>";
-        echo "<h2>Sorties aimées</h2>";
-        $likes = BD::getLikesBy($this);
-        echo "<div id='likes'>";
-        foreach ($likes as $sortie) {
+        foreach (BD::getSortiesBy($this) as $sortie) {
             $sortie->render();
         }
-        if(count($likes)==0){
-            echo "<p>Aucune sortie aimée...</p>";
-        }
-        echo "</div>";
     }
 
     public function renderProfil()

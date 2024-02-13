@@ -27,6 +27,4 @@ function peupleBD(){
 function deletebd(){
     echo 'creation';
     unlink('fappster.db');
-    session_start();
-    session_destroy();
 }
