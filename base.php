@@ -20,7 +20,12 @@ session_start();
         <ul>
             <?php if(isset($_SESSION['pseudo'])) : ?>
                 <li>
-                    <?php echo BD::getUtilisateur($_SESSION['pseudo'])->renderProfil(); ?>
+                    <?php 
+                    $user = BD::getUtilisateur($_SESSION['pseudo']);
+                    if(!is_null($user)){
+                        echo $user->renderProfil();
+                    }
+                    ?>
                 </li>
             <?php endif; ?>
             <li>
