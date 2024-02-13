@@ -10,6 +10,7 @@ réaliser une application présentant le contenu de cette base d'albums de musiq
 contient quelques albums et artistes avec des pochettes d'albums.
 ### Installation
 composer require symfony/yaml
+composer require james-heinrich/getid3
 
 ## 2 - Fonctionnalités attendues
 - [x] 2.1 Affichage des albums

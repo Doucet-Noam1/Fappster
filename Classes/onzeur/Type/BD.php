@@ -115,6 +115,8 @@ class BD
     static function getInstance()
     {
         if (!(file_exists('fappster.db'))) {
+            session_start();
+            session_destroy();
             new BD;
             peupleBD();
         }

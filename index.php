@@ -10,20 +10,12 @@
     <?php
     require 'base.php';
     use onzeur\Type\BD;
+    BD::getInstance();
     if (isset($_SESSION['pseudo'])) {
         $pseudo = $_SESSION['pseudo'];
     }
     ?>
     <div id="contenu">
-        <select>
-            <?php
-            echo '<option value="all">Tous</option>';
-            foreach (BD::getAllGenres() as $value) {
-                $genre = $value;
-                echo '<option value="' . $genre . '">' . $genre . '</option>';
-            }
-            ?>
-        </select>
         <div id="albums">
             <h1>Albums</h1>
             <?php

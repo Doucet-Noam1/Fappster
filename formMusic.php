@@ -1,6 +1,5 @@
 <?php
 require 'Classes/autoloader.php';
-require './Classes/getid3/getid3.php';
 
 Autoloader::register();
 use onzeur\Type\Titre;
