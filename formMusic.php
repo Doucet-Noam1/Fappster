@@ -1,43 +1,46 @@
 <?php
 require 'Classes/autoloader.php';
+require './Classes/getid3/getid3.php';
+
 Autoloader::register();
 use onzeur\Type\Titre;
 use onzeur\Type\Artiste;
+use onzeur\Type\BD;
 session_start();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submitButton'])) {
-    $nomTitre = $_POST['nomTitre'] ?? '';
-    $nbField = $_POST['nbField'] ?? '';
-    $featsList = $_POST['feats'] ?? '';
+if (!isset($_SESSION['pseudo'])) {
+    header('Location: index.php');
+    exit();
+}
+else{
+    $artiste = new Artiste($_SESSION['pseudo']);
+}
 
-    // Vérifie si le fichier MP3 a été correctement téléchargé
-    echo $_FILES['file']['error']['tmp_name'];
-    if ($_FILES['file']['error'] === UPLOAD_ERR_OK) {
-        $file = $_FILES['file']['tmp_name'];
-        $fileName = $_FILES['file']['name'];
-        
-        $date = date('d-m-Y');
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        // Définir le chemin de destination du fichier audio
-        $destination = './data/audios/' . $fileName;
+    $nomTitre = $_POST['nomTitre'];
+    $date = date('d-m-Y');
+    
+    $audioFile = $_FILES['file'];
+    $audioFileName = $audioFile['name'];
+    $audioFileTmp = $audioFile['tmp_name'];
+    $audioFilePath = './data/audios/' . $audioFileName;
+    
+    if (move_uploaded_file($audioFileTmp, $audioFilePath)) {
 
-        // Déplacer le fichier audio téléchargé vers le dossier de destination
-        if (move_uploaded_file($file, $destination)) {
-            // Créer l'objet Titre
-            $musique = new Titre($nomTitre, $_SESSION['pseudo'], $nbField, $date, $destination);
 
-            // Ajouter les artistes en feat
-            $feats = explode(",", $featsList);
-            foreach ($feats as $feat) {
-                $musique->addArtiste(new Artiste($feat));
-            }
+        $getID3 = new getID3;
+        $audioFileInfo = $getID3->analyze($audioFilePath);
+        $audioDuration = $audioFileInfo['playtime_seconds'];
 
-            echo "Le fichier MP3 a été téléchargé avec succès.";
-        } else {
-            echo "Erreur lors du déplacement du fichier MP3.";
-        }
+
+        $titre = new Titre($nomTitre, $artiste, $audioDuration, $date, $audioFilePath);
+        BD::addTitre($titre);
+
+        header("Location: formMusic.php");
+        exit();
     } else {
-        echo "Une erreur s'est produite lors du téléchargement du fichier MP3.";
+        echo "Une erreur s'est produite lors du téléchargement du fichier audio.";
     }
 }
 ?>
@@ -62,12 +65,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submitButton'])) {
         <form method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>">
             <label for="nomTitre">Nom du titre :</label>
             <input type="text" id="nomTitre" name="nomTitre" required><br>
-
-            <label for="feats">Artistes en feat (séparés par des virgules) :</label>
-            <input type="text" id="feats" name="feats"><br>
-
-            <label for="nbField">Durée du titre (en secondes) :</label>
-            <input type="number" id="nbField" name="nbField" required><br>
 
             <label for="file">Audio de votre musique :</label>
             <input type="file" id="file" name="file" accept="audio/*" required><br>
