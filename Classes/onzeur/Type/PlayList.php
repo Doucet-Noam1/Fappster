@@ -6,7 +6,7 @@ namespace onzeur\Type;
 
 class PlayList extends Sortie
 {
-    public function __construct(Artiste $artiste, string $nom, array $listeTitres, string $date, string|null $cover, int $id_type, int $id = null)
+    public function __construct(Artiste $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, int $id = null)
     {
         parent::__construct($artiste, $nom, $listeTitres, $date, $cover, 3, $id);
     }
@@ -22,7 +22,8 @@ class PlayList extends Sortie
         echo "<p>" . $this->date . "</p>";
         echo '</div>';
     }
-    public function renderDetail(){
+    public function renderDetail()
+    {
         $this->render();
     }
 }

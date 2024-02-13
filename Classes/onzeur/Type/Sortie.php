@@ -9,12 +9,12 @@ abstract class Sortie implements Irender
 {
     protected string $nom;
     protected string $date;
-    protected string|null $cover;
+    protected ?string $cover;
     protected array $listeTitres;
     protected array $artiste;
     protected int $id_type;
 
-    public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, string|null $cover, int $id_type, int $id = null)
+    public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, int $id = null)
     {
         $this->nom = $nom;
         $this->date = $date;
@@ -33,7 +33,7 @@ abstract class Sortie implements Irender
     {
         return $this->date;
     }
-    public function getCover(): string|null
+    public function getCover(): ?string
     {
         return $this->cover;
     }
@@ -45,7 +45,7 @@ abstract class Sortie implements Irender
     {
         return $this->id_type;
     }
-    public function getID(): int|null
+    public function getID(): ?int
     {
         return BD::getIdSortie($this);
     }
@@ -68,9 +68,9 @@ abstract class Sortie implements Irender
         return count($this->listeTitres);
     }
 
-    static function factory(Artiste|array $artiste, string $nom, array $listeTitres, string $date, string|null $cover, int $id_type, array $listeGenres, int $id = null): Sortie
+    static function factory(Artiste|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, array $listeGenres, int $id = null): Sortie
     {
-        $id =null;
+        $id = null;
         switch ($id_type) {
             case 1:
                 return new Album($artiste, $nom, $listeTitres, $date, $cover, $listeGenres, $id);

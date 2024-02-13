@@ -2,7 +2,6 @@
 require 'Classes/autoloader.php';
 Autoloader::register();
 use onzeur\Type\BD;
-
 ?>
 <html>
 
@@ -18,6 +17,14 @@ use onzeur\Type\BD;
     <div id="contenu">
         <?php
         $sortie = BD::getSortie($_GET['id']);
+        if (isset($_POST)) {
+            if(isset($_POST['like'])){
+                BD::noteSortie($_SESSION['pseudo'],$sortie,null,boolval($_POST['like']));
+            }
+            if(isset($_POST['note'])){
+                BD::noteSortie($_SESSION['pseudo'],$sortie,$_POST['note']);
+            }
+        }
         $sortie->renderdetail();
         ?>
         <script src="js/sortie.js"></script>
