@@ -16,7 +16,7 @@ class Utilisateur
     protected string $photoDeProfil;
 
 
-    public function __construct($pseudo,$nom="John",$prenom="Doe",$photoDeProfil="./images/covers/default2.jpg",$mdp=null){
+    public function __construct($pseudo,$nom="John",$prenom="Doe",$photoDeProfil="./images/covers/defaultuser.png",$mdp=null){
 
         $this->pseudo = $pseudo;
         $this->nom = $nom;
@@ -63,7 +63,7 @@ class Utilisateur
     }
     public function getPlaylistLikes(){
 
-    {
+    
         return $this->PlaylistLikes;
     }
     public function getListeNotes()

@@ -1,9 +1,3 @@
-<?php
-require 'Classes/autoloader.php';
-Autoloader::register();
-use onzeur\Type\BD;
-
-?>
 <html>
 
 <head>
