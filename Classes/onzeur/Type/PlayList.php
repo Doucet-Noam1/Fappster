@@ -6,21 +6,23 @@ namespace onzeur\Type;
 
 class PlayList extends Sortie
 {
-    public function __construct(Artiste $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, int $id = null)
+    const PATH = "data/images/covers/";
+    public function __construct(Utilisateur|Artiste|array $artiste, string $nom, ?string $cover,array $listeTitres = [], int $id = null,)
     {
-        parent::__construct($artiste, $nom, $listeTitres, $date, $cover, 3, $id);
+        $date  = date('d-m-Y');
+        parent::__construct($artiste, $nom, $listeTitres, $date, $cover, 4, $id);
     }
     public function render()
     {
-        echo '<div class="playlist">';
-        echo '<img src=">' . $this->cover . '" </img>';
-        echo "<h2>EP</h2>";
-        echo "<h1>" . $this->nom . "</h1>";
-        for ($i = 0; $i < count($this->listeTitres); $i++) {
-            $this->listeTitres[$i]->render();
-        }
-        echo "<p>" . $this->date . "</p>";
-        echo '</div>';
+        echo '<a class="sortie" href="sortie.php?id=' . parent::getID() . '">';
+        $image = self::PATH . $this->cover;
+        echo '<img src="' . (($image != self::PATH && file_exists($image)) ? self::PATH . str_replace("%", "%25", $this->cover) : self::PATH . 'null.png') . '"/>';
+        echo "<p>" . $this->nom . "</p>";
+        $splitNameSpace = explode("\\", get_class($this));
+        $splitNameSpace = end($splitNameSpace);
+        echo "<p>" . $this->date . " • " . $splitNameSpace . "</p>";
+
+        echo '</a>';
     }
     public function renderDetail()
     {

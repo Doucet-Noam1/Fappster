@@ -14,7 +14,7 @@ abstract class Sortie implements Irender
     protected array $artiste;
     protected int $id_type;
 
-    public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, int $id = null)
+    public function __construct(Artiste|array|Utilisateur $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, int $id = null)
     {
         $this->nom = $nom;
         $this->date = $date;
@@ -68,7 +68,7 @@ abstract class Sortie implements Irender
         return count($this->listeTitres);
     }
 
-    static function factory(Artiste|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, array $listeGenres, int $id = null): Sortie
+    static function factory(Artiste|array|Utilisateur $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, array $listeGenres, int $id = null): Sortie
     {
         $id = null;
         switch ($id_type) {
@@ -79,7 +79,7 @@ abstract class Sortie implements Irender
             case 3:
                 return new EP($artiste, $nom, $listeTitres, $date, $cover, $listeGenres, $id);
             case 4:
-                return new PlayList($artiste, $nom, $listeTitres, $date, $cover, $id_type, $id);
+                return new PlayList($artiste, $nom, $cover, $listeTitres, $id);
             default:
                 throw new \Exception("Type de sortie inconnu");
         }

@@ -389,7 +389,7 @@ class BD
         return $genre;
     }
 
-    static function addArtisteToSortie(Sortie $album, Artiste $artiste)
+    static function addArtisteToSortie(Sortie $album, Artiste|Utilisateur $artiste)
     {
         $bdd = BD::getInstance();
         $bdd->beginTransaction();
