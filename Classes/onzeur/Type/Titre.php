@@ -45,7 +45,7 @@ class Titre implements Irender
         echo "<td>";
         echo implode(" & ", array_map(function (Artiste $artiste) {
             $pseudo = $artiste->getPseudo();
-            return '<a href="profil.php?id=' . $pseudo . '">' . $pseudo . '</a>';
+            return '<a href="artiste.php?id=' . $pseudo . '">' . $pseudo . '</a>';
         }, $this->lstartiste));
         echo "</td>";
         echo "<td>".$this->duree."</td>";
