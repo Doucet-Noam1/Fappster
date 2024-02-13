@@ -1,46 +1,50 @@
 <?php
 require 'Classes/autoloader.php';
+require './Classes/getid3/getid3.php';
 
 Autoloader::register();
-use onzeur\Type\Sortie;
-use onzeur\Type\BD;
-use onzeur\Type\Album;
 use onzeur\Type\Titre;
-use onzeur\Type\Reader;
 use onzeur\Type\Artiste;
-use onzeur\Type\EP;
-use onzeur\Input\input;
-use onzeur\Input\TextField;
-use onzeur\Input\FileChoserField;
-use onzeur\Input\NumberField;
-use onzeur\Input\SubmitButton;
-
+use onzeur\Type\BD;
 session_start();
-$artiste = $_SESSION['artiste'] ;
 
-$numberField = new NumberField("nbField","Durée du titre (en secondes) ");
-$fileChoserField= new FileChoserField("file","Audio de votre musique  ");
-$textField = new TextField("nomTitre","Nom du titre ");
-$feats = new TextField("feats","Artistes en feat (séparés par des virgules)");
-$submitButton = new SubmitButton("submitButton","Valider");
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submitButton'])) {
-    $nomTitre = $_POST['nomTitre'];
-    $nbField = $_POST['nbField'];
-    $file = $_POST['file'];
-    $featsList = $_POST['feats'];
-
-    $date = date('d-m-Y');
-
-    $musique = new Musique($nomTitre, $artiste, $nbField, $date, $file);
-
-    $feats = explode(",", $featsList);
-    foreach ($feats as $feat) {
-        $musique->addArtiste(new Artiste($feat));
-    }
+if (!isset($_SESSION['pseudo'])) {
+    header('Location: index.php');
+    exit();
+}
+else{
+    $artiste = new Artiste($_SESSION['pseudo']);
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $nomTitre = $_POST['nomTitre'];
+    $date = date('d-m-Y');
+    
+    $audioFile = $_FILES['file'];
+    $audioFileName = $audioFile['name'];
+    $audioFileTmp = $audioFile['tmp_name'];
+    $audioFilePath = './data/audios/' . $audioFileName;
+    
+    if (move_uploaded_file($audioFileTmp, $audioFilePath)) {
+
+
+        $getID3 = new getID3;
+        $audioFileInfo = $getID3->analyze($audioFilePath);
+        $audioDuration = $audioFileInfo['playtime_seconds'];
+
+
+        $titre = new Titre($nomTitre, $artiste, $audioDuration, $date, $audioFilePath);
+        BD::addTitre($titre);
+
+        header("Location: formMusic.php");
+        exit();
+    } else {
+        echo "Une erreur s'est produite lors du téléchargement du fichier audio.";
+    }
+}
 ?>
+
 <html>
 
 <head>
@@ -49,7 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submitButton'])) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap" rel="stylesheet">
-
 </head>
 
 <body>
@@ -59,18 +62,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submitButton'])) {
     <div id="panel">
         <h2>Créer une musique</h2>
         <div class='separator'></div>
-        <form action="POST">
-            <?php
-            $textField->render();
-            $feats->render();
-            $numberField->render();
-            $fileChoserField->render();    
-            $submitButton->render();
-            ?>
+        <form method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+            <label for="nomTitre">Nom du titre :</label>
+            <input type="text" id="nomTitre" name="nomTitre" required><br>
+
+            <label for="file">Audio de votre musique :</label>
+            <input type="file" id="file" name="file" accept="audio/*" required><br>
+
+            <input type="submit" name="submitButton" value="Valider">
+            <input type="hidden" name="MAX_FILE_SIZE" value="59000000" />
         </form>
     </div>
-    
-    
 </body>
 
 </html>
