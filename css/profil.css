@@ -1,0 +1,36 @@
+h2{
+    flex-basis: 100%;
+
+}
+
+#sorties, #likes, #playlists{
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    flex-wrap: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    margin-bottom: 10px;
+}
+#likes::-webkit-scrollbar, #playlists::-webkit-scrollbar{
+    display: none;
+}
+.sortie{
+    margin-right: 10px;
+}
+#profil{
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    border-bottom: 2px solid white;
+    margin-bottom: 10px;
+}
+#imageDeProfil{
+    width: 150px;
+    height: 150px;
+    border-radius: 25%;
+    margin: 10px;
+    margin-right: 20px;
+}

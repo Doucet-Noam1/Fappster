@@ -208,11 +208,14 @@ class BD
         $bdd->commit();
     }
 
-    static function getArtiste($nom): Artiste
+    static function getArtiste($nom): ?Artiste
     {
         $queryArtiste = BD::getInstance()->prepare("SELECT * FROM ARTISTE WHERE nom_artiste = ?");
         $queryArtiste->execute([$nom]);
         $artiste = $queryArtiste->fetch();
+        if($artiste == null){
+            return null;
+        }
         return new Artiste($artiste['nom_artiste'], $artiste['verifie']);
     }
 
@@ -318,6 +321,30 @@ class BD
         $res = [];
         foreach ($sorties as $sortie) {
             $res[] = self::getSortie($sortie['id_sortie']);
+        }
+        return $res;
+    }
+
+    static function getPlaylistsBy(Utilisateur $utilisateur):array
+    {
+        $queryPlaylists = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE NATURAL JOIN CREE WHERE nom_artiste = ? AND id_type = 4");
+        $queryPlaylists->execute([$utilisateur->getPseudo()]);
+        $playlists = $queryPlaylists->fetchAll();
+        $res = [];
+        foreach ($playlists as $playlist) {
+            $res[] = self::getSortie($playlist['id_sortie']);
+        }
+        return $res;
+    }
+
+    static function getLikesBy(Utilisateur $utilisateur):array
+    {
+        $queryLikes = BD::getInstance()->prepare("SELECT id_sortie FROM AVIS WHERE pseudo = ? AND favori = 1");
+        $queryLikes->execute([$utilisateur->getPseudo()]);
+        $likes = $queryLikes->fetchAll();
+        $res = [];
+        foreach ($likes as $like) {
+            $res[] = self::getSortie($like['id_sortie']);
         }
         return $res;
     }
@@ -540,4 +567,3 @@ class BD
     }
 
 }
-?>

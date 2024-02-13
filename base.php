@@ -55,9 +55,6 @@ session_start();
                     </a>
                 </li>
             <?php endif; ?>
-                <?php if(isset($_SESSION['pseudo'])){
-                    echo '<li> <p> <span>'.$_SESSION['pseudo'].' </span> </p></li>';
-                }?>
         </ul>
     </nav>
 </aside>
