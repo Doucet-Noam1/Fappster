@@ -1,6 +1,5 @@
 <?php
 use onzeur\Type\BD;
-
 ?>
 <html>
 
@@ -9,7 +8,6 @@ use onzeur\Type\BD;
     <link rel="stylesheet" href="css/sortie.css">
     <link rel="stylesheet" href="css/index.css">
 </head>
-
 <body>
     <?php
     require 'base.php';
@@ -17,16 +15,12 @@ use onzeur\Type\BD;
     <div id="contenu">
         <?php
         $sortie = BD::getSortie($_GET['id']);
-        if (is_null($sortie)) {
-            echo "<h1 id='error'>Cette sortie n'existe pas...</h1>";
-            die();
-        }
         if (isset($_POST)) {
-            if (isset($_POST['like'])) {
-                BD::noteSortie($_SESSION['pseudo'], $sortie, null, boolval($_POST['like']));
+            if(isset($_POST['like'])){
+                BD::noteSortie($_SESSION['pseudo'],$sortie,null,boolval($_POST['like']));
             }
-            if (isset($_POST['note'])) {
-                BD::noteSortie($_SESSION['pseudo'], $sortie, $_POST['note']);
+            if(isset($_POST['note'])){
+                BD::noteSortie($_SESSION['pseudo'],$sortie,$_POST['note']);
             }
         }
         $sortie->renderdetail();
@@ -39,7 +33,6 @@ use onzeur\Type\BD;
                 $recommandation->render();
             }
             ?>
-        </div>
     </div>
 </body>
 
