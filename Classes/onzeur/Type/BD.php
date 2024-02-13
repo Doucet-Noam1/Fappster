@@ -116,6 +116,7 @@ class BD
     {
         if (!(file_exists('fappster.db'))) {
             new BD;
+            peupleBD();
         }
         return loadbd();
     }
