@@ -20,10 +20,7 @@ session_start();
         <ul>
             <?php if(isset($_SESSION['pseudo'])) : ?>
                 <li>
-                    <a href="profil.php">
-                        <object type="image/svg+xml" data="<?php echo BD::getUtilisateur($_SESSION['pseudo'])->getPseudo(); ?>.jpg" style="width: 50px; height: 50px; border-radius: 50%;"></object>
-                        <span><?php echo $_SESSION['pseudo']; ?></span>
-                    </a>
+                    <?php echo BD::getUtilisateur($_SESSION['pseudo'])->renderProfil(); ?>
                 </li>
             <?php endif; ?>
             <li>

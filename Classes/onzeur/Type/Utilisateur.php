@@ -13,10 +13,8 @@ class Utilisateur
     protected ?string $mdp;
     protected array $listeNotes;
     protected array $PlaylistLikes;
-    protected string $photoDeProfil;
-
-
-    public function __construct($pseudo,$nom="John",$prenom="Doe",$photoDeProfil="./images/covers/defaultuser.png",$mdp=null){
+    const PATH = "data/images/users/";
+    public function __construct($pseudo,$nom="John",$prenom="Doe",$mdp=null){
 
         $this->pseudo = $pseudo;
         $this->nom = $nom;
@@ -24,7 +22,6 @@ class Utilisateur
         $this->mdp = $mdp;
         $this->PlaylistLikes = [];
         $this->listeNotes = [];
-        $this->photoDeProfil = $photoDeProfil;
         BD::addUtilisateur($this);
     }
     public function render()
@@ -36,6 +33,14 @@ class Utilisateur
         foreach (BD::getSortiesBy($this) as $sortie) {
             $sortie->render();
         }
+    }
+
+    public function renderProfil()
+    {
+        echo '<a href="profil.php">';
+        echo '<img src="'.$this->getPhoto().'" id="pfp">';
+        echo '<span>'.$this->pseudo.'</span>';
+        echo '</a>';
     }
 
     public function addNote(Titre $song)
@@ -59,7 +64,10 @@ class Utilisateur
         return $this->prenom;
     }
     public function getPhoto(){
-        return $this->photoDeProfil;
+        if(!file_exists(self::PATH.$this->pseudo.".jpg")){
+            return self::PATH."defaultuser.png";
+        }
+        return self::PATH.$this->pseudo.".jpg";
     }
     public function getPlaylistLikes(){
 

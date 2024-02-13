@@ -9,14 +9,14 @@
 <body>
     <?php
     require 'base.php';
-    if (isset($_SESSION['pseudo'])){
+    use onzeur\Type\BD;
+    if (isset($_SESSION['pseudo'])) {
         $pseudo = $_SESSION['pseudo'];
     }
     ?>
     <div id="contenu">
         <select>
             <?php
-           
             echo '<option value="all">Tous</option>';
             foreach (BD::getAllGenres() as $value) {
                 $genre = $value;

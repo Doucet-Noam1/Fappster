@@ -14,19 +14,23 @@ ul,
 ol {
     list-style: none;
 }
-a{
+
+a {
     text-decoration: none;
 }
+
 a:not(nav a) {
     font-weight: bold;
 }
-body>*{
+
+body>* {
     background-color: #121212;
     border-radius: 10px;
     margin: 5x;
     padding: 10px;
     height: calc(100% - 10px);
 }
+
 body {
     background-color: black;
     display: flex;
@@ -35,65 +39,85 @@ body {
     gap: 10px;
     padding: 5px;
 }
+
 #contenu {
     flex-grow: 1;
     overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+
 .dont-show {
     display: none;
 }
+
 #contenu::-webkit-scrollbar {
     display: none;
 }
+
 aside {
     background-color: #1f1f1f;
     flex-basis: max-content;
 
 }
-nav li{
+
+nav li {
     margin: 1vw;
     padding: 1vw;
     border-radius: 5px;
     transition: 0.3s;
 }
-nav li:hover{
+
+nav li:hover {
     background-color: #2c2e33;
     cursor: pointer;
 }
-nav a{
+
+nav a {
     display: flex;
     align-items: center;
 }
-nav li a{
+
+nav li a {
     font-size: 2vw;
 }
-nav span{
+
+nav span {
     color: #fff;
     margin: 1vw;
     text-decoration: none;
 }
-nav object{
+
+nav object {
     --size: 2rem;
     width: var(--size);
     height: var(--size);
     margin: 1rem;
 }
+
 nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
+
 nav ul li {
     margin-bottom: 10px;
 }
+
 nav ul li a {
     display: flex;
     align-items: center;
     text-decoration: none;
     color: black;
 }
+
 nav ul li a object {
     margin-right: 10px;
+}
+
+#pfp {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
 }
