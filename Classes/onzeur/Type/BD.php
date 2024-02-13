@@ -18,6 +18,7 @@ class BD
                 pseudo VARCHAR(30) PRIMARY KEY,
                 nom TEXT default NULL,
                 prenom TEXT default NULL,
+                photoProfil TEXT default NULL,
                 mdp TEXT default NULL
             )');
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS ARTISTE(
@@ -159,9 +160,10 @@ class BD
         $queryUtilisateur->execute([$utilisateur->getPseudo()]);
         $resUtilisateur = $queryUtilisateur->fetch();
         if (!$resUtilisateur) {
-            $queryAddUtilisateur = $bdd->prepare("INSERT INTO UTILISATEUR(pseudo,mdp) VALUES (?,?)");
-            $mdp = $utilisateur->getMdp() == null ? $utilisateur->getMdp() : hash('sha256', $utilisateur->getMdp());
-            $queryAddUtilisateur->execute([$utilisateur->getPseudo(), $mdp]);
+            $queryAddUtilisateur = $bdd->prepare("INSERT INTO UTILISATEUR(pseudo,nom,prenom,photoProfil,mdp) VALUES (?,?,?,?,?)");
+            $mdp=$utilisateur->getMdp() == null ? $utilisateur->getMdp() : hash('sha256',$utilisateur->getMdp());
+            $queryAddUtilisateur->execute([$utilisateur->getPseudo(),$utilisateur->getNom(),$utilisateur->getPrenom(),$utilisateur->getPhoto(), $mdp]);
+
         }
         $bdd->commit();
     }

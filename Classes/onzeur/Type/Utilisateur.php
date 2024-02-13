@@ -13,15 +13,18 @@ class Utilisateur
     protected ?string $mdp;
     protected array $listeNotes;
     protected array $PlaylistLikes;
+    protected string $photoDeProfil;
 
-    public function __construct($pseudo, $nom = "John", $prenom = "Doe", $mdp = null)
-    {
+
+    public function __construct($pseudo,$nom="John",$prenom="Doe",$photoDeProfil="./images/covers/default2.jpg",$mdp=null){
+
         $this->pseudo = $pseudo;
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->mdp = $mdp;
         $this->PlaylistLikes = [];
         $this->listeNotes = [];
+        $this->photoDeProfil = $photoDeProfil;
         BD::addUtilisateur($this);
     }
     public function render()
@@ -55,7 +58,11 @@ class Utilisateur
     {
         return $this->prenom;
     }
-    public function getPlaylistLikes()
+    public function getPhoto(){
+        return $this->photoDeProfil;
+    }
+    public function getPlaylistLikes(){
+
     {
         return $this->PlaylistLikes;
     }
@@ -63,4 +70,5 @@ class Utilisateur
     {
         return $this->listeNotes;
     }
+    
 }
