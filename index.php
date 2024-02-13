@@ -1,6 +1,4 @@
 <?php
-session_start();
-include 'loadbd.php';
 require 'Classes/autoloader.php';
 Autoloader::register();
 use onzeur\Type\Sortie;
@@ -25,7 +23,6 @@ $ep = new EP($artiste, 'test', [$musique, $musique2], '2024', 'aaa.png', ['Rap']
 $album = new Album($artiste, 'test', [$musique, $musique2], '2024', 'aaa.png', ['Rap']);
 $album->addArtiste($artiste);
 $musique2->addArtiste($artiste2);
-$pseudo = $_SESSION['pseudo'];
 ?>
 <html>
 

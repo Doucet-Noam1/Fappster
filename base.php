@@ -1,7 +1,5 @@
 <?php
 session_start();
-$pseudo = $_SESSION['pseudo'];
-
 ?>
 
 <link rel="stylesheet" href="css/base.css">
@@ -30,10 +28,9 @@ $pseudo = $_SESSION['pseudo'];
                 </li>
             
                 <li>
-            <?php if($pseudo == null){
-                
+            <?php if(isset($_SESSION['pseudo'])){
+                    echo '<p> <span>'.$_SESSION['pseudo'].' </span> </p>';
                 }else{
-                echo '<p> <span>'.$pseudo.' </span> </p>';
                 }?>
             </li>
 
