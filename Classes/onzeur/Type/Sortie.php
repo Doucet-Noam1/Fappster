@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace onzeur\Type;
 
 include_once 'BD.php';
-
 abstract class Sortie implements Irender
 {
     protected string $nom;
@@ -68,7 +67,7 @@ abstract class Sortie implements Irender
         return count($this->listeTitres);
     }
 
-    static function factory(Artiste|array|Utilisateur $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, array $listeGenres, int $id = null): Sortie
+    static function factory(Utilisateur|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, array $listeGenres, int $id = null): SortieCommerciale|Playlist
     {
         $id = null;
         switch ($id_type) {

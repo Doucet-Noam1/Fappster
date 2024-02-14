@@ -83,6 +83,7 @@ abstract class SortieCommerciale extends Sortie
                 <th>Position</th>
                 <th>Titre</th>
                 <th>Artistes</th>
+                <th></th>
                 <th>Durée</th>
             </tr>
         </thead>'; // On ferme les divs et on commence le tableau |Postion|Titre|Artistes|Durée|

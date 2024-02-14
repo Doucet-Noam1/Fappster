@@ -187,6 +187,7 @@ class BD
     {
         $bdd = BD::getInstance();
         $bdd->beginTransaction();
+
         foreach ($titre->getArtiste() as $artiste) {
             $queryArtiste = $bdd->prepare("SELECT nom_artiste FROM CHANTER_PAR WHERE nom_artiste = ? AND id_titre = ?");
             $queryArtiste->execute([$artiste->getPseudo(), $titre->getID()]);
@@ -206,6 +207,7 @@ class BD
         $queryAddTitre = $bdd->prepare("INSERT INTO CONTIENT(id_sortie,id_titre,position) VALUES (?,?,?)");
         $queryAddTitre->execute([$sortie->getID(), $titre->getID(), $sortie->getNombreDeTitres() + 1]);
         $bdd->commit();
+        $sortie->addTitre($titre);
     }
 
     static function getArtiste($nom): ?Artiste
@@ -257,7 +259,7 @@ class BD
         return $res;
     }
 
-    static function getSortie($id): ?Sortie
+    static function getSortie($id): SortieCommerciale|Playlist|null
     {
         $querySortie = BD::getInstance()->prepare("SELECT * FROM SORTIE WHERE id_sortie = ?");
         $querySortie->execute([$id]);
@@ -271,7 +273,7 @@ class BD
         return Sortie::factory($artiste, $sortie["nom_sortie"], $titres, strval($sortie["date_sortie"]), $sortie["cover"], $sortie["id_type"], $genres, intval($id));
     }
 
-    static function getTitre($id): ?Titre
+    static function getTitre(int $id): ?Titre
     {
         $queryTitre = BD::getInstance()->prepare("SELECT * FROM TITRE WHERE id_titre = ?");
         $queryTitre->execute([$id]);
@@ -281,6 +283,21 @@ class BD
         }
         $artistes = self::getArtistesTitre($id);
         $res = new Titre($titre['nom_titre'], array_shift($artistes), $titre['duree'], $titre['id_titre'], "nosong.mp3");
+        foreach ($artistes as $artiste) {
+            $res->addArtiste($artiste);
+        }
+        return $res;
+    }
+    static function getTitreSortie(int $id, SortieCommerciale $sortie): ?Titre
+    {
+        $queryTitre = BD::getInstance()->prepare("SELECT * FROM TITRE WHERE id_titre = ?");
+        $queryTitre->execute([$id]);
+        $titre = $queryTitre->fetch();
+        if ($titre == null) {
+            return null;
+        }
+        $artistes = self::getArtistesTitre($id);
+        $res = new Titre($titre['nom_titre'], array_shift($artistes), $titre['duree'], $titre['id_titre'], "nosong.mp3", $sortie);
         foreach ($artistes as $artiste) {
             $res->addArtiste($artiste);
         }
@@ -316,6 +333,17 @@ class BD
     static function getSortiesBy(Artiste $artiste)
     {
         $querySorties = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE NATURAL JOIN CREE WHERE nom_artiste = ?");
+        $querySorties->execute([$artiste->getPseudo()]);
+        $sorties = $querySorties->fetchAll();
+        $res = [];
+        foreach ($sorties as $sortie) {
+            $res[] = self::getSortie($sortie['id_sortie']);
+        }
+        return $res;
+    }
+    static function getSortiesCommercialBy(Artiste $artiste)
+    {
+        $querySorties = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE NATURAL JOIN CREE WHERE nom_artiste = ? and id_type != 4");
         $querySorties->execute([$artiste->getPseudo()]);
         $sorties = $querySorties->fetchAll();
         $res = [];

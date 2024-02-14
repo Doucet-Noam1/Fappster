@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (move_uploaded_file($fileTmpPath, $destPath)) {
             
             $playlist = new PlayList(BD::getUtilisateur($_SESSION['pseudo']), $nomPlaylist, $nom);
-            header('Location: index.php');
+            header('Location: sortie.php?id='.$playlist->getID());
         } else {
             echo "<script>alert(\"Une erreur s'est produite lors du téléchargement du fichier.\")</script>";
         }

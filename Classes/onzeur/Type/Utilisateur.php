@@ -33,7 +33,7 @@ class Utilisateur
         if(BD::getArtiste($this->pseudo)){
             echo "<h2>Sorties de l'artiste</h2>";
             echo "<div id='sorties'>";
-            $sorties = BD::getSortiesBy(BD::getArtiste($this->pseudo));
+            $sorties = BD::getSortiesCommercialBy(BD::getArtiste($this->pseudo));
             foreach ($sorties as $sortie) {
                 $sortie->render();
             }
