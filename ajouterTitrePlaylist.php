@@ -14,8 +14,10 @@ if (isset($_POST)){
     $playlist = BD::getSortie($id_playlist);
     $sortie = BD::getSortie($id_sortie);
     $id_titre = $_POST['id_titre'];
-    $titre = BD::getTitreSortie($id_titre, $sortie);
-    BD::addTitreToSortie($playlist, $titre);
+    $titre = BD::getTitre($id_titre, $sortie->getID());
+    BD::addTitreToSortie($playlist, $titre,$sortie);
+    header('Location: sortie.php?id='.$_POST['id_redirection']);
+    exit();
 }
 ?>
 

@@ -8,23 +8,23 @@ class Titre implements Irender
     private $lstartiste;
     private $duree;
     private $dateAjout;
-    private $sortie;
+    private int $idsortie;
     private $song;
 
-    public function __construct(string $titre, Artiste $artiste, int $duree, string|int $dateAjout, string $song, SortieCommerciale $sortie = null)
+    public function __construct(string $titre, Artiste $artiste, int $duree, string|int $dateAjout, string $song, int $idsortie = null)
     {
         $this->titre = $titre;
         $this->lstartiste = [$artiste];
         $this->duree = $duree;
         $this->dateAjout = $dateAjout;
-        $this->sortie = $sortie;
+        $this->idsortie = $idsortie;
         $this->song = $song;
         BD::addTitre($this);
     }
     public function render()
     {
         echo '<div class="musique">';
-        echo '<img src=">' . $this->sortie->getCover() . '" </img>';
+        echo '<img src=">' . BD::getSortie($this->idsortie)->getCover() . '" </img>';
         echo "<h3>" . $this->titre . "</h3>";
         echo "div id='artistes'>";
         echo "ul";
@@ -60,7 +60,8 @@ class Titre implements Irender
             }
             echo '</select>';
             echo '<input type="hidden" name="id_titre" value="' . $this->getID() . '"> </input>';
-            echo '<input type="hidden" name="id_sortie" value="' . $this->sortie->getID() . '"> </input>';
+            echo '<input type="hidden" name="id_sortie" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
+            echo '<input type="hidden" name="id_redirection" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
             echo ' <button type="submit" class="btn btn-success"> valider </button>';
             echo " </form>";
             echo "</dialog>";
@@ -98,6 +99,8 @@ class Titre implements Irender
         }
         echo '</select>';
         echo '<input type="hidden" name="id_titre" value="' . $this->getID() . '">';
+        echo '<input type="hidden" name="id_sortie" value="' . BD::getSortieInitial($this)->getID() . '"> </input>';
+        echo '<input type="hidden" name="id_redirection" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
         echo '<button type="submit" class="btn btn-success"> valider </button>';
         echo "</form>";
         echo "</dialog>";
@@ -106,10 +109,8 @@ class Titre implements Irender
     }
     echo "</td>";
     echo "<td>".$this->duree."</td>";
-    echo "<td> caca";
-    var_dump($this->sortie->getNom());
-    //echo '<a href="sortie.php?id=' . $this->sortie->getID() . '"> ' . $this->sortie->getNom() . '</a>';
-    echo ''. $this->sortie->getID();
+    echo "<td>";
+    echo '<a href="sortie.php?id=' . BD::getSortieInitial($this)->getID(). '"> ' .   BD::getSortieInitial($this)->getNom() . '</a>';
     echo "</td>";
     echo "</tr>";
 }
@@ -132,15 +133,15 @@ class Titre implements Irender
     }
     public function getAlbum()
     {
-        return $this->sortie;
+        return BD::getSortie($this->idsortie);
     }
     public function setAlbum(Sortie $sortie)
     {
-        $this->sortie = $sortie;
+        $this->idsortie = $sortie->getID();
     }
     public function getPosition()
     {
-        return array_search($this, $this->sortie->getListeTitres())+1;
+        return array_search($this, BD::getSortie($this->idsortie)->getListeTitres())+1;
     }
     public function getID(): ?int
     {

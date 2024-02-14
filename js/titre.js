@@ -1,12 +1,10 @@
-document.addEventListener("DOMContentLoaded",function(){
-    const dialog = document.querySelector('#dialog');
-    console.log(dialog);
-    const openbtn = document.querySelector('#openbtn');
-    console.log(openbtn);
-    openbtn.addEventListener('click', function() {
-        console.log('haha');
-        dialog.toggleAttribute('open');
+document.addEventListener("DOMContentLoaded", function() {
+    const openbtns = document.querySelectorAll('#openbtn');
+    openbtns.forEach(function(openbtn) {
+        openbtn.addEventListener('click', function() {
+            console.log('haha');
+            const dialog = openbtn.nextElementSibling;
+            dialog.toggleAttribute('open');
         });
-         
-}
-);
+    });
+});
