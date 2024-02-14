@@ -2,28 +2,22 @@
 require 'Classes/autoloader.php';
 Autoloader::register();
 use onzeur\Type\BD;
-session_start();
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu de navigation</title>
-    <link rel="stylesheet" href="css/base.css">
 
-</head>
-<body>
+if(!isset($_SESSION)){
+    session_start();
+}
+?>
+
 <link rel="stylesheet" href="css/base.css">
 <aside>
     <nav>
         <ul>
-            <?php if(isset($_SESSION['pseudo'])) : ?>
+            <?php if (isset($_SESSION['pseudo'])): ?>
                 <li>
-                    <?php 
+                    <?php
                     $user = BD::getUtilisateur($_SESSION['pseudo']);
-                    if(!is_null($user)){
-                        echo $user->renderProfil();
+                    if (!is_null($user)) {
+                        echo $user->renderMini();
                     }
                     ?>
                 </li>
@@ -40,7 +34,7 @@ session_start();
                     <span>Rechercher</span>
                 </a>
             </li>
-            <?php if(!isset($_SESSION['pseudo'])) : ?>
+            <?php if (!isset($_SESSION['pseudo'])): ?>
                 <li>
                     <a href="login.php">
                         <object type="image/svg+xml" data="data/images/connexion.svg"></object>
@@ -48,6 +42,12 @@ session_start();
                     </a>
                 </li>
             <?php else: ?>
+                <li>
+                    <a href="formMusic.php">
+                        <object type="image/svg+xml" data="data/images/upload.svg"></object>
+                        <span>Ajouter une musique</span>
+                    </a>
+                </li>
                 <li>
                     <a href="logout.php">
                         <object type="image/svg+xml" data="data/images/connexion.svg"></object>
@@ -65,5 +65,3 @@ session_start();
         
     </nav>
 </aside>
-</body>
-</html>

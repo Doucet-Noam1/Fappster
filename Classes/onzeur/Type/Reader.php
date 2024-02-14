@@ -18,7 +18,7 @@ class Reader
         if ($this->donnees != null) {
             foreach ($this->donnees as $key => $value) {
                 $img = is_null($value["img"]) ? null : $value["img"];
-                $artiste = new Artiste($value["by"], null);
+                $artiste = new Artiste($value["by"], true);
                 $value["entryId"];
                 $album = new Album($artiste,$value["title"], array(), strval($value["releaseYear"]), $img,$value["genre"]);
                 $data[] = $album;

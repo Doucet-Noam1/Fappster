@@ -4,37 +4,40 @@ namespace onzeur\Type;
 
 class Titre implements Irender
 {
-    private $titre;
-    private $lstartiste;
-    private $duree;
-    private $dateAjout;
-    private int $idsortie;
-    private $song;
 
-    public function __construct(string $titre, Artiste $artiste, int $duree, string|int $dateAjout, string $song, int $idsortie = null)
+    private string $titre;
+    private array $lstartiste;
+    private float $duree;
+    private string|int $dateAjout;
+    private int|null $id_sortie;
+    private string $fichier;
+
+    public function __construct(string $titre, Artiste $artiste, int $duree, string|int $dateAjout, string $fichier, int $idsortie = null)
     {
         $this->titre = $titre;
         $this->lstartiste = [$artiste];
         $this->duree = $duree;
         $this->dateAjout = $dateAjout;
+        $this->fichier = $fichier;
         $this->idsortie = $idsortie;
-        $this->song = $song;
         BD::addTitre($this);
     }
     public function render()
     {
         echo '<div class="musique">';
-        echo '<img src=">' . BD::getSortie($this->idsortie)->getCover() . '" </img>';
+        if ($this->sortie != null){
+            echo '<img src=">' . $this->sortie->getCover() . '" </img>';
+        }
         echo "<h3>" . $this->titre . "</h3>";
-        echo "div id='artistes'>";
-        echo "ul";
+        echo "<div id='artistes'>";
+        echo "<ul>";
         foreach ($this->lstartiste as $artiste) {
             echo "<li>" . $artiste->getPseudo() . "</li>";
         }
-        echo "/ul";
+        echo "</ul>";
         echo "</div>";
         echo "<p>" . $this->dateAjout . "</p>";
-        echo "<p>" . $this->duree . "</p>";
+        echo "<p>" . $this->getDureeFormatted() . "</p>";
         echo '</div>';
     }
     public function renderDetail()
@@ -76,10 +79,10 @@ class Titre implements Irender
         echo "</tr>";
         
     }
-    public function renderDetailPlaylist(int $i)
+    public function renderDetailPlaylist(int $position)
 {
     echo "<tr class='titre'>";
-    echo "<td> ".$i."</td>";
+    echo "<td> ".$position."</td>";
     echo "<td>" .$this->titre . "</td>";
     echo "<td>";
     echo implode(" & ", array_map(function (Artiste $artiste) {
@@ -89,7 +92,7 @@ class Titre implements Irender
     echo "</td>";
     echo "<td>";
     if (isset($_SESSION['pseudo'])) {
-        echo '<button id="openbtn"> : </button>';
+        echo '<button id="openbtn"> + Playlist </button>';
         echo '<dialog id="dialog">';
         echo "<form method='post' action='ajouterTitrePlaylist.php'>";
         echo '<label for="id_playlist"> Choisissez la playlist: </label><br>';
@@ -101,7 +104,7 @@ class Titre implements Irender
         echo '<input type="hidden" name="id_titre" value="' . $this->getID() . '">';
         echo '<input type="hidden" name="id_sortie" value="' . BD::getSortieInitial($this)->getID() . '"> </input>';
         echo '<input type="hidden" name="id_redirection" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
-        echo '<button type="submit" class="btn btn-success"> valider </button>';
+        echo '<button type="submit" class="btn btn-success"> Valider </button>';
         echo "</form>";
         echo "</dialog>";
     } else {
@@ -127,11 +130,17 @@ class Titre implements Irender
     {
         return $this->duree;
     }
+    public function getDureeFormatted(){
+        $dureearondie = round($this->duree);
+        $minutes = floor($dureearondie / 60);
+        $secondes = $dureearondie - $minutes * 60;
+        return $minutes.":".str_pad(strval($secondes), 2, "0", STR_PAD_LEFT);
+    }
     public function getDateAjout()
     {
         return $this->dateAjout;
     }
-    public function getAlbum()
+    public function getAlbum(): SortieCommerciale
     {
         return BD::getSortie($this->idsortie);
     }
@@ -146,6 +155,10 @@ class Titre implements Irender
     public function getID(): ?int
     {
         return BD::getIdTitre($this);
+    }
+    public function getFichier():string
+    {
+        return $this->fichier;
     }
     public function addArtiste(Artiste $artiste)
     {

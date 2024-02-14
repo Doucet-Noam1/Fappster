@@ -1,9 +1,11 @@
 h2{
-    flex-basis: 100%;
-
+    width: 100%;
 }
-
-#sorties, #likes, #playlists{
+#contenu{
+    -ms-overflow-style: initial !important;
+    scrollbar-width: initial !important;
+}
+#contenu>*:not(#profil,h2){
     display: flex;
     flex-wrap: wrap;
     overflow-y: hidden;
@@ -13,7 +15,7 @@ h2{
     scrollbar-width: none;
     margin-bottom: 10px;
 }
-#likes::-webkit-scrollbar, #playlists::-webkit-scrollbar{
+#contenu>*:not(#profil,h2)::-webkit-scrollbar{
     display: none;
 }
 .sortie{

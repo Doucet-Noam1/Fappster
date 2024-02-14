@@ -1,46 +1,56 @@
 <?php
 require 'Classes/autoloader.php';
-require './Classes/getid3/getid3.php';
 
 Autoloader::register();
 use onzeur\Type\Titre;
 use onzeur\Type\Artiste;
 use onzeur\Type\BD;
+
 session_start();
 
 if (!isset($_SESSION['pseudo'])) {
-    header('Location: index.php');
+    header('Location: login.php');
     exit();
 }
-else{
-    $artiste = new Artiste($_SESSION['pseudo']);
+function reload(bool $success)
+{
+    header("Location: formMusic.php?upload=" . ($success ? "1" : "0"));
+    exit();
 }
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+    if (empty($_FILES['file']['name'])) {
+        reload(false);
+    }
+    if (empty($_FILES['file']['tmp_name'])) {
+        reload(false);
+    }
     $nomTitre = $_POST['nomTitre'];
     $date = date('d-m-Y');
-    
-    $audioFile = $_FILES['file'];
-    $audioFileName = $audioFile['name'];
-    $audioFileTmp = $audioFile['tmp_name'];
-    $audioFilePath = './data/audios/' . $audioFileName;
-    
-    if (move_uploaded_file($audioFileTmp, $audioFilePath)) {
 
+    $audioFile = $_FILES['file'];
+    $audioFileTmp = $audioFile['tmp_name'];
+    $audioFileName = sprintf('%s.%s', sha1_file($audioFileTmp), pathinfo($audioFile['name'], PATHINFO_EXTENSION));
+    $audioFilePath = BD::DOSSIERAUDIOS . $audioFileName;
+
+    if (move_uploaded_file($audioFileTmp, $audioFilePath)) {
 
         $getID3 = new getID3;
         $audioFileInfo = $getID3->analyze($audioFilePath);
+        if (!isset($audioFileInfo['playtime_seconds'])) {
+            unlink($audioFilePath);
+            reload(false);
+        }
         $audioDuration = $audioFileInfo['playtime_seconds'];
-
-
-        $titre = new Titre($nomTitre, $artiste, $audioDuration, $date, $audioFilePath);
+        $titre = new Titre($nomTitre, BD::getArtiste($_SESSION['pseudo']), $audioDuration, $date, $audioFileName);
         BD::addTitre($titre);
-
-        header("Location: formMusic.php");
-        exit();
+        if (isset($_POST['feats'])) {
+            foreach ($_POST['feats'] as $feat) {
+                $titre->addArtiste(BD::getArtiste($feat));
+            }
+        }
+        reload(true);
     } else {
-        echo "Une erreur s'est produite lors du téléchargement du fichier audio.";
+        reload(false);
     }
 }
 ?>
@@ -53,12 +63,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.3/pako.min.js"></script>
 </head>
 
 <body>
     <nav>
         <img id='logo' src="./data/images/logo.png" alt="Logo">
     </nav>
+    <?php
+    if (isset($_GET['upload'])) {
+        if ($_GET['upload'] == "1") {
+            echo "<p class='message success'>Votre musique a bien été ajoutée</p>";
+        } else {
+            echo "<p class='message error'>Erreur lors de l'ajout de votre musique</p>";
+        }
+    }
+    ?>
     <div id="panel">
         <h2>Créer une musique</h2>
         <div class='separator'></div>
@@ -68,6 +88,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <label for="file">Audio de votre musique :</label>
             <input type="file" id="file" name="file" accept="audio/*" required><br>
+
+            <label for="feats">Featurings : (Optionnel)</label>
+            <script type="text/javascript" src="js/ajoutArtiste.js"></script>
+            <ol id="liste">
+                <li>
+                    <p class="input mini">
+                        <?php echo $_SESSION['pseudo'] ?> (Vous)
+                    </p>
+                </li>
+                <li>
+                    <input id="inputArtistes" type="text" list="artistes" autocomplete="off" placeholder="Artiste"
+                        class="mini" onkeypress="cancelForm(event)">
+                </li>
+            </ol>
+            <button type="button" onclick="add()">Ajouter</button>
+            <datalist id="artistes"></datalist>
 
             <input type="submit" name="submitButton" value="Valider">
             <input type="hidden" name="MAX_FILE_SIZE" value="59000000" />

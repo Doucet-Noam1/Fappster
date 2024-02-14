@@ -13,7 +13,6 @@ class Utilisateur
     protected ?string $mdp;
     protected array $listeNotes;
     protected array $PlaylistLikes;
-    const PATH = "data/images/users/";
     public function __construct($pseudo,$nom="John",$prenom="Doe",$mdp=null){
 
         $this->pseudo = $pseudo;
@@ -26,11 +25,16 @@ class Utilisateur
     }
     public function render()
     {
-        echo "<div id='profil'>";
+        echo "<div id='profil' class='utilisateur'>";
+        $this->renderProfil();
+        echo "</div>";
+    }
+
+    protected function renderProfil(){
         echo "<h1>" . $this->pseudo . "</h1>";
         echo '<img src="'.$this->getPhoto().'" id="imageDeProfil">';
         echo "</div>";
-        if(BD::getArtiste($this->pseudo)){
+        if(BD::estArtiste($this->pseudo)){
             echo "<h2>Sorties de l'artiste</h2>";
             echo "<div id='sorties'>";
             $sorties = BD::getSortiesCommercialBy(BD::getArtiste($this->pseudo));
@@ -64,7 +68,7 @@ class Utilisateur
         echo "</div>";
     }
 
-    public function renderProfil()
+    public function renderMini()
     {
         echo '<a href="profil.php">';
         echo '<img src="'.$this->getPhoto().'" id="pfp">';
@@ -93,10 +97,10 @@ class Utilisateur
         return $this->prenom;
     }
     public function getPhoto(){
-        if(!file_exists(self::PATH.$this->pseudo.".jpg")){
-            return self::PATH."defaultuser.png";
+        if(!file_exists(BD::DOSSIERUSERS.$this->pseudo.".jpg")){
+            return BD::DOSSIERUSERS."defaultuser.png";
         }
-        return self::PATH.$this->pseudo.".jpg";
+        return BD::DOSSIERUSERS.$this->pseudo.".jpg";
     }
     public function getPlaylistLikes(){
 

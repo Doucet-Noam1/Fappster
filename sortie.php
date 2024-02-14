@@ -7,7 +7,6 @@ use onzeur\Type\BD;
 <head>
     <title>Onzeur</title>
     <link rel="stylesheet" href="css/sortie.css">
-    <link rel="stylesheet" href="css/index.css">
     <script type = "text/javascript" src="js/titre.js"></script>
 </head>
 
