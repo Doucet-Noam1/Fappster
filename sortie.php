@@ -8,6 +8,7 @@ use onzeur\Type\BD;
     <title>Onzeur</title>
     <link rel="stylesheet" href="css/sortie.css">
     <link rel="stylesheet" href="css/index.css">
+    <script type = "text/javascript" src="js/titre.js"></script>
 </head>
 
 <body>
@@ -30,17 +31,19 @@ use onzeur\Type\BD;
             }
         }
         $sortie->renderdetail();
-        ?>
-        <script src="js/sortie.js"></script>
-        <div id="recommandations">
-            <h1>Recommandations</h1>
-            <?php
-            foreach (BD::getRecommandations($sortie) as $recommandation) {
-                $recommandation->render();
-            }
-            ?>
-        </div>
+        if ($sortie->getType() != 4) {
+
+            echo '<script src="js/sortie.js"></script>';
+            echo '<div id="recommandations">';
+            echo    '<h1>Recommandations</h1>';
+                foreach (BD::getRecommandations($sortie) as $recommandation) {
+                    $recommandation->render();
+                }
+               
+            echo '</div>';
+            }?>
     </div>
+
 </body>
 
 </html>
