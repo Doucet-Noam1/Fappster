@@ -12,12 +12,19 @@
     ?>
     <div id="contenu">
         <?php
-        $user = BD::getUtilisateur($_GET['id']??$_SESSION['pseudo']??"");
-        if (is_null($user)) {
-            echo "<h1 id='error'>Cet utilisateur n'existe pas...</h1>";
-            die();
+        $artiste = BD::estArtiste($_GET['id']??$_SESSION['pseudo']??"");
+        if (!$artiste) {
+            $user = BD::getUtilisateur($_GET['id']??$_SESSION['pseudo']??"");
+            if (is_null($user)) {
+                echo "<h1 id='error'>Cet utilisateur n'existe pas...</h1>";
+                die();
+            }else{
+                $user->render();
+            }
+        }else{
+            $artiste = BD::getArtiste($_GET['id']??$_SESSION['pseudo']??"");
+            $artiste->render();
         }
-        $user->render();
         ?>
     </div>
     <script src="js/profil.js" type="text/javascript"></script>

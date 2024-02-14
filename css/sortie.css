@@ -124,3 +124,18 @@ table tr:not(thead tr):hover td {
     cursor: pointer;
     border-color: blue !important;
 }
+#recommandations {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    justify-content: space-around;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+#contenu>*>h1 {
+    color: white;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+}

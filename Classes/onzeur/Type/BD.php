@@ -8,6 +8,9 @@ include 'loadbd.php';
 class BD
 {
     private static $bdd;
+    public const DOSSIERAUDIOS = 'data/audios/';
+    public const DOSSIERCOVERS = 'data/images/covers/';
+    public const DOSSIERUSERS = 'data/images/users/';
     private function __construct()
     {
         try {
@@ -82,7 +85,8 @@ class BD
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS TITRE(
             id_titre INTEGER PRIMARY KEY AUTOINCREMENT,
             nom_titre TEXT,
-            duree INTEGER
+            duree INTEGER,
+            nom_fichier VARCHAR(50)
         )');
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS CONTIENT (
             id_sortie INTEGER,
@@ -172,12 +176,12 @@ class BD
     {
         $bdd = BD::getInstance();
         $bdd->beginTransaction();
-        $queryTitre = $bdd->prepare("SELECT id_titre FROM TITRE WHERE nom_titre = ? AND duree = ?");
-        $queryTitre->execute([$titre->getTitre(), $titre->getDuree()]);
+        $queryTitre = $bdd->prepare("SELECT id_titre FROM TITRE WHERE nom_titre = ? AND duree = ? AND nom_fichier = ?");
+        $queryTitre->execute([$titre->getTitre(), $titre->getDuree(), $titre->getFichier()]);
         $resTitre = $queryTitre->fetch();
         if (!$resTitre) {
-            $queryAddTitre = $bdd->prepare("INSERT INTO TITRE(nom_titre,duree) VALUES (?,?)");
-            $queryAddTitre->execute([$titre->getTitre(), $titre->getDuree()]);
+            $queryAddTitre = $bdd->prepare("INSERT INTO TITRE(nom_titre,duree,nom_fichier) VALUES (?,?,?)");
+            $queryAddTitre->execute([$titre->getTitre(), $titre->getDuree(), $titre->getFichier()]);
         }
         $bdd->commit();
         foreach ($titre->getArtiste() as $artiste) {
@@ -210,15 +214,23 @@ class BD
         $bdd->commit();
     }
 
+    static function estArtiste(string|Utilisateur $pseudo): bool
+    {
+        if ($pseudo instanceof Utilisateur) {
+            $pseudo = $pseudo->getPseudo();
+        }
+        $queryArtiste = BD::getInstance()->prepare("SELECT * FROM ARTISTE WHERE nom_artiste = ?");
+        $queryArtiste->execute([$pseudo]);
+        $artiste = $queryArtiste->fetch();
+        return $artiste != null;
+    }
+
     static function getArtiste($nom): ?Artiste
     {
         $queryArtiste = BD::getInstance()->prepare("SELECT * FROM ARTISTE WHERE nom_artiste = ?");
         $queryArtiste->execute([$nom]);
         $artiste = $queryArtiste->fetch();
-        if($artiste == null){
-            return null;
-        }
-        return new Artiste($artiste['nom_artiste'], $artiste['verifie']);
+        return new Artiste($artiste['nom_artiste']??$nom, boolval($artiste['verifie']??false));
     }
 
     static function getGenresSortie($idSortie)
@@ -282,7 +294,7 @@ class BD
             return null;
         }
         $artistes = self::getArtistesTitre($id);
-        $res = new Titre($titre['nom_titre'], array_shift($artistes), $titre['duree'], $titre['id_titre'], "nosong.mp3");
+        $res = new Titre($titre['nom_titre'], array_shift($artistes), $titre['duree'], $titre['id_titre'], $titre['nom_fichier']);
         foreach ($artistes as $artiste) {
             $res->addArtiste($artiste);
         }
@@ -347,6 +359,18 @@ class BD
         $res = [];
         foreach ($likes as $like) {
             $res[] = self::getSortie($like['id_sortie']);
+        }
+        return $res;
+    }
+
+    static function getTitresBy(Artiste $artiste):array
+    {
+        $queryTitres = BD::getInstance()->prepare("SELECT id_titre FROM TITRE NATURAL JOIN CHANTER_PAR WHERE nom_artiste = ?");
+        $queryTitres->execute([$artiste->getPseudo()]);
+        $titres = $queryTitres->fetchAll();
+        $res = [];
+        foreach ($titres as $titre) {
+            $res[] = self::getTitre($titre['id_titre']);
         }
         return $res;
     }
@@ -474,7 +498,7 @@ class BD
         $artistes = $queryArtiste->fetchAll();
         $res = [];
         foreach ($artistes as $artiste) {
-            $res[] = new Artiste($artiste['nom_artiste'], $artiste['verifie']);
+            $res[] = new Artiste($artiste['nom_artiste'], boolval($artiste['verifie']));
         }
         return $res;
     }

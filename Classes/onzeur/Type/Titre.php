@@ -4,37 +4,39 @@ namespace onzeur\Type;
 
 class Titre implements Irender
 {
-    private $titre;
-    private $lstartiste;
-    private $duree;
-    private $dateAjout;
-    private $sortie;
-    private $song;
+    private string $titre;
+    private array $lstartiste;
+    private float $duree;
+    private string|int $dateAjout;
+    private SortieCommerciale|null $sortie;
+    private string $fichier;
 
-    public function __construct(string $titre, Artiste $artiste, int $duree, string|int $dateAjout, string $song, SortieCommerciale $sortie = null)
+    public function __construct(string $titre, Artiste $artiste, float $duree, string|int $dateAjout, string $fichier, SortieCommerciale $sortie = null)
     {
         $this->titre = $titre;
         $this->lstartiste = [$artiste];
         $this->duree = $duree;
         $this->dateAjout = $dateAjout;
         $this->sortie = $sortie;
-        $this->song = $song;
+        $this->fichier = $fichier;
         BD::addTitre($this);
     }
     public function render()
     {
-        echo '<div class="musique">';
-        echo '<img src=">' . $this->sortie->getCover() . '" </img>';
+        echo '<div class="sortie">';
+        if ($this->sortie != null){
+            echo '<img src=">' . $this->sortie->getCover() . '" </img>';
+        }
         echo "<h3>" . $this->titre . "</h3>";
-        echo "div id='artistes'>";
-        echo "ul";
+        echo "<div id='artistes'>";
+        echo "<ul>";
         foreach ($this->lstartiste as $artiste) {
             echo "<li>" . $artiste->getPseudo() . "</li>";
         }
-        echo "/ul";
+        echo "</ul>";
         echo "</div>";
         echo "<p>" . $this->dateAjout . "</p>";
-        echo "<p>" . $this->duree . "</p>";
+        echo "<p>" . $this->getDureeFormatted() . "</p>";
         echo '</div>';
     }
     public function renderDetail()
@@ -63,11 +65,17 @@ class Titre implements Irender
     {
         return $this->duree;
     }
+    public function getDureeFormatted(){
+        $dureearondie = round($this->duree);
+        $minutes = floor($dureearondie / 60);
+        $secondes = $dureearondie - $minutes * 60;
+        return $minutes.":".str_pad(strval($secondes), 2, "0", STR_PAD_LEFT);
+    }
     public function getDateAjout()
     {
         return $this->dateAjout;
     }
-    public function getAlbum()
+    public function getAlbum(): SortieCommerciale
     {
         return $this->sortie;
     }
@@ -82,6 +90,10 @@ class Titre implements Irender
     public function getID(): ?int
     {
         return BD::getIdTitre($this);
+    }
+    public function getFichier():string
+    {
+        return $this->fichier;
     }
     public function addArtiste(Artiste $artiste)
     {

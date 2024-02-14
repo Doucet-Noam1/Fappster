@@ -1,8 +1,10 @@
-#albums, #eps, #singles, #recommandations {
+#contenu>* {
     display: flex;
     flex-wrap: wrap;
     overflow-y: scroll;
     justify-content: space-around;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 #contenu>*>h1 {
@@ -10,8 +12,4 @@
     text-align: center;
     width: 100%;
     margin-bottom: 10px;
-}
-
-a {
-    color: violet;
 }

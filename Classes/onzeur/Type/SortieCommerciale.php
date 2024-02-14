@@ -8,7 +8,6 @@ include_once 'BD.php';
 abstract class SortieCommerciale extends Sortie
 {
     protected array $listeGenres;
-    const PATH = "data/images/covers/";
 
     public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, ?array $listeGenres, $id = null)
     {
@@ -29,8 +28,8 @@ abstract class SortieCommerciale extends Sortie
     public function render()
     {
         echo '<a class="sortie" href="sortie.php?id=' . parent::getID() . '">';
-        $image = self::PATH . $this->cover;
-        echo '<img src="' . (($image != self::PATH && file_exists($image)) ? self::PATH . str_replace("%", "%25", $this->cover) : self::PATH . 'null.png') . '"/>';
+        $image = BD::DOSSIERCOVERS . $this->cover;
+        echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
         echo "<p>" . $this->nom . "</p>";
         $splitNameSpace = explode("\\", get_class($this));
         $splitNameSpace = end($splitNameSpace);
@@ -44,8 +43,8 @@ abstract class SortieCommerciale extends Sortie
     public function renderDetail()
     {
         echo "<div id='banner'>";
-        $image = self::PATH . $this->cover;
-        echo '<img src="' . (($image != self::PATH && file_exists($image)) ? self::PATH . str_replace("%", "%25", $this->cover) : self::PATH . 'null.png') . '"/>';
+        $image = BD::DOSSIERCOVERS . $this->cover;
+        echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
         echo "<div id='informations'>";
         $splitNameSpace = explode("\\", get_class($this));
         $splitNameSpace = end($splitNameSpace);

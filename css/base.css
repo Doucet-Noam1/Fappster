@@ -16,6 +16,7 @@ ol {
 }
 
 a {
+    color: violet;
     text-decoration: none;
 }
 
@@ -26,7 +27,6 @@ a:not(nav a) {
 body>* {
     background-color: #121212;
     border-radius: 10px;
-    margin: 5x;
     padding: 10px;
     height: calc(100% - 10px);
 }
@@ -68,8 +68,8 @@ nav li {
     transition: 0.3s;
 }
 
-nav li:hover {
-    background-color: #2c2e33;
+nav li:hover, .sortie:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
     cursor: pointer;
 }
 
@@ -86,9 +86,10 @@ nav span {
     color: #fff;
     margin: 1vw;
     text-decoration: none;
+    width: max-content;
 }
 
-nav object {
+nav object, nav img {
     --size: 2rem;
     width: var(--size);
     height: var(--size);
@@ -115,7 +116,9 @@ nav ul li a {
 nav ul li a object {
     margin-right: 10px;
 }
-
+li:has(#pfp){
+    background: rgba(255, 255, 255, 0.1);
+}
 #pfp {
     width: 50px;
     height: 50px;
@@ -135,11 +138,7 @@ nav ul li a object {
     width: 12vw;
     height: calc(17vw + 2em);
     position: relative;
-}
-
-.sortie:hover {
     transition: all 0.3s;
-    background-color: #2f2f2f;
 }
 
 .sortie p:first-of-type {
@@ -170,5 +169,4 @@ nav ul li a object {
     width: 10vw;
     aspect-ratio: 1/1;
     border-radius: 10px;
-    transition: 0.3s;
 }
