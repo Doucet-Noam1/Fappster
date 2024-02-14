@@ -5,7 +5,10 @@ use onzeur\Type\Utilisateur;
 use onzeur\Type\BD;
 
 session_start();
-
+if (isset($_SESSION['pseudo'])){
+    header('Location: index.php');
+    exit();
+}
 if ($_POST) {
     $pseudo = $_POST['pseudo'];
     $password = $_POST['password'];

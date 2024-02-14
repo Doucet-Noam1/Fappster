@@ -54,7 +54,14 @@ if(!isset($_SESSION)){
                         <span>Deconnexion</span>
                     </a>
                 </li>
+                <li>
+                <a href="creerPlaylist.php">
+                    <object type="image/svg+xml" data="data/images/loupe.svg"></object>
+                    <span>creer Playlist</span>
+                </a>
+            </li>
             <?php endif; ?>
         </ul>
+        
     </nav>
 </aside>
