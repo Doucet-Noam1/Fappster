@@ -1,12 +1,9 @@
 <?php
-require 'Classes/autoloader.php';
-
-Autoloader::register();
+require 'base.php';
 use onzeur\Type\Titre;
 use onzeur\Type\Artiste;
 use onzeur\Type\BD;
 
-session_start();
 
 if (!isset($_SESSION['pseudo'])) {
     header('Location: login.php');
@@ -67,9 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <nav>
-        <img id='logo' src="./data/images/logo.png" alt="Logo">
-    </nav>
     <?php
     if (isset($_GET['upload'])) {
         if ($_GET['upload'] == "1") {

@@ -1,6 +1,5 @@
 <?php
-require 'Classes/autoloader.php';
-Autoloader::register();
+require 'base.php';
 use onzeur\Type\Utilisateur;
 use onzeur\Type\BD;
 
@@ -69,11 +68,6 @@ if ($_POST) {
 </head>
 
 <body>
-    <nav>
-        <a href="index.php">
-            <img id="logo" src="./data/images/logo.png" alt="Logo">
-        </a>
-    </nav>
     <div id="panel">
         <div>
             <h2>Connexion</h2>
