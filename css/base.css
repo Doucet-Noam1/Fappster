@@ -173,7 +173,10 @@ li:has(#pfp){
 
 #logo{
     
-    width: 50%;
-    height: 50%;
+    position: absolute;
+    width: 15em;
+    height: 15em;
+    top: 65rem;
+    left: 11rem;
     
 }
