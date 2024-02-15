@@ -12,7 +12,7 @@ class Utilisateur
     protected string $prenom;
     protected ?string $mdp;
     protected array $listeNotes;
-    protected $idPlaylistLikes ;
+    protected Playlist $playlistLikes ;
     public function __construct($pseudo,$nom="John",$prenom="Doe",$mdp=null){
 
         $this->pseudo = $pseudo;
@@ -21,7 +21,7 @@ class Utilisateur
         $this->mdp = $mdp;
         $this->listeNotes = [];
         BD::addUtilisateur($this);
-        $this->idPlaylistLikes = BD::getPlaylistLike($this);
+        $this->playlistLikes = new Playlist($this,'Titre likés '. $this->getPseudo(),'like.jpg',false);
     }
     public function render()
     {
@@ -47,7 +47,6 @@ class Utilisateur
             echo "</div>";
         }
         echo "<h2>Playlists</h2>";
-        echo '<p> '. $this->getPlaylistLikes() . '</p>';    
         echo "<div id='playlists'>";
         $playlists = BD::getPlaylistsBy($this);
         foreach ($playlists as $playlist) {
@@ -106,11 +105,18 @@ class Utilisateur
     public function getPlaylistLikes(){
 
     
-        return $this->idPlaylistLikes;
+        return $this->playlistLikes;
     }
     public function getListeNotes()
     {
         return $this->listeNotes;
+    }
+    public function like(Titre $titre, Sortie $sortie_initial){
+        if(!BD::estDansSortie($this->playlistLikes,$titre))
+       { BD::addTitreToSortie($this->playlistLikes,$titre,$sortie_initial);}
+       else{
+        BD::deleteTitreFromSortie($this->playlistLikes,$titre);
+       }
     }
     
 }

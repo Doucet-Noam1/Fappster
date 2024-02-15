@@ -52,6 +52,14 @@ class Titre implements Irender
             return '<a href="profil.php?id=' . $pseudo . '">' . $pseudo . '</a>';
         }, $this->lstartiste));
         echo "</td>";
+        echo '<td>';
+        echo '<form method = "post" action="like.php">';
+        echo '<input type="hidden" name="id_titre" value="' . $this->getID() . '"> </input>';
+        echo '<input type="hidden" name="id_sortie" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
+        echo '<input type="hidden" name="id_redirection" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
+        echo '<button>+</button>';
+        echo '</form>';
+        echo '</td>';
         echo "<td>";
         if (isset($_SESSION['pseudo'])){
             echo ' <button id="openbtn"> : </button>';
@@ -91,6 +99,14 @@ class Titre implements Irender
         return '<a href="profil.php?id=' . $pseudo . '">' . $pseudo . '</a>';
     }, $this->lstartiste));
     echo "</td>";
+    echo '<td>';
+    echo '<form method = "post" action="like.php">';
+    echo '<input type="hidden" name="id_titre" value="' . $this->getID() . '"> </input>';
+    echo '<input type="hidden" name="id_sortie" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
+    echo '<input type="hidden" name="id_redirection" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
+    echo '<button>+</button>';
+    echo '</form>';
+    echo '</td>';
     echo "<td>";
     if (isset($_SESSION['pseudo'])) {
         echo '<button id="openbtn"><img src="./data/images/icons/add.png"></button>';

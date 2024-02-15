@@ -21,9 +21,7 @@ class BD
                 pseudo VARCHAR(30) PRIMARY KEY,
                 nom TEXT default NULL,
                 prenom TEXT default NULL,
-                mdp TEXT default NULL,
-                id_playlist_like INTEGER default NULL,
-                FOREIGN KEY (id_playlist_like) REFERENCES SORTIE(id_sortie)
+                mdp TEXT default NULL
             )');
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS ARTISTE(
                 nom_artiste VARCHAR(30) PRIMARY KEY,
@@ -171,14 +169,42 @@ class BD
         }
         $bdd->commit();
     }
-    static function getPlaylistLike(Utilisateur $utilisateur){
+    static function toggleTitreToLike(PlayList $playlist, Titre $like, Sortie $sortie){
+        $bdd = BD::getInstance();
+         self::addTitreToSortie($playlist, $like, $sortie);
+        // if (BD::estDansSortie($playlist, $like)){
+        //     self::deleteTitreFromSortie($playlist,$like);
+        // }else{
+        //     self::addTitreToSortie($playlist, $like, $sortie);
+        // }
+        
+        
+
+    }
+
+    static function estDansSortie(Sortie $sortie, Titre $titre){
+        $bdd = BD::getInstance();
+        $bdd -> beginTransaction();
+        $query = $bdd->prepare('SELECT position FROM CONTIENT WHERE id_sortie = ? and id_titre = ?');
+        $query-> execute([$sortie->getID(),$titre->getID()]);
+        $contient = $query ->fetch();
+        if ($contient){
+            return true;
+        }
+        return false;
+
+    }
+    static function deleteTitreFromSortie(Sortie $sortie, Titre $titre)
+    {
         $bdd = BD::getInstance();
         $bdd->beginTransaction();
-        $nom = 'Titre likés '. $utilisateur->getPseudo();
-        $playlist = new Playlist($utilisateur,$nom,'like.jpg',false);
-        BD::addArtisteToSortie($playlist,$utilisateur);
-        return $playlist->getID();
+    
+        $queryDeleteTitre = $bdd->prepare("DELETE FROM CONTIENT WHERE id_sortie = ? AND id_titre = ?");
+        $queryDeleteTitre->execute([$sortie->getID(), $titre->getID()]);
+    
+        $bdd->commit();
     }
+
     static function addTitre(Titre $titre)
     {
         $bdd = BD::getInstance();

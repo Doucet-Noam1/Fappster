@@ -54,6 +54,7 @@ class PlayList extends Sortie
                 <th>Position</th>
                 <th>Titre</th>
                 <th>Artistes</th>
+                <th>Like</th>
                 <th></th>
                 <th>Durée</th>
                 <th>Sortie</th>

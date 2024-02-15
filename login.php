@@ -2,8 +2,6 @@
 require 'base.php';
 use onzeur\Type\Utilisateur;
 use onzeur\Type\BD;
-
-session_start();
 if (isset($_SESSION['pseudo'])){
     header('Location: index.php');
     exit();
