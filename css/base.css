@@ -148,7 +148,7 @@ li:has(#pfp){
     margin-top: 1vw;
     margin-bottom: 1rem;
     bottom: unset;
-    height: 2em;
+    height: 2.5em;
     overflow: hidden;
     display: -webkit-box;
     line-clamp: 2;
@@ -169,4 +169,14 @@ li:has(#pfp){
     width: 10vw;
     aspect-ratio: 1/1;
     border-radius: 10px;
+}
+
+#logo{
+    
+    position: absolute;
+    width: 15em;
+    height: 15em;
+    top: 65rem;
+    left: 11rem;
+    
 }
