@@ -68,6 +68,16 @@ class Utilisateur
         echo "</div>";
     }
 
+    public function renderAdmin(){
+        echo "<td>" . $this->pseudo . "</td>";
+        echo "<td><img src='".$this->getPhoto()."' id='imageDeProfil'></td>";
+        $splitNameSpace = explode("\\", get_class($this));
+        $splitNameSpace = end($splitNameSpace);
+        echo "<td>" . $splitNameSpace . "</td>";
+        echo "<td><a href='modifierArtiste.php?pseudo=".$this->pseudo."'>modifier</a></td>";
+        echo "<td><a href='supprimerArtiste.php?pseudo=".$this->pseudo."'>supprimer</a></td>";
+    }
+
     public function renderMini()
     {
         echo '<a href="profil.php">';

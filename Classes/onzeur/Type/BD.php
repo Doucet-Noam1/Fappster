@@ -524,6 +524,18 @@ class BD
         return $res;
     }
 
+    static function getAllArtistes()
+    {
+        $queryArtistes = BD::getInstance()->prepare("SELECT DISTINCT pseudo FROM UTILISATEUR");
+        $queryArtistes->execute();
+        $artistes = $queryArtistes->fetchAll();
+        $res = [];
+        foreach ($artistes as $artiste) {
+            $res[] = self::estArtiste($artiste['pseudo']) ? self::getArtiste($artiste['pseudo']) : self::getUtilisateur($artiste['pseudo']);
+        }
+        return $res;
+    }
+
     static function rechercheArtiste(string $id)
     {
         $queryArtiste = BD::getInstance()->prepare("SELECT * FROM ARTISTE WHERE nom_artiste LIKE ?");

@@ -41,5 +41,6 @@ class Artiste extends Utilisateur
         );
         return $json;
     }
+    
 }
 ?>
