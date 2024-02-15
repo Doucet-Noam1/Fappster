@@ -15,8 +15,8 @@ class PlayList extends Sortie
     public function render()
     {
         echo '<a class="sortie" href="sortie.php?id=' . parent::getID() . '">';
-        $image = self::PATH . $this->cover;
-        echo '<img src="' . (($image != self::PATH && file_exists($image)) ? self::PATH . str_replace("%", "%25", $this->cover) : self::PATH . 'null.png') . '"/>';
+        $image = BD::DOSSIERCOVERS . $this->cover;
+        echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
         echo "<p>" . $this->nom . "</p>";
         $splitNameSpace = explode("\\", get_class($this));
         $splitNameSpace = end($splitNameSpace);
@@ -27,16 +27,16 @@ class PlayList extends Sortie
     public function renderDetail()
     {
         echo "<div id='banner'>";
-        $image = self::PATH . $this->cover;
-        echo '<img src="' . (($image != self::PATH && file_exists($image)) ? self::PATH . str_replace("%", "%25", $this->cover) : self::PATH . 'null.png') . '"/>';
+        $image = BD::DOSSIERCOVERS . $this->cover;
+        echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
         echo "<div id='informations'>";
         $splitNameSpace = explode("\\", get_class($this));
         $splitNameSpace = end($splitNameSpace);
         echo "<p>" . $splitNameSpace . "</p>";
         echo "<h1>" . $this->nom . "</h1>";
         echo "<span class='artistes'>";
-        echo implode(" • ", array_map(function (Artiste $artiste) {
-            $pseudo = $artiste->getPseudo();
+        echo implode(" • ", array_map(function (Utilisateur $utilisateur) {
+            $pseudo = $utilisateur->getPseudo();
             return '<a href="profil.php?id=' . $pseudo . '">' . $pseudo . '</a>';
         }, $this->artiste));
         echo "</span>";
@@ -56,16 +56,16 @@ class PlayList extends Sortie
             </tr>
         </thead>'; // On ferme les divs et on commence le tableau |Postion|Titre|Artistes|Durée|
         echo "<tbody>";
-        for ( $i = 0; $i < count($this->listeTitres  ); $i++){
-            $this->listeTitres[$i]->renderDetailPlaylist($i+1);
+        for ( $i = 0; $i < count($this->listeTitres); $i++){
+            $this->listeTitres[$i]->renderDetailPlaylist();
         }
         echo "</tbody>";
         echo "</table>";
     }
     public function renderModif(){
         echo "<div id='banner'>";
-        $image = self::PATH . $this->cover;
-        echo '<img src="' . (($image != self::PATH && file_exists($image)) ? self::PATH . str_replace("%", "%25", $this->cover) : self::PATH . 'null.png') . '"/>';
+        $image = BD::DOSSIERCOVERS . $this->cover;
+        echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
         echo "<div id='informations'>";
         $splitNameSpace = explode("\\", get_class($this));
         $splitNameSpace = end($splitNameSpace);

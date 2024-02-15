@@ -9,7 +9,7 @@ class Titre implements Irender
     private array $lstartiste;
     private float $duree;
     private string|int $dateAjout;
-    private int|null $id_sortie;
+    private int|null $idsortie;
     private string $fichier;
 
     public function __construct(string $titre, Artiste $artiste, int $duree, string|int $dateAjout, string $fichier, int $idsortie = null)
@@ -25,8 +25,9 @@ class Titre implements Irender
     public function render()
     {
         echo '<div class="musique">';
-        if ($this->sortie != null){
-            echo '<img src=">' . $this->sortie->getCover() . '" </img>';
+        $sortie = $this->getSortie();
+        if ($sortie != null){
+            echo '<img src=">' . $sortie->getCover() . '" </img>';
         }
         echo "<h3>" . $this->titre . "</h3>";
         echo "<div id='artistes'>";
@@ -79,10 +80,10 @@ class Titre implements Irender
         echo "</tr>";
         
     }
-    public function renderDetailPlaylist(int $position)
+    public function renderDetailPlaylist()
 {
     echo "<tr class='titre'>";
-    echo "<td> ".$position."</td>";
+    echo "<td> ".$this->getPosition()."</td>";
     echo "<td>" .$this->titre . "</td>";
     echo "<td>";
     echo implode(" & ", array_map(function (Artiste $artiste) {
@@ -140,7 +141,7 @@ class Titre implements Irender
     {
         return $this->dateAjout;
     }
-    public function getAlbum(): SortieCommerciale
+    public function getAlbum(): Sortie
     {
         return BD::getSortie($this->idsortie);
     }
@@ -150,7 +151,7 @@ class Titre implements Irender
     }
     public function getPosition()
     {
-        return array_search($this, BD::getSortie($this->idsortie)->getListeTitres())+1;
+        return BD::getPositionTitre($this, $this->getAlbum());
     }
     public function getID(): ?int
     {
@@ -164,6 +165,9 @@ class Titre implements Irender
     {
         BD::addArtisteToTitre($this, $artiste);
         $this->lstartiste[] = $artiste;
+    }
+    public function getSortie() : ?Sortie{
+        return BD::getSortie($this->idsortie);
     }
 
 }

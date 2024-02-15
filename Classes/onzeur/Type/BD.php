@@ -121,8 +121,6 @@ class BD
     static function getInstance()
     {
         if (!(file_exists('fappster.db'))) {
-            session_start();
-            session_destroy();
             new BD;
             peupleBD();
         }
@@ -131,15 +129,12 @@ class BD
     static function addArtiste(Artiste $artiste)
     {
         $bdd = BD::getInstance();
-        $bdd->beginTransaction();
-        $queryArtiste = $bdd->prepare("SELECT nom_artiste FROM ARTISTE WHERE nom_artiste = ?");
-        $queryArtiste->execute([$artiste->getPseudo()]);
-        $resArtiste = $queryArtiste->fetch();
-        if (!$resArtiste) {
+        if (BD::estArtiste($artiste->getPseudo()) == false) {
+            $bdd->beginTransaction();
             $queryAddArtiste = $bdd->prepare("INSERT INTO ARTISTE(nom_artiste,verifie) VALUES (?,?)");
             $queryAddArtiste->execute([$artiste->getPseudo(), $artiste->getVerifie()]);
+            $bdd->commit();
         }
-        $bdd->commit();
     }
 
     static function addSortie(Sortie $sortie)
@@ -168,8 +163,8 @@ class BD
         $resUtilisateur = $queryUtilisateur->fetch();
         if (!$resUtilisateur) {
             $queryAddUtilisateur = $bdd->prepare("INSERT INTO UTILISATEUR(pseudo,nom,prenom,mdp) VALUES (?,?,?,?)");
-            $mdp=$utilisateur->getMdp() == null ? $utilisateur->getMdp() : hash('sha256',$utilisateur->getMdp());
-            $queryAddUtilisateur->execute([$utilisateur->getPseudo(),$utilisateur->getNom(),$utilisateur->getPrenom(), $mdp]);
+            $mdp = $utilisateur->getMdp() == null ? $utilisateur->getMdp() : hash('sha256', $utilisateur->getMdp());
+            $queryAddUtilisateur->execute([$utilisateur->getPseudo(), $utilisateur->getNom(), $utilisateur->getPrenom(), $mdp]);
         }
         $bdd->commit();
     }
@@ -212,23 +207,32 @@ class BD
             $bdd->commit();
             return;
         }
-        if ($sortie->getType() == 4){
+        $position = BD::getNombreDeTitres($sortie) + 1;
+        if ($sortie->getType() == 4) {
             $queryAddTitre = $bdd->prepare("INSERT INTO CONTIENT(id_sortie,id_titre,position,id_sortie_initiale) VALUES (?,?,?,?)");
-            $queryAddTitre->execute([$sortie->getID(), $titre->getID(), $sortie->getNombreDeTitres() + 1,$sortie_initial->getID()]);
+            $queryAddTitre->execute([$sortie->getID(), $titre->getID(), $position, $sortie_initial->getID()]);
         } else {
             $queryAddTitre = $bdd->prepare("INSERT INTO CONTIENT(id_sortie,id_titre,position) VALUES (?,?,?)");
-            $queryAddTitre->execute([$sortie->getID(), $titre->getID(), $sortie->getNombreDeTitres() + 1]);
+            $queryAddTitre->execute([$sortie->getID(), $titre->getID(), $position]);
         }
         $bdd->commit();
     }
-    static function getSortieInitial(Titre $titre) : ?SortieCommerciale{
+    static function getSortieInitial(Titre $titre): ?SortieCommerciale
+    {
         $bdd = BD::getInstance();
         $queryTitre = $bdd->prepare("SELECT id_sortie_initiale FROM CONTIENT WHERE id_sortie = ? AND id_titre = ?");
         $queryTitre->execute([$titre->getAlbum()->getID(), $titre->getID()]);
         $resTitre = $queryTitre->fetch();
         return BD::getSortie($resTitre['id_sortie_initiale']);
     }
-
+    static function getNombreDeTitres(Sortie $sortie): int
+    {
+        $bdd = BD::getInstance();
+        $queryNombreDeTitres = $bdd->prepare("SELECT COUNT(id_titre) FROM CONTIENT WHERE id_sortie = ?");
+        $queryNombreDeTitres->execute([$sortie->getID()]);
+        $nombreDeTitres = $queryNombreDeTitres->fetch();
+        return $nombreDeTitres[0];
+    }
     static function estArtiste(string|Utilisateur $pseudo): bool
     {
         if ($pseudo instanceof Utilisateur) {
@@ -245,10 +249,10 @@ class BD
         $queryArtiste = BD::getInstance()->prepare("SELECT * FROM ARTISTE WHERE nom_artiste = ?");
         $queryArtiste->execute([$nom]);
         $artiste = $queryArtiste->fetch();
-        return new Artiste($artiste['nom_artiste']??$nom, boolval($artiste['verifie']??false));
+        return new Artiste($artiste['nom_artiste'] ?? $nom, boolval($artiste['verifie'] ?? false));
     }
 
-    static function getGenresSortie($idSortie) : array
+    static function getGenresSortie($idSortie): array
     {
         $queryGenres = BD::getInstance()->prepare("SELECT nom_genre FROM A_POUR_STYLE WHERE id_sortie = ?");
         $queryGenres->execute([$idSortie]);
@@ -266,12 +270,12 @@ class BD
     static function getTitresSortie($idSortie): array
     {
 
-        $queryTitres = BD::getInstance()->prepare("SELECT id_titre FROM CONTIENT WHERE id_sortie = ?");
+        $queryTitres = BD::getInstance()->prepare("SELECT id_titre FROM CONTIENT WHERE id_sortie = ? ORDER BY (position)");
         $queryTitres->execute([$idSortie]);
         $titres = $queryTitres->fetchAll();
         $res = [];
         foreach ($titres as $titre) {
-            $res[] = self::getTitre($titre['id_titre'],$idSortie);
+            $res[] = self::getTitre($titre['id_titre'], $idSortie);
         }
         return $res;
     }
@@ -282,7 +286,7 @@ class BD
         $queryArtiste->execute([$idSortie]);
         $artistes = $queryArtiste->fetchAll();
         foreach ($artistes as $artiste) {
-            $res[] = self::getArtiste($artiste['nom_artiste']);
+            $res[] = self::estArtiste($artiste['nom_artiste']) ? self::getArtiste($artiste['nom_artiste']) : self::getUtilisateur($artiste['nom_artiste']);
         }
         return $res;
     }
@@ -301,8 +305,9 @@ class BD
         return Sortie::factory($artiste, $sortie["nom_sortie"], $titres, strval($sortie["date_sortie"]), $sortie["cover"], $sortie["id_type"], $genres, intval($id));
     }
 
-    static function getTitre(int $id,int|string $idsortie): ?Titre
-    {   $idsortie =  intval($idsortie);
+    static function getTitre(int $id, int|string|null $idsortie = null): ?Titre
+    {
+        $idsortie = intval($idsortie);
         $queryTitre = BD::getInstance()->prepare("SELECT * FROM TITRE WHERE id_titre = ?");
         $queryTitre->execute([$id]);
         $titre = $queryTitre->fetch();
@@ -316,7 +321,7 @@ class BD
         }
         return $res;
     }
-    
+
 
     static function getUtilisateur(string $pseudo): ?Utilisateur
     {
@@ -329,7 +334,7 @@ class BD
         $utilisateur['nom'] = $utilisateur['nom'] != null ? $utilisateur['nom'] : "Doe";
         $utilisateur['prenom'] = $utilisateur['prenom'] != null ? $utilisateur['prenom'] : "John";
         $utilisateur['mdp'] = $utilisateur['mdp'] != null ? $utilisateur['mdp'] : null;
-        return new Utilisateur($pseudo, $utilisateur['nom'], $utilisateur['prenom'],$utilisateur['mdp']);
+        return new Utilisateur($pseudo, $utilisateur['nom'], $utilisateur['prenom'], $utilisateur['mdp']);
     }
 
     static function getArtistesTitre($idTitre): array
@@ -367,7 +372,7 @@ class BD
         return $res;
     }
 
-    static function getPlaylistsBy(Utilisateur $utilisateur):array
+    static function getPlaylistsBy(Utilisateur $utilisateur): array
     {
         $queryPlaylists = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE NATURAL JOIN CREE WHERE nom_artiste = ? AND id_type = 4");
         $queryPlaylists->execute([$utilisateur->getPseudo()]);
@@ -379,7 +384,7 @@ class BD
         return $res;
     }
 
-    static function getLikesBy(Utilisateur $utilisateur):array
+    static function getLikesBy(Utilisateur $utilisateur): array
     {
         $queryLikes = BD::getInstance()->prepare("SELECT id_sortie FROM AVIS WHERE pseudo = ? AND favori = 1");
         $queryLikes->execute([$utilisateur->getPseudo()]);
@@ -391,7 +396,7 @@ class BD
         return $res;
     }
 
-    static function getTitresBy(Artiste $artiste):array
+    static function getTitresBy(Artiste $artiste): array
     {
         $queryTitres = BD::getInstance()->prepare("SELECT id_titre FROM TITRE NATURAL JOIN CHANTER_PAR WHERE nom_artiste = ?");
         $queryTitres->execute([$artiste->getPseudo()]);
@@ -570,7 +575,7 @@ class BD
         if (is_null($note) && is_null($like)) {
             return;
         }
-        if($sortie instanceof SortieCommerciale){
+        if ($sortie instanceof SortieCommerciale) {
             //faire qq chose
         }
 
@@ -616,6 +621,18 @@ class BD
         $moyenne = $queryMoyenne->fetch();
         if ($moyenne) {
             return $moyenne[0];
+        }
+        return null;
+    }
+
+    static function getPositionTitre(Titre $titre, Sortie $sortie)
+    {
+        $bdd = BD::getInstance();
+        $queryPosition = $bdd->prepare('SELECT position FROM CONTIENT WHERE id_sortie = ? AND id_titre = ?');
+        $queryPosition->execute([$sortie->getID(), $titre->getID()]);
+        $position = $queryPosition->fetch();
+        if ($position) {
+            return $position[0];
         }
         return null;
     }

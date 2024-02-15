@@ -13,6 +13,7 @@ function peupleBD(){
     $artiste = new Artiste('naps', true);
     $artiste2 = new Artiste('gazo', true);
     $artiste3 = new Artiste('Rohff', false);
+    $utilisateur = new Utilisateur('admin','adminnom','adminprenom','admin');
 
     $album2 = new Album($artiste3, 'albumderohffavecgazo', [], '2024', 'aaa.png', ['Rap']);
     $album2->addArtiste($artiste2);
