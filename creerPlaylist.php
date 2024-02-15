@@ -14,7 +14,7 @@ if (!isset($_SESSION['pseudo'])){
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nomPlaylist = $_POST['nomTitre'];
-
+    $visibilite = $_POST['Visibilité'];
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $_FILES['photo']['tmp_name'];
         $fileName = $_FILES['photo']['name'];
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if (move_uploaded_file($fileTmpPath, $destPath)) {
             
-            $playlist = new PlayList(BD::getUtilisateur($_SESSION['pseudo']), $nomPlaylist, $nom);
+            $playlist = new PlayList(BD::getUtilisateur($_SESSION['pseudo']), $nomPlaylist, $nom,boolval($visibilite));
             header('Location: sortie.php?id='.$playlist->getID());
         } else {
             echo "<script>alert(\"Une erreur s'est produite lors du téléchargement du fichier.\")</script>";
@@ -54,6 +54,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <label for="photo">Cover :</label>
             <input type="file" name="photo" accept="image/*"/><br>
+
+            <label for="Visibilité">Visibilité :</label>
+            <select id="Visibilité">
+                <option value ='true'> Public</option>
+                <option value ='false'> Privé</option>
+
+            </select> <br>
 
             <button type="submit">Valider</button>
         </form>

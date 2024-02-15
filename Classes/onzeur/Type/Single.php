@@ -5,7 +5,7 @@ namespace onzeur\Type;
 
 class Single extends SortieCommerciale
 {
-    public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, array $genres, int $id = null)
+    public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, array $genres,bool $visibilite = true, int $id = null)
     {
         parent::__construct($artiste, $nom, $listeTitres, $date, $cover, 2, $genres);
     }

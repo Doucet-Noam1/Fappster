@@ -9,9 +9,9 @@ abstract class SortieCommerciale extends Sortie
 {
     protected array $listeGenres;
 
-    public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, ?array $listeGenres, $id = null)
+    public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, ?array $listeGenres,bool $visibilite = true,$id = null)
     {
-        parent::__construct($artiste, $nom, $listeTitres, $date, $cover, $id_type, $id);
+        parent::__construct($artiste, $nom, $listeTitres, $date, $cover, $id_type,$visibilite, $id);
         $this->listeGenres = [];
         if ($listeGenres != null)
             foreach ($listeGenres as $genre)
@@ -26,7 +26,8 @@ abstract class SortieCommerciale extends Sortie
     }
 
     public function render()
-    {
+    {$artistNames = array_map(fn($artiste) => $artiste->getPseudo(), $this->getArtiste());
+        if ( isset($_SESSION['pseudo']) &&  in_array($_SESSION['pseudo'], $artistNames)  && !$this->getVisibilite() || $this->getVisibilite()){
         echo '<a class="sortie" href="sortie.php?id=' . parent::getID() . '">';
         $image = BD::DOSSIERCOVERS . $this->cover;
         echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
@@ -37,11 +38,13 @@ abstract class SortieCommerciale extends Sortie
         echo "<genre class='dont-show'>";
         echo implode("-", $this->listeGenres);
         echo "</genre>";
-        echo '</a>';
+        echo '</a>';}
     }
 
     public function renderDetail()
     {
+        $artistNames = array_map(fn($artiste) => $artiste->getPseudo(), $this->getArtiste());
+        if (  isset($_SESSION['pseudo']) &&  in_array($_SESSION['pseudo'], $artistNames)  && !$this->getVisibilite() || $this->getVisibilite()){
         echo "<div id='banner'>";
         $image = BD::DOSSIERCOVERS . $this->cover;
         echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
@@ -91,6 +94,6 @@ abstract class SortieCommerciale extends Sortie
             $titre->renderDetail();
         }
         echo "</tbody>";
-        echo "</table>";
+        echo "</table>";}
     }
 }

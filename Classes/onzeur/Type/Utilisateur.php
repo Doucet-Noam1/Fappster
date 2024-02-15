@@ -12,16 +12,16 @@ class Utilisateur
     protected string $prenom;
     protected ?string $mdp;
     protected array $listeNotes;
-    protected array $PlaylistLikes;
+    protected $idPlaylistLikes ;
     public function __construct($pseudo,$nom="John",$prenom="Doe",$mdp=null){
 
         $this->pseudo = $pseudo;
         $this->nom = $nom;
         $this->prenom = $prenom;
         $this->mdp = $mdp;
-        $this->PlaylistLikes = [];
         $this->listeNotes = [];
         BD::addUtilisateur($this);
+        $this->idPlaylistLikes = BD::getPlaylistLike($this);
     }
     public function render()
     {
@@ -47,6 +47,7 @@ class Utilisateur
             echo "</div>";
         }
         echo "<h2>Playlists</h2>";
+        echo '<p> '. $this->getPlaylistLikes() . '</p>';    
         echo "<div id='playlists'>";
         $playlists = BD::getPlaylistsBy($this);
         foreach ($playlists as $playlist) {
@@ -105,7 +106,7 @@ class Utilisateur
     public function getPlaylistLikes(){
 
     
-        return $this->PlaylistLikes;
+        return $this->idPlaylistLikes;
     }
     public function getListeNotes()
     {

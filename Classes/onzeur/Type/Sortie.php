@@ -12,13 +12,15 @@ abstract class Sortie implements Irender
     protected array $listeTitres;
     protected array $artiste;
     protected int $id_type;
+    protected bool $visibilite;
 
-    public function __construct(Artiste|array|Utilisateur $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, int $id = null)
+    public function __construct(Artiste|array|Utilisateur $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, bool $visibilite = true, int $id = null)
     {
         $this->nom = $nom;
         $this->date = $date;
         $this->cover = $cover;
         $this->listeTitres = $listeTitres;
+        $this->visibilite = $visibilite;
         is_array($artiste) ? $this->artiste = $artiste : $this->artiste = [$artiste];
         $this->id_type = $id_type;
         BD::addSortie($this);
@@ -66,19 +68,21 @@ abstract class Sortie implements Irender
     {
         return count($this->listeTitres);
     }
-
-    static function factory(Utilisateur|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, array $listeGenres, int $id = null): SortieCommerciale|Playlist
+    public function getVisibilite(): bool{
+        return $this->visibilite;
+    }
+    static function factory(Utilisateur|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, array $listeGenres,bool $visibilite, int $id = null): SortieCommerciale|Playlist
     {
         $id = null;
         switch ($id_type) {
             case 1:
-                return new Album($artiste, $nom, $listeTitres, $date, $cover, $listeGenres, $id);
+                return new Album($artiste, $nom, $listeTitres, $date, $cover, $listeGenres,$visibilite, $id);
             case 2:
-                return new Single($artiste, $nom, $listeTitres, $date, $cover, $listeGenres, $id);
+                return new Single($artiste, $nom, $listeTitres, $date, $cover, $listeGenres,$visibilite, $id);
             case 3:
-                return new EP($artiste, $nom, $listeTitres, $date, $cover, $listeGenres, $id);
+                return new EP($artiste, $nom, $listeTitres, $date, $cover, $listeGenres,$visibilite, $id);
             case 4:
-                return new PlayList($artiste, $nom, $cover, $listeTitres, $id);
+                return new PlayList($artiste, $nom, $cover,$visibilite, $listeTitres, $id);
             default:
                 throw new \Exception("Type de sortie inconnu");
         }

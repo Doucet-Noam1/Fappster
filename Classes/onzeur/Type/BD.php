@@ -21,7 +21,9 @@ class BD
                 pseudo VARCHAR(30) PRIMARY KEY,
                 nom TEXT default NULL,
                 prenom TEXT default NULL,
-                mdp TEXT default NULL
+                mdp TEXT default NULL,
+                id_playlist_like INTEGER default NULL,
+                FOREIGN KEY (id_playlist_like) REFERENCES SORTIE(id_sortie)
             )');
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS ARTISTE(
                 nom_artiste VARCHAR(30) PRIMARY KEY,
@@ -39,6 +41,7 @@ class BD
                 date_sortie DATE,
                 cover TEXT,
                 id_type INTEGER NOT NULL,
+                visibilite BOOLEAN DEFAULT TRUE,
                 FOREIGN KEY(id_type) REFERENCES TYPE_SORTIE(id_type)
             )');
 
@@ -142,8 +145,8 @@ class BD
         $bdd = BD::getInstance();
         $bdd->beginTransaction();
         if (BD::getIdSortie($sortie) == null) {
-            $queryAddAlbum = $bdd->prepare("INSERT INTO SORTIE(nom_sortie,date_sortie,cover,id_type) VALUES (?,?,?,?)");
-            $queryAddAlbum->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType()]);
+            $queryAddAlbum = $bdd->prepare("INSERT INTO SORTIE(nom_sortie,date_sortie,cover,id_type,visibilite) VALUES (?,?,?,?,?)");
+            $queryAddAlbum->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), (int)$sortie->getVisibilite()]);
             $bdd->commit();
         }
         foreach ($sortie->getArtiste() as $artiste) {
@@ -168,7 +171,14 @@ class BD
         }
         $bdd->commit();
     }
-
+    static function getPlaylistLike(Utilisateur $utilisateur){
+        $bdd = BD::getInstance();
+        $bdd->beginTransaction();
+        $nom = 'Titre likés '. $utilisateur->getPseudo();
+        $playlist = new Playlist($utilisateur,$nom,'like.jpg',false);
+        BD::addArtisteToSortie($playlist,$utilisateur);
+        return $playlist->getID();
+    }
     static function addTitre(Titre $titre)
     {
         $bdd = BD::getInstance();
@@ -302,7 +312,7 @@ class BD
         $artiste = self::getArtistesSortie($id);
         $genres = self::getGenresSortie($id);
         $titres = self::getTitresSortie($id);
-        return Sortie::factory($artiste, $sortie["nom_sortie"], $titres, strval($sortie["date_sortie"]), $sortie["cover"], $sortie["id_type"], $genres, intval($id));
+        return Sortie::factory($artiste, $sortie["nom_sortie"], $titres, strval($sortie["date_sortie"]), $sortie["cover"], $sortie["id_type"], $genres,boolval($sortie['visibilite']) , intval($id));
     }
 
     static function getTitre(int $id, int|string|null $idsortie = null): ?Titre

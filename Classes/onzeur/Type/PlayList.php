@@ -7,25 +7,29 @@ namespace onzeur\Type;
 class PlayList extends Sortie
 {
     const PATH = "data/images/covers/";
-    public function __construct(Utilisateur|Artiste|array $artiste, string $nom, ?string $cover,array $listeTitres = [], int $id = null,)
+    public function __construct(Utilisateur|Artiste|array $artiste, string $nom, ?string $cover,bool $visibilite = true,array $listeTitres = [] , int $id = null,)
     {
-        $date  = date('d-m-Y');
-        parent::__construct($artiste, $nom, $listeTitres, $date, $cover, 4, $id);
+        $date  = date('Y');
+        parent::__construct($artiste, $nom, $listeTitres, $date, $cover, 4, $visibilite,$id);
     }
     public function render()
     {
-        echo '<a class="sortie" href="sortie.php?id=' . parent::getID() . '">';
-        $image = BD::DOSSIERCOVERS . $this->cover;
-        echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
-        echo "<p>" . $this->nom . "</p>";
-        $splitNameSpace = explode("\\", get_class($this));
-        $splitNameSpace = end($splitNameSpace);
-        echo "<p>" . $this->date . " • " . $splitNameSpace . "</p>";
-
-        echo '</a>';
+        $artistNames = array_map(fn($artiste) => $artiste->getPseudo(), $this->getArtiste());
+        if (  isset($_SESSION['pseudo']) &&   in_array($_SESSION['pseudo'], $artistNames)  && !$this->getVisibilite() || $this->getVisibilite()){
+            echo '<a class="sortie" href="sortie.php?id=' . parent::getID() . '">';
+            $image = BD::DOSSIERCOVERS . $this->cover;
+            echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
+            echo "<p>" . $this->nom . "</p>";
+            $splitNameSpace = explode("\\", get_class($this));
+            $splitNameSpace = end($splitNameSpace);
+            echo "<p>" . $this->date . " • " . $splitNameSpace . "</p>";
+    
+            echo '</a>';
+        }
     }
     public function renderDetail()
-    {
+    { $artistNames = array_map(fn($artiste) => $artiste->getPseudo(), $this->getArtiste());
+        if (  isset($_SESSION['pseudo']) &&   in_array($_SESSION['pseudo'], $artistNames)  && !$this->getVisibilite() || $this->getVisibilite()){
         echo "<div id='banner'>";
         $image = BD::DOSSIERCOVERS . $this->cover;
         echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
@@ -60,9 +64,11 @@ class PlayList extends Sortie
             $this->listeTitres[$i]->renderDetailPlaylist();
         }
         echo "</tbody>";
-        echo "</table>";
+        echo "</table>";}
     }
     public function renderModif(){
+        $artistNames = array_map(fn($artiste) => $artiste->getPseudo(), $this->getArtiste());
+        if ( isset($_SESSION['pseudo']) &&   in_array($_SESSION['pseudo'], $artistNames)  && !$this->getVisibilite() || $this->getVisibilite()){
         echo "<div id='banner'>";
         $image = BD::DOSSIERCOVERS . $this->cover;
         echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
@@ -80,6 +86,6 @@ class PlayList extends Sortie
         echo "<p>" . $this->date . "</p>";
         echo "<p>" . count($this->listeTitres) . " titres</p>";
         echo '</div>';
-        echo '</div>';
+        echo '</div>';}
     }
 }
