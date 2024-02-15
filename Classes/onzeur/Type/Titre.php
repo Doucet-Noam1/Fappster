@@ -56,9 +56,9 @@ class Titre implements Irender
         if (isset($_SESSION['pseudo'])){
             echo ' <button id="openbtn"> : </button>';
             echo '<dialog id="dialog">';
-            echo "<form method='post' action='ajouterTitrePlaylist.php'>";
-            echo '<label for="id_playlist"> Choisissez la playlist: </label></br>';
-            echo '<select name="id_playlist">';
+            echo "<form id='popUp' method='post' action='ajouterTitrePlaylist.php'>";
+            echo '<label id="labelSelect" for="id_playlist"> Choisissez la playlist: </label><br>';
+            echo '<select id="selectPlaylist" name="id_playlist">';
             foreach (BD::getPlaylistsBy(BD::getUtilisateur($_SESSION['pseudo'])) as $playlist) {
                 echo '<option value="' . $playlist->getID() . '">' . $playlist->getNom() . '</option>';
             }
@@ -66,7 +66,7 @@ class Titre implements Irender
             echo '<input type="hidden" name="id_titre" value="' . $this->getID() . '"> </input>';
             echo '<input type="hidden" name="id_sortie" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
             echo '<input type="hidden" name="id_redirection" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
-            echo ' <button type="submit" class="btn btn-success"> valider </button>';
+            echo ' <button type="submit" class="btn btn-success" id="btnValider" > Valider </button>';
             echo " </form>";
             echo "</dialog>";
         }
@@ -93,11 +93,11 @@ class Titre implements Irender
     echo "</td>";
     echo "<td>";
     if (isset($_SESSION['pseudo'])) {
-        echo '<button id="openbtn"> + Playlist </button>';
+        echo '<button id="openbtn"><img src="./data/images/icons/add.png"></button>';
         echo '<dialog id="dialog">';
-        echo "<form method='post' action='ajouterTitrePlaylist.php'>";
-        echo '<label for="id_playlist"> Choisissez la playlist: </label><br>';
-        echo '<select name="id_playlist">';
+        echo "<form id='popUp' method='post' action='ajouterTitrePlaylist.php'>";
+        echo '<label id="labelSelect" for="id_playlist"> Choisissez la playlist: </label><br>';
+        echo '<select id="selectPlaylist" name="id_playlist">';
         foreach (BD::getPlaylistsBy(BD::getUtilisateur($_SESSION['pseudo'])) as $playlist) {
             echo '<option value="' . $playlist->getID() . '">' . $playlist->getNom() . '</option>';
         }
@@ -105,7 +105,7 @@ class Titre implements Irender
         echo '<input type="hidden" name="id_titre" value="' . $this->getID() . '">';
         echo '<input type="hidden" name="id_sortie" value="' . BD::getSortieInitial($this)->getID() . '"> </input>';
         echo '<input type="hidden" name="id_redirection" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
-        echo '<button type="submit" class="btn btn-success"> Valider </button>';
+        echo '<button type="submit" class="btn btn-success"  id="btnValider"> Valider </button>';
         echo "</form>";
         echo "</dialog>";
     } else {

@@ -1,28 +1,24 @@
 #logo{
     width: 12.5vw;
 }
-nav{
-    background-color: #1a1b25;
-    display: flex;
-    justify-content: center;
-    border-bottom: white 0.5em solid;
-}
+
 body{
     background-color: #1a1b25;
 }
 
 #panel{
     background-color: #5d1cdf;
-    padding: 2vw 10vw;
+    padding: 1vw 10vw;
     border-radius: 10px;
     width: 50vw;
+    height: fit-content;
     display: flex;
     flex-direction: row;
     gap: 2vw;
     align-items: center;
     justify-content: space-around; 
     margin: auto;
-    margin-top: 3vw;
+    margin-top: 5vw;
 }
 label{
     color: white;
@@ -31,13 +27,13 @@ label{
 }
 h2{
     color: white;
-    font-size: 3.5em;
+    font-size: 2.5em;
     text-align: center;
 }
 form{
     display: flex;
     flex-direction: column;
-    gap: 1vw;
+    gap: 0.8vw;
     align-items: center;
 }
 input,p.input{
@@ -47,7 +43,7 @@ input,p.input{
     border: none;
     background-color: #1a1b25;
     color: white;
-    font-size: 1.5em;
+    font-size: 1em;
     border : 3px solid white;
 }
 input:hover,p.input:hover{
@@ -58,11 +54,12 @@ input:hover,p.input:hover{
     box-shadow: 0px 0px 15px 1px white;
 }
 .separator{
-    width: 0.5vw;
+    width: 20vw;
     height: 25vw;
     background-color: white;
     border: none;
     border-radius: 5px;
+    display: block;
 }
 
 button{
@@ -86,9 +83,6 @@ button:hover{
     font-size: 1em !important;
 }
 
-*{
-    font-family: 'Protest Riot', sans-serif;
-}
 .message{
     width: 100%;
     text-align: center;

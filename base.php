@@ -57,11 +57,12 @@ if(!isset($_SESSION)){
                 <li>
                 <a href="creerPlaylist.php">
                     <object type="image/svg+xml" data="data/images/loupe.svg"></object>
-                    <span>creer Playlist</span>
+                    <span>Creer Playlist</span>
                 </a>
             </li>
             <?php endif; ?>
         </ul>
+        <img id='logo' src="./data/images/logo.png" alt="LogoFappster">
         
     </nav>
 </aside>
