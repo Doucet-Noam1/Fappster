@@ -26,7 +26,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $audioFile = $_FILES['file'];
     $audioFileTmp = $audioFile['tmp_name'];
-    $audioFileName = sprintf('%s.%s', sha1_file($audioFileTmp), pathinfo($audioFile['name'], PATHINFO_EXTENSION));
+    
+    $artistes = isset($_POST['feats']) ? $_POST['feats'] : [];
+    $artistesString = implode('_', $artistes);
+
+    $audioFileName = $nomTitre . '_' . $artistesString . '.' . pathinfo($audioFile['name'], PATHINFO_EXTENSION); // Nouveau nom du fichier
     $audioFilePath = BD::DOSSIERAUDIOS . $audioFileName;
 
     if (move_uploaded_file($audioFileTmp, $audioFilePath)) {

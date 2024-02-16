@@ -43,7 +43,7 @@ class Titre implements Irender
     }
     public function renderDetail()
     {
-        echo "<tr class='titre'>";
+        echo "<tr class='titre' onclick='clickPlayer(this)' >";
         echo "<td>".$this->getPosition()."</td>";
         echo "<td>" .$this->titre . "</td>";
         echo "<td>";

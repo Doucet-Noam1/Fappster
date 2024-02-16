@@ -62,7 +62,9 @@ if(!isset($_SESSION)){
             </li>
             <?php endif; ?>
         </ul>
-        <img id='logo' src="./data/images/logo.png" alt="LogoFappster">
         
     </nav>
 </aside>
+<?php
+require 'player.php';
+?>
