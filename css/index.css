@@ -5,6 +5,7 @@
     justify-content: space-around;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    padding-bottom: 5%;
 }
 
 #contenu>*>h1 {
