@@ -26,7 +26,7 @@ class Titre implements Irender
     {
         echo '<div class="musique">';
         $sortie = $this->getSortie();
-        if ($sortie != null){
+        if ($sortie != null) {
             echo '<img src=">' . $sortie->getCover() . '" </img>';
         }
         echo "<h3>" . $this->titre . "</h3>";
@@ -43,9 +43,10 @@ class Titre implements Irender
     }
     public function renderDetail()
     {
+        $estOriginale = is_null(BD::getSortieInitiale($this));
         echo "<tr class='titre'>";
-        echo "<td>".$this->getPosition()."</td>";
-        echo "<td>" .$this->titre . "</td>";
+        echo "<td> " . $this->getPosition() . "</td>";
+        echo "<td>" . $this->titre . "</td>";
         echo "<td>";
         echo implode(" & ", array_map(function (Artiste $artiste) {
             $pseudo = $artiste->getPseudo();
@@ -53,71 +54,54 @@ class Titre implements Irender
         }, $this->lstartiste));
         echo "</td>";
         echo "<td>";
-        if (isset($_SESSION['pseudo'])){
-            echo ' <button id="openbtn"> : </button>';
-            echo '<dialog id="dialog">';
-            echo "<form id='popUp' method='post' action='ajouterTitrePlaylist.php'>";
-            echo '<label id="labelSelect" for="id_playlist"> Choisissez la playlist: </label><br>';
-            echo '<select id="selectPlaylist" name="id_playlist">';
-            foreach (BD::getPlaylistsBy(BD::getUtilisateur($_SESSION['pseudo'])) as $playlist) {
-                echo '<option value="' . $playlist->getID() . '">' . $playlist->getNom() . '</option>';
+        if (isset($_SESSION['pseudo'])) {
+            echo '<button class="openbtn"></button>';
+            echo '<dialog class="dialog">';
+            echo "<form class='popUp' method='post' action='ajouterTitrePlaylist.php'>";
+            echo '<label class="labelSelect" for="id_playlist"> Choisissez la playlist: </label><br>';
+            echo '<select class="selectPlaylist" name="id_playlist">';
+            $playlists = BD::getPlaylistsBy(BD::getUtilisateur($_SESSION['pseudo']));
+            foreach ($playlists as $playlist) {
+                if ($playlist != BD::getSortie($this->idsortie)) {
+                    echo '<option value="' . $playlist->getID() . '">' . $playlist->getNom() . '</option>';
+                }
             }
             echo '</select>';
-            echo '<input type="hidden" name="id_titre" value="' . $this->getID() . '"> </input>';
-            echo '<input type="hidden" name="id_sortie" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
+            echo '<input type="hidden" name="id_titre" value="' . $this->getID() . '">';
+            echo '<input type="hidden" name="id_sortie" value="' . ($estOriginale ? BD::getSortie($this->idsortie)->getID() : BD::getSortieInitiale($this)->getID()) . '"> </input>';
             echo '<input type="hidden" name="id_redirection" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
-            echo ' <button type="submit" class="btn btn-success" id="btnValider" > Valider </button>';
-            echo " </form>";
+            echo '<button type="submit" class="btnValider"> Valider </button>';
+            echo "</form>";
             echo "</dialog>";
-        }
-        else{
-            echo ':';
-
+            if (
+                in_array(
+                    $_SESSION['pseudo'],
+                    array_map(
+                        function (Utilisateur $utilisateur) {
+                            return $utilisateur->getPseudo();
+                        },
+                        BD::getSortie($this->idsortie)->getArtiste()
+                    )
+                )
+            ) {
+                echo '<form method="post" action="supprimerTitre.php">';
+                echo '<button class="deletebtn"></button>';
+                echo '<input type="hidden" name="id_titre" value="' . $this->getID() . '">';
+                echo '<input type="hidden" name="id_sortie" value="' . $this->idsortie . '">';
+                echo '</form>';
+            }
+        } else {
+            echo '<a href="login.php">Ajouter à une playlist</a>';
         }
         echo "</td>";
-        echo "<td>".$this->duree."</td>";
-        
-        echo "</tr>";
-        
-    }
-    public function renderDetailPlaylist()
-{
-    echo "<tr class='titre'>";
-    echo "<td> ".$this->getPosition()."</td>";
-    echo "<td>" .$this->titre . "</td>";
-    echo "<td>";
-    echo implode(" & ", array_map(function (Artiste $artiste) {
-        $pseudo = $artiste->getPseudo();
-        return '<a href="profil.php?id=' . $pseudo . '">' . $pseudo . '</a>';
-    }, $this->lstartiste));
-    echo "</td>";
-    echo "<td>";
-    if (isset($_SESSION['pseudo'])) {
-        echo '<button id="openbtn"><img src="./data/images/icons/add.png"></button>';
-        echo '<dialog id="dialog">';
-        echo "<form id='popUp' method='post' action='ajouterTitrePlaylist.php'>";
-        echo '<label id="labelSelect" for="id_playlist"> Choisissez la playlist: </label><br>';
-        echo '<select id="selectPlaylist" name="id_playlist">';
-        foreach (BD::getPlaylistsBy(BD::getUtilisateur($_SESSION['pseudo'])) as $playlist) {
-            echo '<option value="' . $playlist->getID() . '">' . $playlist->getNom() . '</option>';
+        if (!$estOriginale) {
+            echo "<td>";
+            echo '<a href="sortie.php?id=' . BD::getSortieInitiale($this)->getID() . '"> ' . BD::getSortieInitiale($this)->getNom() . '</a>';
+            echo "</td>";
         }
-        echo '</select>';
-        echo '<input type="hidden" name="id_titre" value="' . $this->getID() . '">';
-        echo '<input type="hidden" name="id_sortie" value="' . BD::getSortieInitial($this)->getID() . '"> </input>';
-        echo '<input type="hidden" name="id_redirection" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
-        echo '<button type="submit" class="btn btn-success"  id="btnValider"> Valider </button>';
-        echo "</form>";
-        echo "</dialog>";
-    } else {
-        echo ':';
+        echo "<td>" . $this->duree . "</td>";
+        echo "</tr>";
     }
-    echo "</td>";
-    echo "<td>".$this->duree."</td>";
-    echo "<td>";
-    echo '<a href="sortie.php?id=' . BD::getSortieInitial($this)->getID(). '"> ' .   BD::getSortieInitial($this)->getNom() . '</a>';
-    echo "</td>";
-    echo "</tr>";
-}
 
     public function getTitre()
     {
@@ -131,11 +115,12 @@ class Titre implements Irender
     {
         return $this->duree;
     }
-    public function getDureeFormatted(){
+    public function getDureeFormatted()
+    {
         $dureearondie = round($this->duree);
         $minutes = floor($dureearondie / 60);
         $secondes = $dureearondie - $minutes * 60;
-        return $minutes.":".str_pad(strval($secondes), 2, "0", STR_PAD_LEFT);
+        return $minutes . ":" . str_pad(strval($secondes), 2, "0", STR_PAD_LEFT);
     }
     public function getDateAjout()
     {
@@ -157,7 +142,7 @@ class Titre implements Irender
     {
         return BD::getIdTitre($this);
     }
-    public function getFichier():string
+    public function getFichier(): string
     {
         return $this->fichier;
     }
@@ -166,7 +151,8 @@ class Titre implements Irender
         BD::addArtisteToTitre($this, $artiste);
         $this->lstartiste[] = $artiste;
     }
-    public function getSortie() : ?Sortie{
+    public function getSortie(): ?Sortie
+    {
         return BD::getSortie($this->idsortie);
     }
 

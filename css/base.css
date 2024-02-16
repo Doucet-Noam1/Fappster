@@ -173,7 +173,7 @@ li:has(#pfp){
 
 .verified::after{
     content: "";
-    background-image: url(../data/images/verifie.png);
+    background-image: url(../data/images/icons/verifie.png);
     background-size: 100% 100%;
     display: inline-block;
     width: 1.5rem;

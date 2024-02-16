@@ -21,48 +21,47 @@ if(!isset($_SESSION)){
                     }
                     ?>
                 </li>
-            <?php endif; ?>
+            <?php endif; $PATHICON ="data/images/icons/"; ?>
             <li>
                 <a href="/">
-                    <object type="image/svg+xml" data="data/images/accueil.svg"></object>
+                    <object type="image/svg+xml" data="<?php echo $PATHICON?>accueil.svg"></object>
                     <span>Accueil</span>
                 </a>
             </li>
             <li>
                 <a href="recherche.php">
-                    <object type="image/svg+xml" data="data/images/loupe.svg"></object>
+                    <object type="image/svg+xml" data="<?php echo $PATHICON?>loupe.svg"></object>
                     <span>Rechercher</span>
                 </a>
             </li>
             <?php if (!isset($_SESSION['pseudo'])): ?>
                 <li>
                     <a href="login.php">
-                        <object type="image/svg+xml" data="data/images/connexion.svg"></object>
+                        <object type="image/svg+xml" data="<?php echo $PATHICON?>connexion.svg"></object>
                         <span>Connexion</span>
                     </a>
                 </li>
             <?php else: ?>
                 <li>
                     <a href="formMusic.php">
-                        <object type="image/svg+xml" data="data/images/upload.svg"></object>
+                        <object type="image/svg+xml" data="<?php echo $PATHICON?>upload.svg"></object>
                         <span>Ajouter une musique</span>
                     </a>
                 </li>
                 <li>
                     <a href="logout.php">
-                        <object type="image/svg+xml" data="data/images/connexion.svg"></object>
+                        <object type="image/svg+xml" data="<?php echo $PATHICON?>connexion.svg"></object>
                         <span>Deconnexion</span>
                     </a>
                 </li>
                 <li>
                 <a href="creerPlaylist.php">
-                    <object type="image/svg+xml" data="data/images/loupe.svg"></object>
+                    <object type="image/svg+xml" data="<?php echo $PATHICON?>loupe.svg"></object>
                     <span>Creer Playlist</span>
                 </a>
             </li>
             <?php endif; ?>
         </ul>
-        <img id='logo' src="./data/images/logo.png" alt="LogoFappster">
         
     </nav>
 </aside>

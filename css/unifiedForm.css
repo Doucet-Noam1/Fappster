@@ -2,23 +2,16 @@
     width: 12.5vw;
 }
 
-body{
-    background-color: #1a1b25;
-}
-
-#panel{
+#contenu{
     background-color: #5d1cdf;
     padding: 1vw 10vw;
     border-radius: 10px;
-    width: 50vw;
-    height: fit-content;
+    width: fit-content;
     display: flex;
     flex-direction: row;
     gap: 2vw;
     align-items: center;
     justify-content: space-around; 
-    margin: auto;
-    margin-top: 5vw;
 }
 label{
     color: white;
@@ -54,8 +47,8 @@ input:hover,p.input:hover{
     box-shadow: 0px 0px 15px 1px white;
 }
 .separator{
-    width: 20vw;
-    height: 25vw;
+    width: 10px;
+    height: 25vh;
     background-color: white;
     border: none;
     border-radius: 5px;
