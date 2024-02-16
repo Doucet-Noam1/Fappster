@@ -33,7 +33,6 @@ class Utilisateur
     protected function renderProfil(){
         echo "<h1>" . $this->pseudo . "</h1>";
         echo '<img src="'.$this->getPhoto().'" id="imageDeProfil">';
-        echo "</div>";
         if(BD::estArtiste($this->pseudo)){
             echo "<h2>Sorties de l'artiste</h2>";
             echo "<div id='sorties'>";

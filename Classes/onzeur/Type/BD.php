@@ -526,7 +526,8 @@ class BD
 
     static function getAllArtistes()
     {
-        $queryArtistes = BD::getInstance()->prepare("SELECT DISTINCT pseudo FROM UTILISATEUR");
+        $bdd = BD::getInstance();
+        $queryArtistes = $bdd->prepare("SELECT DISTINCT pseudo FROM UTILISATEUR");
         $queryArtistes->execute();
         $artistes = $queryArtistes->fetchAll();
         $res = [];
@@ -647,6 +648,28 @@ class BD
             return $position[0];
         }
         return null;
+    }
+
+    static function setVerifie(Artiste $artiste, bool $verifie)
+    {
+        $bdd = BD::getInstance();
+        $bdd->beginTransaction();
+        $queryVerifie = $bdd->prepare('UPDATE ARTISTE SET verifie = ? WHERE nom_artiste = ?');
+        $queryVerifie->execute([$verifie, $artiste->getPseudo()]);
+        $bdd->commit();
+    }
+
+    static function modifierUtilisateur(string $pseudo, string $nom, string $prenom, ?string $mdp)
+    {
+        $bdd = BD::getInstance();
+        $bdd->beginTransaction();
+        $queryModif = $bdd->prepare('UPDATE UTILISATEUR SET nom = ?, prenom = ? WHERE pseudo = ?');
+        $queryModif->execute([$nom, $prenom, $pseudo]);
+        if (!is_null($mdp)) {
+            $queryModifMdp = $bdd->prepare('UPDATE UTILISATEUR SET mdp = ? WHERE pseudo = ?');
+            $queryModifMdp->execute([hash('sha256', $mdp), $pseudo]);
+        }
+        $bdd->commit();
     }
 
 }
