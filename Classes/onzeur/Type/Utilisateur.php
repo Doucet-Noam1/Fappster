@@ -60,13 +60,15 @@ class Utilisateur
     }
 
     public function renderAdmin(){
-        echo "<td>" . $this->pseudo . "</td>";
+        echo "<tr>";
+        echo "<td><a href='profil.php?id=".$this->pseudo."'>".$this->pseudo."</a></td>";
         echo "<td><img src='".$this->getPhoto()."' id='imageDeProfil'></td>";
         $splitNameSpace = explode("\\", get_class($this));
         $splitNameSpace = end($splitNameSpace);
         echo "<td>" . $splitNameSpace . "</td>";
         echo "<td><a href='modifierArtiste.php?pseudo=".$this->pseudo."'>modifier</a></td>";
         echo "<td><a href='supprimerArtiste.php?pseudo=".$this->pseudo."'>supprimer</a></td>";
+        echo "</tr>";
     }
 
     public function renderMini()

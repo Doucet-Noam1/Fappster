@@ -2,7 +2,7 @@
 
 <head>
     <title>Panel Admin</title>
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/moduleAdmin.css">
     <link rel="icon" href="data/images/logo.png">
 </head>
 
@@ -10,14 +10,21 @@
     <?php
     require 'base.php';
     use onzeur\Type\BD;
-    BD::getInstance();
+
     if (isset($_SESSION['pseudo'])) {
+        if (($_SESSION['pseudo'] != "admin")) {
+            header('Location: index.php');
+            exit();
+        }
         $pseudo = $_SESSION['pseudo'];
+    } else {
+        header('Location: index.php');
+        exit();
     }
     ?>
     <div id="contenu">
         <div id="artistes">
-            <h1>Touts les artistes</h1>
+            <h1>Tous les artistes</h1>
             <table>
                 <thead>
                     <tr>
@@ -30,15 +37,13 @@
                 </thead>
                 <tbody>
                     <?php
-                        foreach (BD::getAllArtistes() as $art) {
-                            echo "<tr>";
-                            $art->renderAdmin();
-                            echo "</tr>";
-                        }
+                    foreach (BD::getAllArtistes() as $artiste) {
+                        $artiste->renderAdmin();
+                    }
                     ?>
                 </tbody>
             </table>
-            
+
         </div>
 </body>
 

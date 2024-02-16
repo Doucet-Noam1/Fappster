@@ -44,10 +44,10 @@ class BD
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS AVIS (
                 id_sortie INTEGER,
-                pseudo INTEGER,
+                pseudo VARCHAR(30),
                 note INTEGER,
                 favori BOOLEAN default false,
-                FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_groupe),
+                FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie),
                 FOREIGN KEY(pseudo) REFERENCES UTILISATEUR(pseudo) ON DELETE CASCADE,
                 PRIMARY KEY(id_sortie,pseudo)
             )');

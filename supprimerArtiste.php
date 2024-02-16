@@ -8,7 +8,6 @@ if (($_SESSION['pseudo']!="admin")){
     exit();
 }
 
-$querry = "DELETE FROM utilisateur WHERE pseudo = '".$_GET['pseudo']."'";
-BD::getInstance()->query($querry);
+BD::supprimerArtiste($_GET['pseudo']);
 header('location: vueAdmin.php ' );
 exit();
