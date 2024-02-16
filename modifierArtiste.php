@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             move_uploaded_file($_FILES['photo']['tmp_name'], $uploadPath);
 
         }
-        //header('Location: vueAdmin.php');
+        header('Location: vueAdmin.php');
     }
 }
 ?>

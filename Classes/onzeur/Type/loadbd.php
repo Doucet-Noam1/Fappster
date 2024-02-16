@@ -2,18 +2,22 @@
 
 declare(strict_types=1);
 namespace onzeur\Type;
-function loadbd(){
+
+function loadbd()
+{
     $bdd = new \PDO('sqlite:fappster.db');
     $bdd->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    $bdd->exec('PRAGMA foreign_keys = ON;');
     return $bdd;
 }
-function peupleBD(){
+function peupleBD()
+{
     $reader = new Reader("extrait.yml");
     $reader->getData();
     $artiste = new Artiste('naps', true);
     $artiste2 = new Artiste('gazo', true);
     $artiste3 = new Artiste('Rohff', false);
-    $utilisateur = new Utilisateur('admin','adminnom','adminprenom','admin');
+    $utilisateur = new Utilisateur('admin', 'adminnom', 'adminprenom', 'admin');
 
     $album2 = new Album($artiste3, 'albumderohffavecgazo', [], '2024', 'aaa.png', ['Rap']);
     $album2->addArtiste($artiste2);
@@ -25,7 +29,8 @@ function peupleBD(){
     $musique2->addArtiste($artiste2);
 
 }
-function deletebd(){
+function deletebd()
+{
     echo 'creation';
     unlink('fappster.db');
 }

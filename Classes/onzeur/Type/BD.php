@@ -26,7 +26,7 @@ class BD
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS ARTISTE(
                 nom_artiste VARCHAR(30) PRIMARY KEY,
                 verifie BOOLEAN DEFAULT FALSE,
-                FOREIGN KEY(nom_artiste) REFERENCES Utilisateur(pseudo)
+                FOREIGN KEY(nom_artiste) REFERENCES UTILISATEUR(pseudo) ON DELETE CASCADE
             )');
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS TYPE_SORTIE (
                 id_type INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,8 +47,8 @@ class BD
                 pseudo INTEGER,
                 note INTEGER,
                 favori BOOLEAN default false,
-                FOREIGN KEY(id_sortie) REFERENCES ARTISTE(id_sortie),
-                FOREIGN KEY(pseudo) REFERENCES SORTIE(id_groupe),
+                FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_groupe),
+                FOREIGN KEY(pseudo) REFERENCES UTILISATEUR(pseudo) ON DELETE CASCADE,
                 PRIMARY KEY(id_sortie,pseudo)
             )');
 
@@ -56,7 +56,7 @@ class BD
             id_sortie INTEGER,
             nom_artiste VARCHAR(30),
             FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie),
-            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste),
+            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste) ON DELETE CASCADE,
             PRIMARY KEY(id_sortie,nom_artiste)
         )');
 
@@ -64,7 +64,7 @@ class BD
             id_sortie INTEGER,
             nom_artiste VARCHAR(30),
             FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie),
-            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste),
+            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste) ON DELETE CASCADE,
             PRIMARY KEY(id_sortie,nom_artiste)
         )');
 
@@ -101,7 +101,7 @@ class BD
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS CHANTER_PAR(
             nom_artiste VARCHAR(30),
             id_titre INTEGER ,
-            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste),
+            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste) ON DELETE CASCADE,
             FOREIGN KEY(id_titre) REFERENCES TITRE(id_titre),
             PRIMARY KEY(nom_artiste,id_titre)
         )');
@@ -599,8 +599,8 @@ class BD
 
         $bdd = BD::getInstance();
         $bdd->beginTransaction();
-        $querryInsert = $bdd->prepare('INSERT OR REPLACE INTO AVIS(pseudo,id_sortie,note,favori) VALUES(?,?,?,?)');
-        $querryInsert->execute([$pseudo, $sortie->getID(), $newNote, $newLike]);
+        $querryInsert = $bdd->prepare('INSERT OR REPLACE INTO AVIS(id_sortie,pseudo,note,favori) VALUES(?,?,?,?)');
+        $querryInsert->execute([$sortie->getID(),$pseudo, $newNote, $newLike]);
         $bdd->commit();
     }
     static function getLike(string $pseudo, Sortie $sortie): bool
@@ -669,6 +669,15 @@ class BD
             $queryModifMdp = $bdd->prepare('UPDATE UTILISATEUR SET mdp = ? WHERE pseudo = ?');
             $queryModifMdp->execute([hash('sha256', $mdp), $pseudo]);
         }
+        $bdd->commit();
+    }
+
+    static function supprimerArtiste(Artiste $artiste)
+    {
+        $bdd = BD::getInstance();
+        $bdd->beginTransaction();
+        $querySuppr = $bdd->prepare('DELETE FROM UTILISATEUR WHERE pseudo = ?');
+        $querySuppr->execute([$artiste->getPseudo()]);
         $bdd->commit();
     }
 
