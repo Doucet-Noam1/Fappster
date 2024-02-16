@@ -52,8 +52,9 @@ abstract class SortieCommerciale extends Sortie
         echo "<h1>" . $this->nom . "</h1>";
         echo "<span class='artistes'>";
         echo implode(" • ", array_map(function (Artiste $artiste) {
-            $pseudo = $artiste->getPseudo();
-            return '<a href="profil.php?id=' . $pseudo . '">' . $pseudo . '</a>';
+            $artisteValue = $artiste;
+            $pseudo = $artisteValue->getPseudo();
+            return '<a href="profil.php?id=' . $pseudo . '"'.($artisteValue->getVerifie()?"class='verified'":"").' >' . $pseudo .'</a>';
         }, $this->artiste));
         echo "</span>";
         echo "<p>" . $this->date . "</p>";

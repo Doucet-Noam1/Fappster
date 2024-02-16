@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Document</title>
 </head>
 <body>
-    <div id="panel">
+    <div id="contenu">
         <form method="post" action="creerPlaylist.php" enctype="multipart/form-data">
             <label for="nomTitre">Nom de la playlist:</label>
             <input type="text" name="nomTitre" required><br>
