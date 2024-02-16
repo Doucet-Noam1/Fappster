@@ -77,8 +77,13 @@ button:hover{
 }
 
 .message{
-    width: 100%;
     text-align: center;
+    position: absolute;
+    height: fit-content;
+    padding: 1vw;
+    border-radius: 10px;
+    background-color: black;
+    top: 5vh;
 }
 .success{
     color: green;

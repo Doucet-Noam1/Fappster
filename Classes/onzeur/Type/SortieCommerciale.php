@@ -88,8 +88,12 @@ abstract class SortieCommerciale extends Sortie
             </tr>
         </thead>'; // On ferme les divs et on commence le tableau |Postion|Titre|Artistes|Durée|
         echo "<tbody>";
-        foreach ($this->listeTitres as $titre) {
-            $titre->renderDetail();
+        if(count($this->listeTitres) == 0){
+            echo "<tr><td colspan='5'>Aucun titre</td></tr>";
+        }else{
+            foreach ($this->listeTitres as $titre) {
+                $titre->renderDetail();
+            }
         }
         echo "</tbody>";
         echo "</table>";

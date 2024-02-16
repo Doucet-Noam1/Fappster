@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <div id="panel">
+    <div id="contenu">
         <h2>Modifier les informations de
             <?php echo $pseudo; ?>
         </h2>

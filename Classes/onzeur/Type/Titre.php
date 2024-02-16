@@ -59,18 +59,22 @@ class Titre implements Irender
             echo '<dialog class="dialog">';
             echo "<form class='popUp' method='post' action='ajouterTitrePlaylist.php'>";
             echo '<label class="labelSelect" for="id_playlist"> Choisissez la playlist: </label><br>';
-            echo '<select class="selectPlaylist" name="id_playlist">';
             $playlists = BD::getPlaylistsBy(BD::getUtilisateur($_SESSION['pseudo']));
+            if (count($playlists) == 0) {
+                echo '<p>Vous n\'avez pas de playlist</p>';
+            }else{
+            echo '<select class="selectPlaylist" name="id_playlist">';
             foreach ($playlists as $playlist) {
                 if ($playlist != BD::getSortie($this->idsortie)) {
                     echo '<option value="' . $playlist->getID() . '">' . $playlist->getNom() . '</option>';
                 }
             }
             echo '</select>';
+            echo '<button type="submit" class="btnValider"> Valider </button>';
+            }
             echo '<input type="hidden" name="id_titre" value="' . $this->getID() . '">';
             echo '<input type="hidden" name="id_sortie" value="' . ($estOriginale ? BD::getSortie($this->idsortie)->getID() : BD::getSortieInitiale($this)->getID()) . '"> </input>';
             echo '<input type="hidden" name="id_redirection" value="' . BD::getSortie($this->idsortie)->getID() . '"> </input>';
-            echo '<button type="submit" class="btnValider"> Valider </button>';
             echo "</form>";
             echo "</dialog>";
             if (
