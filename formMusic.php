@@ -68,16 +68,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <?php
-    if (isset($_GET['upload'])) {
-        if ($_GET['upload'] == "1") {
-            echo "<p class='message success'>Votre musique a bien été ajoutée</p>";
-        } else {
-            echo "<p class='message error'>Erreur lors de l'ajout de votre musique</p>";
+    <div id="contenu">
+        <?php
+        if (isset($_GET['upload'])) {
+            if ($_GET['upload'] == "1") {
+                echo "<p class='message success'>Votre musique a bien été ajoutée</p>";
+            } else {
+                echo "<p class='message error'>Erreur lors de l'ajout de votre musique</p>";
+            }
         }
-    }
-    ?>
-    <div id="panel">
+        ?>
         <h2>Créer une musique</h2>
         <div class='separator'></div>
         <form method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>">

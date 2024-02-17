@@ -25,9 +25,9 @@ composer require james-heinrich/getid3
 <sup>1</sup> *CRUD* : Create, Read, Update, Delete
 
 ## 4 - Fonctionnalités possibles
-- [ ] 4.1 Inscription/Login Utilisateur
-- [ ] 4.2 Playlist par utilisateur
-- [ ] 4.3 Système de notation des albums
+- [x] 4.1 Inscription/Login Utilisateur
+- [x] 4.2 Playlist par utilisateur
+- [x] 4.3 Système de notation des albums
 
 ## 5 - Contraintes
 - [x] 5.1 Organisation du code dans une arborescence cohérente
@@ -35,7 +35,7 @@ composer require james-heinrich/getid3
 - [x] 5.3 Utilisation d’un provider pour charger le fichier YAML
 - [x] 5.4 Utilisation d'un autoloader pour charger les classes d’objets nécessaires
 - [x] 5.5 Utilisation de PDO avec base de données sqlite
-- [ ] 5.6 Utilisation de sessions
+- [x] 5.6 Utilisation de sessions
 - [x] 5.7 Mise en place CSS
 
 ## 6 - Documentations

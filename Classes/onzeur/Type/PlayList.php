@@ -57,7 +57,7 @@ class PlayList extends Sortie
         </thead>'; // On ferme les divs et on commence le tableau |Postion|Titre|Artistes|Durée|
         echo "<tbody>";
         for ( $i = 0; $i < count($this->listeTitres); $i++){
-            $this->listeTitres[$i]->renderDetailPlaylist();
+            $this->listeTitres[$i]->renderDetail();
         }
         echo "</tbody>";
         echo "</table>";

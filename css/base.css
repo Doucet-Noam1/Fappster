@@ -58,7 +58,6 @@ body {
 aside {
     background-color: #1f1f1f;
     flex-basis: max-content;
-
 }
 
 nav li {
@@ -171,12 +170,12 @@ li:has(#pfp){
     border-radius: 10px;
 }
 
-#logo{
-    
-    position: absolute;
-    width: 15em;
-    height: 15em;
-    top: 65rem;
-    left: 11rem;
-    
+.verified::after{
+    content: "";
+    background-image: url(../data/images/icons/verifie.png);
+    background-size: 100% 100%;
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    vertical-align: middle;
 }

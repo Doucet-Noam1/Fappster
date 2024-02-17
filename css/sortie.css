@@ -140,25 +140,24 @@ table tr:not(thead tr):hover td {
     margin-bottom: 10px;
 }
 
-#dialog {
+.dialog {
     width: fit-content;
     height: fit-content;
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2.5px);
-    top: 33%;
-    left: 50%;
+    top : 50%;
+    left : 50%;
+    transform: translateY(-50%);
     z-index: 100;
-    box-shadow: 0 0 2000px 200px black;
-    
+    backdrop-filter: blur(10px);
 }
 
-#popUp{
+.popUp{
     display: flex;
     flex-direction: column;
 }
 
-#btnValider{
-    width: 33%;
+.btnValider{
+    width: fit-content;
     background-color: #2f2f2f;
     margin: auto;
     margin-top: 1em;
@@ -167,22 +166,39 @@ table tr:not(thead tr):hover td {
     
 }
 
-#selectPlaylist{
-    width: 66%;
+.selectPlaylist{
+    width: max-content;
     background-color: #2f2f2f;
     margin: auto;
     margin-top: 1.5em;
-    
 }
 
-#labelSelect{
+.labelSelect{
     color: white;
     margin: auto;
     font-weight: bolder;
     font-size: 2.5vw;
 }
-
-#openbtn{
-    z-index: 200;
-    
+td:has(.openbtn){
+    display: flex;
+    justify-content: space-around;
+}
+.openbtn,.deletebtn{
+    width: 30px;
+    height: 30px;
+}
+.openbtn::after{
+    content: "➕";
+    font-size: 2em;
+    position: absolute;
+    transform: translateX(-50%) translateY(-50%);
+}
+form:has(.deletebtn){
+    padding: 0;
+}
+.deletebtn::after{
+    content: "❌";
+    font-size: 2em;
+    position: absolute;
+    transform: translateX(-50%) translateY(-50%);
 }
