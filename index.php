@@ -7,34 +7,33 @@
 </head>
 
 <body>
-    <?php
-    require 'base.php';
-    use onzeur\Type\BD;
-    BD::getInstance();
-    if (isset($_SESSION['pseudo'])) {
-        $pseudo = $_SESSION['pseudo'];
-    }
-    ?>
-    <div id="contenu">
-        <div id="albums">
-            <h1>Albums</h1>
-            <?php
-            foreach (BD::getAllAlbums() as $album) {
-                $album->render();
-            }
-            ?>
-        </div>
-        <div id="eps">
-            <h1>EPs</h1>
-            <?php
-            foreach (BD::getAllEPs() as $ep) {
-                $ep->render();
-            }
-            ?>
-        </div>
-        <?php 
-        
+    <main>
+        <?php
+        require 'base.php';
+        use onzeur\Type\BD;
+        BD::getInstance();
+        if (isset($_SESSION['pseudo'])) {
+            $pseudo = $_SESSION['pseudo'];
+        }
         ?>
+        <div id="contenu">
+            <div id="albums">
+                <h1>Albums</h1>
+                <?php
+                foreach (BD::getAllAlbums() as $album) {
+                    $album->render();
+                }
+                ?>
+            </div>
+            <div id="eps">
+                <h1>EPs</h1>
+                <?php
+                foreach (BD::getAllEPs() as $ep) {
+                    $ep->render();
+                }
+                ?>
+            </div>
+    </main>
 </body>
 
 </html>

@@ -3,18 +3,11 @@ footer{
     height: 10%;
     position: absolute;
     background-color: #383838;
-    z-index: 500;
-    top: 90%;
-    left: 0;
-    display: block
 }
 
 audio{
     width: 66%;
-    z-index: 1000;
     border-radius: 45px;
-
-    
 }
 
 #divAudio{
