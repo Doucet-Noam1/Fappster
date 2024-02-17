@@ -26,7 +26,7 @@ class BD
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS ARTISTE(
                 nom_artiste VARCHAR(30) PRIMARY KEY,
                 verifie BOOLEAN DEFAULT FALSE,
-                FOREIGN KEY(nom_artiste) REFERENCES Utilisateur(pseudo)
+                FOREIGN KEY(nom_artiste) REFERENCES UTILISATEUR(pseudo) ON DELETE CASCADE
             )');
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS TYPE_SORTIE (
                 id_type INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -44,19 +44,19 @@ class BD
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS AVIS (
                 id_sortie INTEGER,
-                pseudo INTEGER,
+                pseudo VARCHAR(30),
                 note INTEGER,
                 favori BOOLEAN default false,
-                FOREIGN KEY(id_sortie) REFERENCES ARTISTE(id_sortie),
-                FOREIGN KEY(pseudo) REFERENCES SORTIE(id_groupe),
+                FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie),
+                FOREIGN KEY(pseudo) REFERENCES UTILISATEUR(pseudo) ON DELETE CASCADE,
                 PRIMARY KEY(id_sortie,pseudo)
             )');
 
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS CREE (
             id_sortie INTEGER,
             nom_artiste VARCHAR(30),
-            FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie),
-            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste),
+            FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie) ON DELETE CASCADE,
+            FOREIGN KEY(nom_artiste) REFERENCES UTILISATEUR(pseudo) ON DELETE CASCADE,
             PRIMARY KEY(id_sortie,nom_artiste)
         )');
 
@@ -64,7 +64,7 @@ class BD
             id_sortie INTEGER,
             nom_artiste VARCHAR(30),
             FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie),
-            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste),
+            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste) ON DELETE CASCADE,
             PRIMARY KEY(id_sortie,nom_artiste)
         )');
 
@@ -78,7 +78,7 @@ class BD
             nom_genre TEXT,
             id_sortie INTEGER,
             FOREIGN KEY(nom_genre) REFERENCES GENRE(nom_genre),
-            FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie),
+            FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie) ON DELETE CASCADE,
             PRIMARY KEY(nom_genre,id_sortie)
         )');
 
@@ -93,15 +93,15 @@ class BD
             id_titre INTEGER,
             position INTEGER,
             id_sortie_initiale INTEGER default null,
-            FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie),
+            FOREIGN KEY(id_sortie) REFERENCES SORTIE(id_sortie) ON DELETE CASCADE,
             FOREIGN KEY(id_sortie_initiale) REFERENCES SORTIE(id_sortie),
-            FOREIGN KEY(id_titre) REFERENCES TITRE(id_titre),
+            FOREIGN KEY(id_titre) REFERENCES TITRE(id_titre) ON DELETE CASCADE,
             PRIMARY KEY(id_sortie,id_titre)
         )');
             self::$bdd->exec('CREATE TABLE IF NOT EXISTS CHANTER_PAR(
             nom_artiste VARCHAR(30),
             id_titre INTEGER ,
-            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste),
+            FOREIGN KEY(nom_artiste) REFERENCES ARTISTE(nom_artiste) ON DELETE CASCADE,
             FOREIGN KEY(id_titre) REFERENCES TITRE(id_titre),
             PRIMARY KEY(nom_artiste,id_titre)
         )');
@@ -217,7 +217,7 @@ class BD
         }
         $bdd->commit();
     }
-    static function getSortieInitial(Titre $titre): ?SortieCommerciale
+    static function getSortieInitiale(Titre $titre): ?SortieCommerciale
     {
         $bdd = BD::getInstance();
         $queryTitre = $bdd->prepare("SELECT id_sortie_initiale FROM CONTIENT WHERE id_sortie = ? AND id_titre = ?");
@@ -285,6 +285,7 @@ class BD
         $queryArtiste = BD::getInstance()->prepare("SELECT nom_artiste FROM CREE WHERE id_sortie = ?");
         $queryArtiste->execute([$idSortie]);
         $artistes = $queryArtiste->fetchAll();
+        $res = [];
         foreach ($artistes as $artiste) {
             $res[] = self::estArtiste($artiste['nom_artiste']) ? self::getArtiste($artiste['nom_artiste']) : self::getUtilisateur($artiste['nom_artiste']);
         }
@@ -315,11 +316,14 @@ class BD
             return null;
         }
         $artistes = self::getArtistesTitre($id);
-        $res = new Titre($titre['nom_titre'], array_shift($artistes), $titre['duree'], $titre['id_titre'], $titre['nom_fichier'], $idsortie);
-        foreach ($artistes as $artiste) {
-            $res->addArtiste($artiste);
+        if (count($artistes) > 0) {
+            $res = new Titre($titre['nom_titre'], array_shift($artistes), $titre['duree'], $titre['id_titre'], $titre['nom_fichier'], $idsortie);
+            foreach ($artistes as $artiste) {
+                $res->addArtiste($artiste);
+            }
+            return $res;
         }
-        return $res;
+        return null;
     }
 
 
@@ -524,6 +528,19 @@ class BD
         return $res;
     }
 
+    static function getAllArtistes()
+    {
+        $bdd = BD::getInstance();
+        $queryArtistes = $bdd->prepare("SELECT DISTINCT pseudo FROM UTILISATEUR");
+        $queryArtistes->execute();
+        $artistes = $queryArtistes->fetchAll();
+        $res = [];
+        foreach ($artistes as $artiste) {
+            $res[] = self::estArtiste($artiste['pseudo']) ? self::getArtiste($artiste['pseudo']) : self::getUtilisateur($artiste['pseudo']);
+        }
+        return $res;
+    }
+
     static function rechercheArtiste(string $id)
     {
         $queryArtiste = BD::getInstance()->prepare("SELECT * FROM ARTISTE WHERE nom_artiste LIKE ?");
@@ -586,8 +603,8 @@ class BD
 
         $bdd = BD::getInstance();
         $bdd->beginTransaction();
-        $querryInsert = $bdd->prepare('INSERT OR REPLACE INTO AVIS(pseudo,id_sortie,note,favori) VALUES(?,?,?,?)');
-        $querryInsert->execute([$pseudo, $sortie->getID(), $newNote, $newLike]);
+        $querryInsert = $bdd->prepare('INSERT OR REPLACE INTO AVIS(id_sortie,pseudo,note,favori) VALUES(?,?,?,?)');
+        $querryInsert->execute([$sortie->getID(),$pseudo, $newNote, $newLike]);
         $bdd->commit();
     }
     static function getLike(string $pseudo, Sortie $sortie): bool
@@ -637,4 +654,56 @@ class BD
         return null;
     }
 
+    static function setVerifie(Artiste $artiste, bool $verifie)
+    {
+        $bdd = BD::getInstance();
+        $bdd->beginTransaction();
+        $queryVerifie = $bdd->prepare('UPDATE ARTISTE SET verifie = ? WHERE nom_artiste = ?');
+        $queryVerifie->execute([$verifie, $artiste->getPseudo()]);
+        $bdd->commit();
+    }
+
+    static function modifierUtilisateur(string $pseudo, string $nom, string $prenom, ?string $mdp)
+    {
+        $bdd = BD::getInstance();
+        $bdd->beginTransaction();
+        $queryModif = $bdd->prepare('UPDATE UTILISATEUR SET nom = ?, prenom = ? WHERE pseudo = ?');
+        $queryModif->execute([$nom, $prenom, $pseudo]);
+        if (!is_null($mdp)) {
+            $queryModifMdp = $bdd->prepare('UPDATE UTILISATEUR SET mdp = ? WHERE pseudo = ?');
+            $queryModifMdp->execute([hash('sha256', $mdp), $pseudo]);
+        }
+        $bdd->commit();
+    }
+
+    static function supprimerArtiste(string $pseudo)
+    {
+        $bdd = BD::getInstance();
+        $bdd->beginTransaction();
+        $sorties = BD::getSortiesCommercialBy(BD::getArtiste($pseudo));
+        $querySuppr = $bdd->prepare('DELETE FROM UTILISATEUR WHERE pseudo = ?');
+        $querySuppr->execute([$pseudo]);
+        $bdd->commit();
+        foreach ($sorties as $sortie) {
+            BD::supprimerSortie($sortie->getID());
+        }
+    }
+
+    static function supprimerSortie(int $id)
+    {
+        $bdd = BD::getInstance();
+        $bdd->beginTransaction();
+        $querySuppr = $bdd->prepare('DELETE FROM SORTIE WHERE id_sortie = ?');
+        $querySuppr->execute([$id]);
+        $bdd->commit();
+    }
+
+    static function supprimerTitreSortie(Titre $titre, Sortie $sortie)
+    {
+        $bdd = BD::getInstance();
+        $bdd->beginTransaction();
+        $querySuppr = $bdd->prepare('DELETE FROM CONTIENT WHERE id_sortie = ? AND id_titre = ?');
+        $querySuppr->execute([$sortie->getID(), $titre->getID()]);
+        $bdd->commit();
+    }
 }

@@ -3,7 +3,6 @@ require 'base.php';
 use onzeur\Type\Utilisateur;
 use onzeur\Type\BD;
 
-session_start();
 if (isset($_SESSION['pseudo'])){
     header('Location: index.php');
     exit();
@@ -68,7 +67,7 @@ if ($_POST) {
 </head>
 
 <body>
-    <div id="panel">
+    <div id="contenu">
         <div>
             <h2>Connexion</h2>
             <form method="post" action="login.php">
