@@ -63,6 +63,15 @@ if (!isset($_SESSION)) {
                 </li>
             <?php endif; ?>
         </ul>
-
     </nav>
 </aside>
+<?php
+require 'player.php';
+?>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let contenu = document.querySelector('#contenu');
+        let footer = document.querySelector('footer');
+        contenu.appendChild(footer);
+    });
+</script>
