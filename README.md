@@ -6,7 +6,7 @@
 
 ## Project et fonctionalitées : 
 
-### 1 - Présentation
+### 1 - Présentation du projet
 A partir des données que vous trouverez dans le fichier fixtures.zip dans Celene, il vous est demandé de  
 réaliser une application présentant le contenu de cette base d'albums de musique. Le fichier fixtures.zip  
 contient quelques albums et artistes avec des pochettes d'albums.
@@ -48,24 +48,30 @@ composer require james-heinrich/getid3
 - [ ] 6.5 README et requirements
 
 
+## Présentation de Fappster
+  Fappster est un site dédiée à la découverte et à la gestion musicale en ligne. Conçue pour les amateurs de musique, cette application offre une expérience exceptionnel et intuitive pour explorer de nouveaux albums, singles et EPs, ainsi que pour ajouter et organiser votre propre collection musicale.
+Fappster vise à offrir une expérience musicale personnalisée et engageante, en permettant aux utilisateurs d'explorer de nouveaux titres, de créer leur propre collection musicale, et de partager leurs passions avec d'autres passionnés de musique.
+
+Explorez et profitez de Fappster pour une expérience musicale enrichissante et personnalisée !
+
 
 ## Utilisation de Fappster :
 
 ### 1 - Connexion :
-  Dans un premier temps, il y a la possibilité de se connecter en ramplissant les champs textuels sur la partie gauche de l'écran si l'utilisateur possède déja un compte. Dans le cas contraire, il peut s'en créer un en ramplissant le formulaire sur la partie droite, il devra renseigner : son nom, son prénom, une photo de profil (facultatif), un pseudonyme ainsi que son mot de passe de connexion.
+Dans un premier temps, l'utilisateur a la possibilité de se connecter en remplissant les champs textuels sur la partie gauche de l'écran s'il possède déjà un compte. Dans le cas contraire, il peut en créer un en remplissant le formulaire sur la partie droite. Il devra renseigner : son nom, son prénom, une photo de profil (facultatif), un pseudonyme ainsi que son mot de passe de connexion.
 
-### 2 - Acceuil : 
-  Sur la page d'acceuil nous pouvons retrouver, toute les sorties musical de tous les artistes (Albums, EPs, Single).
+### 2 - Accueil :
+Sur la page d'accueil, nous pouvons retrouver toutes les sorties musicales de tous les artistes (Albums, EPs, Singles).
 
-### 3 - Détail d'un sortie musical :
-  En cliquant sur une sortie musical, nous accèdons au détail de la sortie, en cliquant sur le coeur en haut à droite de la page, la sortie s'ajoute à notre liste de sorties liké, il y a aussi possibilité de noter la proposition musical en cliquant sur les étoiles.
-  Enfin plusieurs recommandations peuvent être faite en fonction des types de musique contenue dans la sortie musical.
+### 3 - Détail d'une sortie musicale :
+En cliquant sur une sortie musicale, nous accédons aux détails de la sortie. En cliquant sur le cœur en haut à droite de la page, la sortie est ajoutée à notre liste de sorties likées. Il est également possible de noter la proposition musicale en cliquant sur les étoiles. Enfin, plusieurs recommandations peuvent être faites en fonction des types de musique contenus dans la sortie musicale.
 
 ### 4 - Ajouter une musique :
-  Dans ce formulaire, nous avons la possibilité d'ajouter une musique à notre bibliothèque, pour cela il faudra renseigner  : le titre, la piste audio, les artistes présents sur la musiique (si il y en a) et valider le formulaire.
+Dans ce formulaire, nous avons la possibilité d'ajouter une musique à notre bibliothèque. Pour cela, il faudra renseigner : le titre, la piste audio, les artistes présents sur la musique (s'il y en a) et valider le formulaire.
 
-### 5 - Créer une sortie musical : 
-  Dans ce formulaire, nous avons la possibilité créer une sortie musical dans notre bibliothèque, pour cela il faudra renseigner  : le type de sortie, le nom de la sortie, un cover (optionnel), des co-artistes (si il y en a), la date de sortie du projet, tout les titres qui devrons être dans la sortie et enfin choisir un ou plusieurs genres puis valider le formulaire.
+### 5 - Créer une sortie musicale :
+Dans ce formulaire, nous avons la possibilité de créer une sortie musicale dans notre bibliothèque. Pour cela, il faudra renseigner : le type de sortie, le nom de la sortie, une couverture (optionnelle), des co-artistes (s'il y en a), la date de sortie du projet, tous les titres qui devront être dans la sortie, et enfin choisir un ou plusieurs genres, puis valider le formulaire.
 
-### 6 - Déconnexion : 
-  Pour finir, afin de se déconnecter, il suffit simplement cliquer sur déconnexion.
+### 6 - Déconnexion :
+Pour finir, afin de se déconnecter, il suffit simplement de cliquer sur "déconnexion".
+
