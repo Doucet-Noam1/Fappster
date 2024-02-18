@@ -31,9 +31,7 @@ class PlayList extends Sortie
         }
     }
     public function renderDetail()
-    {$artistNames = array_map(fn($artiste) => $artiste->getPseudo(), $this->getArtiste());
-        if (  isset($_SESSION['pseudo']) &&  in_array($_SESSION['pseudo'], $artistNames)  && !$this->getVisibilite() || $this->getVisibilite())
-        { 
+    {
         echo "<div id='banner'>";
         $image = BD::DOSSIERCOVERS . $this->cover;
         echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
@@ -68,10 +66,7 @@ class PlayList extends Sortie
             $this->listeTitres[$i]->renderDetail();
         }
         echo "</tbody>";
-        echo "</table>";}else{
-            header("Location:index.php");
-            exit();
-        }
+        echo "</table>";
     }
     public function renderModif(){
         $artistNames = array_map(fn($artiste) => $artiste->getPseudo(), $this->getArtiste());
@@ -94,9 +89,6 @@ class PlayList extends Sortie
         echo "<p>" . $this->date . "</p>";
         echo "<p>" . count($this->listeTitres) . " titres</p>";
         echo '</div>';
-        echo '</div>';}else{
-            header("Location:index.php");
-            exit();
-        }
+        echo '</div>';
     }
-}
+}}

@@ -19,6 +19,15 @@
                 echo "<h1 id='error'>Cette sortie n'existe pas...</h1>";
                 die();
             }
+            $artistNames = array_map(fn($artiste) => $artiste->getPseudo(), $sortie->getArtiste());
+            if (!isset($_SESSION) && !$sortie->getVisibilite() ){
+               
+            } if (in_array($_SESSION['pseudo'], $artistNames)) 
+            { echo "<h1 id='error'>Cette sortie est privée</h1>";
+                die();
+                }
+
+
             if (isset($_POST)) {
                 if (isset($_POST['like'])) {
                     BD::noteSortie($_SESSION['pseudo'], $sortie, null, boolval($_POST['like']));

@@ -26,9 +26,7 @@ abstract class SortieCommerciale extends Sortie
     }
 
     public function render()
-    { $artistNames = array_map(fn($artiste) => $artiste->getPseudo(), $this->getArtiste());
-        if (isset($_SESSION['pseudo']) &&  in_array($_SESSION['pseudo'], $artistNames)  && !$this->getVisibilite() || $this->getVisibilite())
-        {
+    { 
         echo '<a class="sortie" href="sortie.php?id=' . parent::getID() . '">';
         $image = BD::DOSSIERCOVERS . $this->cover;
         echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
@@ -39,14 +37,12 @@ abstract class SortieCommerciale extends Sortie
         echo "<genre class='dont-show'>";
         echo implode("-", $this->listeGenres);
         echo "</genre>";
-        echo '</a>';}
+        echo '</a>';
     }
 
     public function renderDetail()
     {
-        $artistNames = array_map(fn($artiste) => $artiste->getPseudo(), $this->getArtiste());
-        if (  isset($_SESSION['pseudo']) &&  in_array($_SESSION['pseudo'], $artistNames)  && !$this->getVisibilite() || $this->getVisibilite())
-        { 
+
             echo "<div id='banner'>";
             $image = BD::DOSSIERCOVERS . $this->cover;
             echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
@@ -101,11 +97,7 @@ abstract class SortieCommerciale extends Sortie
                 }
             }
             echo "</tbody>";
-            echo "</table>";}
-            else{
-                header('Location : index.php');
-                exit();
-            }
+            echo "</table>";
         
     }
 }
