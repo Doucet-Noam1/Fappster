@@ -19,12 +19,12 @@ function peupleBD()
     $artiste3 = new Artiste('Rohff', false);
     $utilisateur = new Utilisateur('admin', 'adminnom', 'adminprenom', 'admin');
 
-    $album2 = new Album($artiste3, 'albumderohffavecgazo', [], '2024', 'aaa.png', ['Rap']);
+    $album2 = new Album($artiste3, 'albumderohffavecgazo', [], '2024', 'aaa.png', ['Rap'], false);
     $album2->addArtiste($artiste2);
     $musique = new Titre('la mala est gangx', $artiste, 120, '13-02-2005', '506c748dca4d22f81168b433b76ad515b6980483.mp3');
     $musique2 = new Titre('la mala est gangxxxxxxxx', $artiste, 120, '13-02-2005', '506c748dca4d22f81168b433b76ad515b6980483.mp3');
-    $ep = new EP($artiste, 'test', [$musique, $musique2], '2024', 'aaa.png', ['Rap']);
-    $album = new Album($artiste, 'test', [$musique, $musique2], '2024', 'aaa.png', ['Rap']);
+    $ep = new EP($artiste, 'test', [$musique, $musique2], '2024', 'aaa.png', ['Rap'], true);
+    $album = new Album($artiste, 'test', [$musique, $musique2], '2024', 'aaa.png', ['Rap'], true);
     $album->addArtiste($artiste);
     $musique2->addArtiste($artiste2);
 

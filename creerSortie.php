@@ -28,6 +28,7 @@
             $date = $_POST['date'];
             $titres = isset($_POST['titres']) ? $_POST['titres'] : [];
             $genres = isset($_POST['genres']) ? $_POST['genres'] : [];
+            $visibilite = boolval($_POST['visibilite']);
 
             var_dump($_POST);
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
@@ -47,7 +48,7 @@
             $titres = array_map(function ($id) {
                 return BD::getTitre($id);
             }, $titres);
-            $sortie = Sortie::factory($artistes, $nomSortie, $titres, $date, $coverName, $typeSortie, $genres);
+            $sortie = Sortie::factory($artistes, $nomSortie, $titres, $date, $coverName, $typeSortie, $genres,$visibilite);
             header('Location: sortie.php?id=' . $sortie->getID());
         }
 
@@ -70,9 +71,16 @@
                 </select>
                 <label for="nomSortie">Nom de la sortie :</label>
                 <input type="text" name="nomSortie" required>
-
+                
                 <label for="photo">Cover :</label>
                 <input type="file" name="photo" accept="image/*" />
+                
+                <label for= 'visibilite'>Visibilite :</label>
+                <select name = 'visibilite' required> 
+                <option selected value disabled>Choisir une visibilite</option>
+                <option value= '1'> Public </option>
+                <option value= '0'> Prive </option>
+                </select>
 
                 <label for="feats">Co-Artistes :</label>
                 <script type="text/javascript" src="js/ajoutArtiste.js"></script>

@@ -9,7 +9,7 @@ A partir des données que vous trouverez dans le fichier fixtures.zip dans Celen
 réaliser une application présentant le contenu de cette base d'albums de musique. Le fichier fixtures.zip  
 contient quelques albums et artistes avec des pochettes d'albums.
 ### Installation
-composer require symfony/yaml
+composer require symfony/yaml ^6.4
 composer require james-heinrich/getid3
 
 ## 2 - Fonctionnalités attendues

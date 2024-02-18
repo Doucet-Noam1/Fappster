@@ -3,7 +3,9 @@
     padding: 0;
     box-sizing: border-box;
 }
-
+h2{
+    color: white;
+}
 html,
 body {
     height: 100%;
@@ -72,7 +74,8 @@ nav li {
     transition: 0.3s;
 }
 
-nav li:hover, .sortie:hover {
+nav li:hover,
+.sortie:hover {
     background: rgba(255, 255, 255, 0.2) !important;
     cursor: pointer;
 }
@@ -93,7 +96,8 @@ nav span {
     width: max-content;
 }
 
-nav object, nav img {
+nav object,
+nav img {
     --size: 2rem;
     width: var(--size);
     height: var(--size);
@@ -120,20 +124,24 @@ nav ul li a {
 nav ul li a object {
     margin-right: 10px;
 }
-li:has(#pfp){
+
+li:has(#pfp) {
     background: rgba(255, 255, 255, 0.1);
 }
+
 #pfp {
     width: 50px;
     height: 50px;
     border-radius: 50%;
 }
-#error{
+
+#error {
     color: red;
     font-size: 2rem;
     text-align: center;
     margin-top: 10%;
 }
+
 .sortie {
     padding: 1vw;
     background-color: #1f1f1f;
@@ -159,10 +167,10 @@ li:has(#pfp){
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
-    overflow-wrap:break-word;
+    overflow-wrap: break-word;
 }
 
-.sortie p{
+.sortie p {
     color: rgb(154, 154, 154);
     position: absolute;
     bottom: 1vw;
@@ -175,7 +183,7 @@ li:has(#pfp){
     border-radius: 10px;
 }
 
-.verified::after{
+.verified::after {
     content: "";
     background-image: url(../data/images/icons/verifie.png);
     background-size: 100% 100%;

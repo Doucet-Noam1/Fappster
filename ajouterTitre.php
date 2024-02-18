@@ -38,9 +38,8 @@
 
             $audioFile = $_FILES['file'];
             $audioFileTmp = $audioFile['tmp_name'];
-
-            array_unshift($artistes, $_SESSION['pseudo']);
             $artistes = isset($_POST['feats']) ? $_POST['feats'] : [];
+            array_unshift($artistes, $_SESSION['pseudo']);
             $artistesString = implode('_', $artistes);
 
             $audioFileName = $nomTitre . '_' . $artistesString . '.' . pathinfo($audioFile['name'], PATHINFO_EXTENSION); // Nouveau nom du fichier

@@ -39,6 +39,7 @@ class BD
                 date_sortie DATE,
                 cover TEXT,
                 id_type INTEGER NOT NULL,
+                visibilite BOOLEAN DEFAULT TRUE,
                 FOREIGN KEY(id_type) REFERENCES TYPE_SORTIE(id_type)
             )');
 
@@ -154,8 +155,8 @@ class BD
         $bdd = BD::getInstance();
         $bdd->beginTransaction();
         if (BD::getIdSortie($sortie) == null) {
-            $queryAddAlbum = $bdd->prepare("INSERT INTO SORTIE(nom_sortie,date_sortie,cover,id_type) VALUES (?,?,?,?)");
-            $queryAddAlbum->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType()]);
+            $queryAddAlbum = $bdd->prepare("INSERT INTO SORTIE(nom_sortie,date_sortie,cover,id_type,visibilite) VALUES (?,?,?,?,?)");
+            $queryAddAlbum->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), $sortie -> getVisibilite()]);
             $bdd->commit();
         }
         foreach ($sortie->getArtiste() as $artiste) {
@@ -164,6 +165,14 @@ class BD
         foreach ($sortie->getListeTitres() as $titre) {
             BD::addTitreToSortie($sortie, $titre);
         }
+    }
+
+    static function toggleVisibilite(Sortie $sortie){
+        $bdd = BD::getInstance();
+        $bdd->beginTransaction();
+        $querryInsert = $bdd->prepare('INSERT OR REPLACE INTO SORTIE(nom_sortie,date_sortie,cover,id_type,visibilite) VALUES (?,?,?,?,?)');
+        $querryInsert->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), $sortie -> getVisibilite()]);
+        $bdd -> commit();
     }
 
     static function addUtilisateur(Utilisateur $utilisateur)
@@ -315,7 +324,7 @@ class BD
         $artiste = self::getArtistesSortie($id);
         $genres = self::getGenresSortie($id);
         $titres = self::getTitresSortie($id);
-        return Sortie::factory($artiste, $sortie["nom_sortie"], $titres, strval($sortie["date_sortie"]), $sortie["cover"], $sortie["id_type"], $genres, intval($id));
+        return Sortie::factory($artiste, $sortie["nom_sortie"], $titres, strval($sortie["date_sortie"]), $sortie["cover"], $sortie["id_type"], $genres,boolval($sortie['visibilite']), intval($id));
     }
 
     static function getTitre(int $id, int|string|null $idsortie = null): ?Titre
@@ -518,7 +527,7 @@ class BD
 
     static function getAllAlbums()
     {
-        $queryAlbums = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE WHERE id_type = 1");
+        $queryAlbums = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE WHERE id_type = 1 AND visibilite = 1");
         $queryAlbums->execute();
         $albums = $queryAlbums->fetchAll();
         $res = [];
@@ -528,9 +537,21 @@ class BD
         return $res;
     }
 
+    static function getAllSingles()
+    {
+        $querySingles = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE WHERE id_type = 2 AND visibilite = 1");
+        $querySingles->execute();
+        $singles = $querySingles->fetchAll();
+        $res = [];
+        foreach ($singles as $single) {
+            $res[] = self::getSortie($single['id_sortie']);
+        }
+        return $res;
+    }
+
     static function getAllEPs()
     {
-        $queryEPs = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE WHERE id_type = 3");
+        $queryEPs = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE WHERE id_type = 3 AND visibilite = 1");
         $queryEPs->execute();
         $eps = $queryEPs->fetchAll();
         $res = [];
@@ -573,7 +594,7 @@ class BD
         JOIN A_POUR_STYLE aps ON s.id_sortie = aps.id_sortie
         JOIN GENRE g ON aps.nom_genre = g.nom_genre
         WHERE g.nom_genre IN (" . implode(',', array_fill(0, count($genres), '?')) . ")
-        AND s.id_sortie != ?
+        AND s.id_sortie != ? AND s.visibilite = 1
         GROUP BY s.id_sortie
         ORDER BY communs DESC, RANDOM()
         LIMIT 5;
