@@ -75,6 +75,7 @@
                 <label for="photo">Cover :</label>
                 <input type="file" name="photo" accept="image/*" />
                 
+                <label for= 'visibilite'>Visibilite :</label>
                 <select name = 'visibilite' required> 
                 <option selected value disabled>Choisir une visibilite</option>
                 <option value= 'true'> Public </option>

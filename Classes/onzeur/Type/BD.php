@@ -156,7 +156,7 @@ class BD
         $bdd->beginTransaction();
         if (BD::getIdSortie($sortie) == null) {
             $queryAddAlbum = $bdd->prepare("INSERT INTO SORTIE(nom_sortie,date_sortie,cover,id_type,visibilite) VALUES (?,?,?,?,?)");
-            $queryAddAlbum->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), $sortie -> getVisibilite()]);
+            $queryAddAlbum->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), (int)$sortie -> getVisibilite()]);
             $bdd->commit();
         }
         foreach ($sortie->getArtiste() as $artiste) {
@@ -165,6 +165,14 @@ class BD
         foreach ($sortie->getListeTitres() as $titre) {
             BD::addTitreToSortie($sortie, $titre);
         }
+    }
+
+    static function togleSortie(Sortie $sortie){
+        $bdd = BD::getInstance();
+        $bdd->beginTransaction();
+        $querryInsert = $bdd->prepare('INSERT OR REPLACE INTO SORTIE(nom_sortie,date_sortie,cover,id_type,visibilite) VALUES (?,?,?,?,?)');
+        $querryInsert->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), (int)$sortie -> getVisibilite()]);
+        $bdd -> commit();
     }
 
     static function addUtilisateur(Utilisateur $utilisateur)
@@ -316,7 +324,7 @@ class BD
         $artiste = self::getArtistesSortie($id);
         $genres = self::getGenresSortie($id);
         $titres = self::getTitresSortie($id);
-        return Sortie::factory($artiste, $sortie["nom_sortie"], $titres, strval($sortie["date_sortie"]), $sortie["cover"], $sortie["id_type"], $genres, intval($id));
+        return Sortie::factory($artiste, $sortie["nom_sortie"], $titres, strval($sortie["date_sortie"]), $sortie["cover"], $sortie["id_type"], $genres,boolval($sortie['visibilite']), intval($id));
     }
 
     static function getTitre(int $id, int|string|null $idsortie = null): ?Titre
