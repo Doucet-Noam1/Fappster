@@ -20,7 +20,7 @@ class Reader
                 $img = is_null($value["img"]) ? null : $value["img"];
                 $artiste = new Artiste($value["by"], true);
                 $value["entryId"];
-                $album = new Album($artiste,$value["title"], array(), strval($value["releaseYear"]), $img,$value["genre"]);
+                $album = new Album($artiste, $value["title"], array(), strval($value["releaseYear"]), $img, $value["genre"], true);
                 $data[] = $album;
             }
         }
