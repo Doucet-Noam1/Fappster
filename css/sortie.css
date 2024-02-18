@@ -1,7 +1,9 @@
 #contenu {
     padding: 0;
 }
-
+#contenu *{
+    color: white;
+}
 #banner {
     padding: 20px;
     display: flex;
@@ -187,18 +189,17 @@ td:has(.openbtn){
     width: 30px;
     height: 30px;
 }
-.openbtn::after{
-    content: "➕";
+.openbtn::after, .deletebtn::after{
     font-size: 2em;
-    position: absolute;
-    transform: translateX(-50%) translateY(-50%);
+    display: block;
+    transform: translateX(-250%) translateY(-50%);
 }
 form:has(.deletebtn){
     padding: 0;
 }
+.openbtn::after{
+    content: "➕";
+}
 .deletebtn::after{
     content: "❌";
-    font-size: 2em;
-    position: absolute;
-    transform: translateX(-50%) translateY(-50%);
 }

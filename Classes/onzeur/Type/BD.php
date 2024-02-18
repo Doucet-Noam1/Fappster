@@ -137,6 +137,18 @@ class BD
         }
     }
 
+    static function getAllTypes()
+    {
+        $queryTypes = BD::getInstance()->prepare("SELECT * FROM TYPE_SORTIE");
+        $queryTypes->execute();
+        $types = $queryTypes->fetchAll();
+        $res = [];
+        foreach ($types as $type) {
+            $res[$type['id_type']] = $type['libelle'];
+        }
+        return $res;
+    }
+
     static function addSortie(Sortie $sortie)
     {
         $bdd = BD::getInstance();

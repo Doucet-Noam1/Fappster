@@ -11,3 +11,11 @@
         <h2 id='artistesPlayers'></h2>
     </div>
 </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        let player = document.querySelector('footer');
+        // let player = document.createElement('footer');
+        document.body.appendChild(player);
+    })
+</script>

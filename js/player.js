@@ -12,7 +12,7 @@ function clickPlayer(tr) {
             artistesString += '_';
         }
     }
-    document.querySelector('audio').src = '/data/audios/' + titre +"_"+artistesString+ '.mp3';
+    document.querySelector('audio').src = '/data/audios/' + titre + "_" + artistesString + '.mp3';
     document.querySelector('audio').play();
     document.querySelector('#titrePlayer').innerText = titre;
     document.querySelector('#artistesPlayers').innerText = artistes.join(' & ');

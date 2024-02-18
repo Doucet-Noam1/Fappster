@@ -98,12 +98,12 @@ class Titre implements Irender
             echo '<a href="login.php">Ajouter à une playlist</a>';
         }
         echo "</td>";
+        echo "<td>" . $this->duree . "</td>";
         if (!$estOriginale) {
             echo "<td>";
             echo '<a href="sortie.php?id=' . BD::getSortieInitiale($this)->getID() . '"> ' . BD::getSortieInitiale($this)->getNom() . '</a>';
             echo "</td>";
         }
-        echo "<td>" . $this->duree . "</td>";
         echo "</tr>";
     }
 

@@ -1,0 +1,15 @@
+#titres{
+    list-style: decimal;
+}
+#sortiecommerciale{
+    display: inherit;
+    flex-direction: inherit;
+    gap: inherit;
+    align-items: inherit;
+}
+#contenu li{
+    flex-wrap: wrap;
+}
+#contenu li input{
+    width: fit-content;
+}

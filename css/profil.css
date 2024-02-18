@@ -5,6 +5,11 @@ h2{
     -ms-overflow-style: initial !important;
     scrollbar-width: initial !important;
 }
+
+#contenu *{
+    color: white;
+}
+
 #contenu>*:not(#profil,h2){
     display: flex;
     flex-wrap: wrap;

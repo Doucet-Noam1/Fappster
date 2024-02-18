@@ -44,15 +44,15 @@ if (!isset($_SESSION)) {
                 </li>
             <?php else: ?>
                 <li>
-                    <a href="formMusic.php">
+                    <a href="ajouterTitre.php">
                         <object type="image/svg+xml" data="<?php echo $PATHICON ?>upload.svg"></object>
                         <span>Ajouter une musique</span>
                     </a>
                 </li>
                 <li>
-                    <a href="creerPlaylist.php">
+                    <a href="creerSortie.php">
                         <object type="image/svg+xml" data="<?php echo $PATHICON ?>playlist.svg"></object>
-                        <span>Créer une playlist</span>
+                        <span>Créer une sortie</span>
                     </a>
                 </li>
                 <li>
@@ -68,10 +68,3 @@ if (!isset($_SESSION)) {
 <?php
 require 'player.php';
 ?>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        let contenu = document.querySelector('#contenu');
-        let footer = document.querySelector('footer');
-        contenu.appendChild(footer);
-    });
-</script>

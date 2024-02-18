@@ -4,7 +4,6 @@
 
 #contenu{
     background-color: #5d1cdf;
-    padding: 1vw 10vw;
     border-radius: 10px;
     width: fit-content;
     display: flex;
@@ -12,7 +11,9 @@
     gap: 2vw;
     align-items: center;
     justify-content: space-around; 
+    overflow-y: hidden !important;
 }
+
 label{
     color: white;
     font-size: 2em;
@@ -28,8 +29,16 @@ form{
     flex-direction: column;
     gap: 0.8vw;
     align-items: center;
+    overflow-y: scroll;
+    height: 100%;
+    flex-basis: 50%;
 }
-input,p.input{
+
+form input[type="date"], form input[type="file"]{
+    min-height: 3rem;
+}
+
+input,p.input, select{
     width: 20vw;
     padding: 0.5vw;
     border-radius: 5px;
@@ -64,7 +73,23 @@ button{
     font-size: 1.5em;
     cursor: pointer;
 }
-
+#contenu ol, #contenu ul{
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+    counter-reset: li;
+}
+#contenu li{
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+    align-items: center;
+    justify-content: space-around;
+}
+#contenu ol li:not(:last-of-type)::before{
+    counter-increment: li;
+    content: counter(li);
+}
 button:hover{
     background-color: white;
     color: #1a1b25;

@@ -2,7 +2,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    color: white;
 }
 
 html,
@@ -24,20 +23,23 @@ a:not(nav a) {
     font-weight: bold;
 }
 
-body>* {
+main>* {
     background-color: #121212;
     border-radius: 10px;
     padding: 10px;
     height: calc(100% - 10px);
+    overflow-y: auto;
 }
 
-body {
+main {
     background-color: black;
     display: flex;
     align-items: center;
     justify-content: space-around;
     gap: 10px;
     padding: 5px;
+    flex-wrap: wrap;
+    height: 90%;
 }
 
 #contenu {
@@ -45,10 +47,12 @@ body {
     overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    height: 100%;
+    flex-basis: 50%;
 }
 
 .dont-show {
-    display: none;
+    display: none !important;
 }
 
 #contenu::-webkit-scrollbar {
@@ -57,7 +61,8 @@ body {
 
 aside {
     background-color: #1f1f1f;
-    flex-basis: max-content;
+    flex-basis: auto;
+    flex-shrink: 1;
 }
 
 nav li {
