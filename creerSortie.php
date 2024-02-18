@@ -78,8 +78,8 @@
                 <label for= 'visibilite'>Visibilite :</label>
                 <select name = 'visibilite' required> 
                 <option selected value disabled>Choisir une visibilite</option>
-                <option value= 'true'> Public </option>
-                <option value= 'false'> Prive </option>
+                <option value= '1'> Public </option>
+                <option value= '0'> Prive </option>
                 </select>
 
                 <label for="feats">Co-Artistes :</label>

@@ -42,6 +42,7 @@ abstract class SortieCommerciale extends Sortie
 
     public function renderDetail()
     {
+        if ($this->getVisibilite())
         echo "<div id='banner'>";
         $image = BD::DOSSIERCOVERS . $this->cover;
         echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
