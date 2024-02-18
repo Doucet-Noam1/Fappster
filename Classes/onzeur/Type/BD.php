@@ -156,7 +156,7 @@ class BD
         $bdd->beginTransaction();
         if (BD::getIdSortie($sortie) == null) {
             $queryAddAlbum = $bdd->prepare("INSERT INTO SORTIE(nom_sortie,date_sortie,cover,id_type,visibilite) VALUES (?,?,?,?,?)");
-            $queryAddAlbum->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), (int)$sortie -> getVisibilite()]);
+            $queryAddAlbum->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), $sortie -> getVisibilite()]);
             $bdd->commit();
         }
         foreach ($sortie->getArtiste() as $artiste) {
@@ -171,7 +171,7 @@ class BD
         $bdd = BD::getInstance();
         $bdd->beginTransaction();
         $querryInsert = $bdd->prepare('INSERT OR REPLACE INTO SORTIE(nom_sortie,date_sortie,cover,id_type,visibilite) VALUES (?,?,?,?,?)');
-        $querryInsert->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), (int)$sortie -> getVisibilite()]);
+        $querryInsert->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), $sortie -> getVisibilite()]);
         $bdd -> commit();
     }
 
