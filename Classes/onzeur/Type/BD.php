@@ -167,7 +167,7 @@ class BD
         }
     }
 
-    static function togleSortie(Sortie $sortie){
+    static function toggleVisibilite(Sortie $sortie){
         $bdd = BD::getInstance();
         $bdd->beginTransaction();
         $querryInsert = $bdd->prepare('INSERT OR REPLACE INTO SORTIE(nom_sortie,date_sortie,cover,id_type,visibilite) VALUES (?,?,?,?,?)');

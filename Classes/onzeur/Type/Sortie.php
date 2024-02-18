@@ -68,7 +68,7 @@ abstract class Sortie implements Irender
     
     public function toggleVisibilite():void{
         $this->visibilite = !$this->visibilite;
-        BD::togleSortie($this);
+        BD::toggleVisibilite($this);
     }
     public function getNombreDeTitres(): int
     {
