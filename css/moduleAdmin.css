@@ -2,7 +2,9 @@
     width: 5rem;
     height: 5rem;
 }
-
+*{
+    color: white;
+}
 h1 {
     text-align: center;
     width: 100%;

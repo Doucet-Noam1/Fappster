@@ -11,6 +11,7 @@
         <?php
         require 'base.php';
         use onzeur\Type\BD;
+
         BD::getInstance();
         if (isset($_SESSION['pseudo'])) {
             $pseudo = $_SESSION['pseudo'];
@@ -20,16 +21,39 @@
             <div id="albums">
                 <h1>Albums</h1>
                 <?php
-                foreach (BD::getAllAlbums() as $album) {
-                    $album->render();
+                $albums = BD::getAllAlbums();
+                if (count($albums) == 0) {
+                    echo "<h2>Aucun album n'a été publié pour le moment</h2>";
+                } else {
+                    foreach ($albums as $album) {
+                        $album->render();
+                    }
+                }
+                ?>
+            </div>
+            <div id="singles">
+                <h1>Singles</h1>
+                <?php
+                $singles = BD::getAllSingles();
+                if (count($singles) == 0) {
+                    echo "<h2>Aucun single n'a été publié pour le moment</h2>";
+                } else {
+                    foreach ($singles as $single) {
+                        $single->render();
+                    }
                 }
                 ?>
             </div>
             <div id="eps">
                 <h1>EPs</h1>
                 <?php
-                foreach (BD::getAllEPs() as $ep) {
-                    $ep->render();
+                $eps = BD::getAllEPs();
+                if (count($eps) == 0) {
+                    echo "<h2>Aucun EP n'a été publié pour le moment</h2>";
+                } else {
+                    foreach ($eps as $ep) {
+                        $ep->render();
+                    }
                 }
                 ?>
             </div>

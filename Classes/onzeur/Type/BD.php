@@ -527,7 +527,7 @@ class BD
 
     static function getAllAlbums()
     {
-        $queryAlbums = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE WHERE id_type = 1");
+        $queryAlbums = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE WHERE id_type = 1 AND visibilite = 1");
         $queryAlbums->execute();
         $albums = $queryAlbums->fetchAll();
         $res = [];
@@ -537,9 +537,21 @@ class BD
         return $res;
     }
 
+    static function getAllSingles()
+    {
+        $querySingles = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE WHERE id_type = 2 AND visibilite = 1");
+        $querySingles->execute();
+        $singles = $querySingles->fetchAll();
+        $res = [];
+        foreach ($singles as $single) {
+            $res[] = self::getSortie($single['id_sortie']);
+        }
+        return $res;
+    }
+
     static function getAllEPs()
     {
-        $queryEPs = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE WHERE id_type = 3");
+        $queryEPs = BD::getInstance()->prepare("SELECT id_sortie FROM SORTIE WHERE id_type = 3 AND visibilite = 1");
         $queryEPs->execute();
         $eps = $queryEPs->fetchAll();
         $res = [];
@@ -582,7 +594,7 @@ class BD
         JOIN A_POUR_STYLE aps ON s.id_sortie = aps.id_sortie
         JOIN GENRE g ON aps.nom_genre = g.nom_genre
         WHERE g.nom_genre IN (" . implode(',', array_fill(0, count($genres), '?')) . ")
-        AND s.id_sortie != ?
+        AND s.id_sortie != ? AND s.visibilite = 1
         GROUP BY s.id_sortie
         ORDER BY communs DESC, RANDOM()
         LIMIT 5;

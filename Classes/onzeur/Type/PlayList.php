@@ -14,9 +14,6 @@ class PlayList extends Sortie
     }
     public function render()
     {
-        $artistNames = array_map(fn($artiste) => $artiste->getPseudo(), $this->getArtiste());
-        if (  isset($_SESSION['pseudo']) &&  in_array($_SESSION['pseudo'], $artistNames)  && !$this->getVisibilite() || $this->getVisibilite())
-        { 
         echo '<a class="sortie" href="sortie.php?id=' . parent::getID() . '">';
         $image = BD::DOSSIERCOVERS . $this->cover;
         echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
@@ -25,10 +22,7 @@ class PlayList extends Sortie
         $splitNameSpace = end($splitNameSpace);
         echo "<p>" . $this->date . " • " . $splitNameSpace . "</p>";
 
-        echo '</a>';}else{
-            header("Location:index.php");
-            exit();
-        }
+        echo '</a>';
     }
     public function renderDetail()
     {
