@@ -52,8 +52,6 @@ composer require james-heinrich/getid3
   Fappster est un site dédiée à la découverte et à la gestion musicale en ligne. Conçue pour les amateurs de musique, cette application offre une expérience exceptionnel et intuitive pour explorer de nouveaux albums, singles et EPs, ainsi que pour ajouter et organiser votre propre collection musicale.
 Fappster vise à offrir une expérience musicale personnalisée et engageante, en permettant aux utilisateurs d'explorer de nouveaux titres, de créer leur propre collection musicale, et de partager leurs passions avec d'autres passionnés de musique.
 
-Explorez et profitez de Fappster pour une expérience musicale enrichissante et personnalisée !
-
 
 ## Utilisation de Fappster :
 
