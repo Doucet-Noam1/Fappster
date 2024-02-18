@@ -9,9 +9,9 @@ abstract class SortieCommerciale extends Sortie
 {
     protected array $listeGenres;
 
-    public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, ?array $listeGenres, $id = null)
+    public function __construct(Artiste|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, ?array $listeGenres,bool $visibilite, $id = null)
     {
-        parent::__construct($artiste, $nom, $listeTitres, $date, $cover, $id_type, $id);
+        parent::__construct($artiste, $nom, $listeTitres, $date, $cover, $id_type,$visibilite, $id);
         $this->listeGenres = [];
         if ($listeGenres != null)
             foreach ($listeGenres as $genre)

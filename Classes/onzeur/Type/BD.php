@@ -39,6 +39,7 @@ class BD
                 date_sortie DATE,
                 cover TEXT,
                 id_type INTEGER NOT NULL,
+                visibilite BOOLEAN DEFAULT TRUE,
                 FOREIGN KEY(id_type) REFERENCES TYPE_SORTIE(id_type)
             )');
 
@@ -154,8 +155,8 @@ class BD
         $bdd = BD::getInstance();
         $bdd->beginTransaction();
         if (BD::getIdSortie($sortie) == null) {
-            $queryAddAlbum = $bdd->prepare("INSERT INTO SORTIE(nom_sortie,date_sortie,cover,id_type) VALUES (?,?,?,?)");
-            $queryAddAlbum->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType()]);
+            $queryAddAlbum = $bdd->prepare("INSERT INTO SORTIE(nom_sortie,date_sortie,cover,id_type,visibilite) VALUES (?,?,?,?,?)");
+            $queryAddAlbum->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), $sortie -> getVisibilite()]);
             $bdd->commit();
         }
         foreach ($sortie->getArtiste() as $artiste) {

@@ -7,10 +7,10 @@ namespace onzeur\Type;
 class PlayList extends Sortie
 {
     const PATH = "data/images/covers/";
-    public function __construct(Utilisateur|Artiste|array $artiste, string $nom, ?string $cover,array $listeTitres = [], int $id = null,)
+    public function __construct(Utilisateur|Artiste|array $artiste, string $nom, ?string $cover,array $listeTitres = [],bool $visibilite =true, int $id = null,)
     {
         $date  = date('d-m-Y');
-        parent::__construct($artiste, $nom, $listeTitres, $date, $cover, 4, $id);
+        parent::__construct($artiste, $nom, $listeTitres, $date, $cover, 4,$visibilite, $id);
     }
     public function render()
     {
