@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace onzeur\Type;
+namespace fappster\Type;
 
 include_once 'BD.php';
 abstract class Avis

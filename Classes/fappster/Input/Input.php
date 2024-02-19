@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace onzeur\Input;
+namespace fappster\Input;
 abstract class Input{
     protected string $label;
 

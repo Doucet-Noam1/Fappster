@@ -1,7 +1,7 @@
 <?php
 require 'Classes/autoloader.php';
 Autoloader::register();
-use onzeur\Type\BD;
+use fappster\Type\BD;
 session_start();
 if (!isset($_SESSION['pseudo'])){
     header('Location: login.php');

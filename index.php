@@ -10,7 +10,7 @@
     <main>
         <?php
         require 'base.php';
-        use onzeur\Type\BD;
+        use fappster\Type\BD;
 
         BD::getInstance();
         if (isset($_SESSION['pseudo'])) {

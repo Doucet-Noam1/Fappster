@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace onzeur\Type;
+namespace fappster\Type;
 
 use Symfony\Component\Yaml\Yaml;
 
@@ -20,7 +20,8 @@ class Reader
                 $img = is_null($value["img"]) ? null : $value["img"];
                 $artiste = new Artiste($value["by"], true);
                 $value["entryId"];
-                $album = new Album($artiste, $value["title"], array(), strval($value["releaseYear"]), $img, $value["genre"], true);
+
+                $album = new Album($artiste, $value["title"], array(), strval($value['releaseYear']), $img, $value["genre"], true);
                 $data[] = $album;
             }
         }

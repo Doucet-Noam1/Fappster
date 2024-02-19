@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace onzeur\Type;
+namespace fappster\Type;
 
 include_once 'BD.php';
 abstract class Sortie implements Irender
@@ -12,9 +12,9 @@ abstract class Sortie implements Irender
     protected array $listeTitres;
     protected array $artiste;
     protected int $id_type;
-    protected bool $visibilite ;
+    protected bool $visibilite;
 
-    public function __construct(Artiste|array|Utilisateur $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type,bool $visibilite, int $id = null)
+    public function __construct(Artiste|array|Utilisateur $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, bool $visibilite, int $id = null)
     {
         $this->nom = $nom;
         $this->date = $date;
@@ -22,7 +22,7 @@ abstract class Sortie implements Irender
         $this->listeTitres = $listeTitres;
         is_array($artiste) ? $this->artiste = $artiste : $this->artiste = [$artiste];
         $this->id_type = $id_type;
-        $this -> visibilite =$visibilite;
+        $this->visibilite = $visibilite;
         BD::addSortie($this);
     }
     public abstract function render();
@@ -34,9 +34,18 @@ abstract class Sortie implements Irender
     {
         return $this->date;
     }
+    public function setDate(string $date)
+    {
+        $this->date = $date;
+    }
     public function getCover(): ?string
     {
         return $this->cover;
+    }
+    public function renderCover(): string
+    {
+        $image = BD::DOSSIERCOVERS . $this->cover;
+        return ($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'default.jpg';
     }
     public function getListeTitres(): array
     {
@@ -63,10 +72,13 @@ abstract class Sortie implements Irender
         BD::addArtisteToSortie($this, $artiste);
         $this->artiste[] = $artiste;
     }
-    public function getVisibilite():bool{
-    return $this->visibilite;}
-    
-    public function toggleVisibilite():void{
+    public function getVisibilite(): bool
+    {
+        return $this->visibilite;
+    }
+
+    public function toggleVisibilite(): void
+    {
         $this->visibilite = !$this->visibilite;
         BD::toggleVisibilite($this);
     }
@@ -75,18 +87,18 @@ abstract class Sortie implements Irender
         return count($this->listeTitres);
     }
 
-    static function factory(Utilisateur|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, array $listeGenres,$visibilite, int $id = null): SortieCommerciale|Playlist
+    static function factory(Utilisateur|array $artiste, string $nom, array $listeTitres, string $date, ?string $cover, int $id_type, array $listeGenres, $visibilite, int $id = null): SortieCommerciale|Playlist
     {
         $id = null;
         switch ($id_type) {
             case 1:
-                return new Album($artiste, $nom, $listeTitres, $date, $cover, $listeGenres,$visibilite, $id);
+                return new Album($artiste, $nom, $listeTitres, $date, $cover, $listeGenres, $visibilite, $id);
             case 2:
-                return new Single($artiste, $nom, $listeTitres, $date, $cover, $listeGenres,$visibilite, $id);
+                return new Single($artiste, $nom, $listeTitres, $date, $cover, $listeGenres, $visibilite, $id);
             case 3:
-                return new EP($artiste, $nom, $listeTitres, $date, $cover, $listeGenres,$visibilite, $id);
+                return new EP($artiste, $nom, $listeTitres, $date, $cover, $listeGenres, $visibilite, $id);
             case 4:
-                return new PlayList($artiste, $nom, $cover, $listeTitres,$visibilite, $id);
+                return new PlayList($artiste, $nom, $cover, $listeTitres, $visibilite, $id);
             default:
                 throw new \Exception("Type de sortie inconnu");
         }

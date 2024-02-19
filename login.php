@@ -15,8 +15,8 @@
     <main>
         <?php
         require 'base.php';
-        use onzeur\Type\Utilisateur;
-        use onzeur\Type\BD;
+        use fappster\Type\Utilisateur;
+        use fappster\Type\BD;
 
         if (isset($_SESSION['pseudo'])) {
             header('Location: index.php');

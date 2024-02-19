@@ -10,7 +10,7 @@
         <?php
 
         require "base.php";
-        use onzeur\Type\BD;
+        use fappster\Type\BD;
 
         if (!isset($_SESSION['pseudo']) || $_SESSION['pseudo'] != "admin") {
             header('Location: index.php');
@@ -32,7 +32,7 @@
                     BD::getArtiste($pseudo)->setVerifie($verifie);
                 }
                 if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-                    $uploadDirectory = "./data/images/users/";
+                    $uploadDirectory = BD::DOSSIERUSERS;
                     $fileName = $pseudo . '.jpg';
                     $uploadPath = $uploadDirectory . $fileName;
                     move_uploaded_file($_FILES['photo']['tmp_name'], $uploadPath);

@@ -1,7 +1,7 @@
 <?php
 
 require "base.php";	
-use onzeur\Type\BD;
+use fappster\Type\BD;
 
 if (($_SESSION['pseudo']!="admin")){
     header('Location: index.php');

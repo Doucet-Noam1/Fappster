@@ -9,7 +9,7 @@
     <main>
         <?php
         require 'base.php';
-        use onzeur\Type\BD;
+        use fappster\Type\BD;
 
         ?>
         <div id="contenu">

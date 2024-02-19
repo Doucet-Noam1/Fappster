@@ -1,22 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace onzeur\Type;
+namespace fappster\Type;
 
 
 class PlayList extends Sortie
 {
-    const PATH = "data/images/covers/";
-    public function __construct(Utilisateur|Artiste|array $artiste, string $nom, ?string $cover,array $listeTitres = [],bool $visibilite =true, int $id = null,)
+    public function __construct(Utilisateur|Artiste|array $artiste, string $nom, ?string $cover, array $listeTitres = [], bool $visibilite = true, int $id = null, )
     {
-        $date  = date('d-m-Y');
-        parent::__construct($artiste, $nom, $listeTitres, $date, $cover, 4,$visibilite, $id);
+        $date = date('d-m-Y');
+        parent::__construct($artiste, $nom, $listeTitres, $date, $cover, 4, $visibilite, $id);
     }
     public function render()
     {
         echo '<a class="sortie" href="sortie.php?id=' . parent::getID() . '">';
-        $image = BD::DOSSIERCOVERS . $this->cover;
-        echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
+        echo '<img src="' . $this->renderCover() . '"/>';
         echo "<p>" . $this->nom . "</p>";
         $splitNameSpace = explode("\\", get_class($this));
         $splitNameSpace = end($splitNameSpace);
@@ -27,13 +25,14 @@ class PlayList extends Sortie
     public function renderDetail()
     {
         echo "<div id='banner'>";
-        $image = BD::DOSSIERCOVERS . $this->cover;
-        echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
+        echo '<img src="' . $this->renderCover() . '"/>';
         echo "<div id='informations'>";
+        echo "<a href='modifierSortie.php?id=" . $this->getID() . "'>Modifier</a>";
         $splitNameSpace = explode("\\", get_class($this));
         $splitNameSpace = end($splitNameSpace);
         echo "<p>" . $splitNameSpace . "</p>";
         echo "<h1>" . $this->nom . "</h1>";
+        echo "<p>" . ($this->visibilite ? "Publique" : "Privée") . "</p>";
         echo "<span class='artistes'>";
         echo implode(" • ", array_map(function (Utilisateur $utilisateur) {
             $pseudo = $utilisateur->getPseudo();
@@ -42,7 +41,7 @@ class PlayList extends Sortie
         echo "</span>";
         echo "<p>" . $this->date . "</p>";
         echo "<p>" . count($this->listeTitres) . " titres</p>";
-        echo "<a href= modifierPlaylist.php?id=" . $this->getID() . ">modifier</a>";
+        echo "<a href= modifierSortie.php?id=" . $this->getID() . ">modifier</a>";
         echo '</div>';
         echo '</div>
         <table><thead>
@@ -56,19 +55,16 @@ class PlayList extends Sortie
             </tr>
         </thead>'; // On ferme les divs et on commence le tableau |Postion|Titre|Artistes|Durée|
         echo "<tbody>";
-        for ( $i = 0; $i < count($this->listeTitres); $i++){
+        for ($i = 0; $i < count($this->listeTitres); $i++) {
             $this->listeTitres[$i]->renderDetail();
         }
         echo "</tbody>";
         echo "</table>";
     }
-    public function renderModif(){
-        $artistNames = array_map(fn($artiste) => $artiste->getPseudo(), $this->getArtiste());
-        if (  isset($_SESSION['pseudo']) &&  in_array($_SESSION['pseudo'], $artistNames)  && !$this->getVisibilite() || $this->getVisibilite())
-        { 
+    public function renderModif()
+    {
         echo "<div id='banner'>";
-        $image = BD::DOSSIERCOVERS . $this->cover;
-        echo '<img src="' . (($image != BD::DOSSIERCOVERS && file_exists($image)) ? BD::DOSSIERCOVERS . str_replace("%", "%25", $this->cover) : BD::DOSSIERCOVERS . 'null.png') . '"/>';
+        echo '<img src="' . $this->renderCover() . '"/>';
         echo "<div id='informations'>";
         $splitNameSpace = explode("\\", get_class($this));
         $splitNameSpace = end($splitNameSpace);
@@ -85,4 +81,4 @@ class PlayList extends Sortie
         echo '</div>';
         echo '</div>';
     }
-}}
+}

@@ -14,8 +14,8 @@
     <main>
         <?php
         require 'base.php';
-        use onzeur\Type\BD;
-        use onzeur\Type\Sortie;
+        use fappster\Type\BD;
+        use fappster\Type\Sortie;
 
         if (!isset($_SESSION['pseudo'])) {
             header('Location: login.php');

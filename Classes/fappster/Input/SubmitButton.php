@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace onzeur\Input;
+namespace fappster\Input;
 
-class FileChoserField{
+class SubmitButton{
+
     private $id;
     private $label;
     public function __construct(string $id,string $label){
@@ -11,7 +12,6 @@ class FileChoserField{
     }
 
     public function render(){
-        echo '<label for="avatar">'.$this->label." : </label></br>";
-        echo '<input type="file" name="avatar" accept="audio/mp3"/></br>';
+        echo "<input type='submit' value=".$this->label." id=".$this->id.">";
     }
 }

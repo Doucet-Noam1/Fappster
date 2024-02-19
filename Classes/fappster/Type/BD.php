@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace onzeur\Type;
+namespace fappster\Type;
 
 include 'loadbd.php';
 
@@ -156,7 +156,14 @@ class BD
         $bdd->beginTransaction();
         if (BD::getIdSortie($sortie) == null) {
             $queryAddAlbum = $bdd->prepare("INSERT INTO SORTIE(nom_sortie,date_sortie,cover,id_type,visibilite) VALUES (?,?,?,?,?)");
-            $queryAddAlbum->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), $sortie -> getVisibilite()]);
+            $date = $sortie->getDate();
+            if ($date == '0') {
+                $date = '0000-00-00';
+            } else {
+                $date = date('Y-m-d', strtotime($date . '-01-01'));
+            }
+            $sortie->setDate($date);
+            $queryAddAlbum->execute([$sortie->getNom(), $date, $sortie->getCover(), $sortie->getType(), $sortie->getVisibilite()]);
             $bdd->commit();
         }
         foreach ($sortie->getArtiste() as $artiste) {
@@ -167,12 +174,13 @@ class BD
         }
     }
 
-    static function toggleVisibilite(Sortie $sortie){
+    static function toggleVisibilite(Sortie $sortie)
+    {
         $bdd = BD::getInstance();
         $bdd->beginTransaction();
         $querryInsert = $bdd->prepare('INSERT OR REPLACE INTO SORTIE(nom_sortie,date_sortie,cover,id_type,visibilite) VALUES (?,?,?,?,?)');
-        $querryInsert->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), $sortie -> getVisibilite()]);
-        $bdd -> commit();
+        $querryInsert->execute([$sortie->getNom(), $sortie->getDate(), $sortie->getCover(), $sortie->getType(), $sortie->getVisibilite()]);
+        $bdd->commit();
     }
 
     static function addUtilisateur(Utilisateur $utilisateur)
@@ -324,7 +332,7 @@ class BD
         $artiste = self::getArtistesSortie($id);
         $genres = self::getGenresSortie($id);
         $titres = self::getTitresSortie($id);
-        return Sortie::factory($artiste, $sortie["nom_sortie"], $titres, strval($sortie["date_sortie"]), $sortie["cover"], $sortie["id_type"], $genres,boolval($sortie['visibilite']), intval($id));
+        return Sortie::factory($artiste, $sortie["nom_sortie"], $titres, strval($sortie["date_sortie"]), $sortie["cover"], $sortie["id_type"], $genres, boolval($sortie['visibilite']), intval($id));
     }
 
     static function getTitre(int $id, int|string|null $idsortie = null): ?Titre
@@ -441,6 +449,18 @@ class BD
         $res = [];
         foreach ($genres as $genre) {
             $res[] = $genre['nom_genre'];
+        }
+        return $res;
+    }
+
+    static function getAllAnnees()
+    {
+        $queryAnnees = BD::getInstance()->prepare("SELECT DISTINCT strftime('%Y',date_sortie) as annee FROM SORTIE WHERE date_sortie != '0000-00-00' ORDER BY annee DESC");
+        $queryAnnees->execute();
+        $annees = $queryAnnees->fetchAll();
+        $res = [];
+        foreach ($annees as $annee) {
+            $res[] = $annee['annee'];
         }
         return $res;
     }
@@ -576,12 +596,45 @@ class BD
 
     static function rechercheArtiste(string $id)
     {
-        $queryArtiste = BD::getInstance()->prepare("SELECT * FROM ARTISTE WHERE nom_artiste LIKE ?");
+        $bdd = BD::getInstance();
+        $queryArtiste = $bdd->prepare("SELECT DISTINCT nom_artiste FROM ARTISTE WHERE nom_artiste LIKE ?");
         $queryArtiste->execute([$id . "%"]);
         $artistes = $queryArtiste->fetchAll();
         $res = [];
         foreach ($artistes as $artiste) {
-            $res[] = new Artiste($artiste['nom_artiste'], boolval($artiste['verifie']));
+            $res[] = self::getArtiste($artiste['nom_artiste']);
+        }
+        return $res;
+    }
+
+    static function rechercheSortie(string $id, string $genre, int $annee)
+    {
+        $bdd = BD::getInstance();
+        $genre = $genre == "" ? "%" : $genre;
+        $annee = $annee == -1 ? null : $annee;
+        $querySortie = $bdd->prepare("SELECT DISTINCT id_sortie FROM SORTIE NATURAL JOIN A_POUR_STYLE WHERE nom_genre LIKE ?" . (isset($annee) ? "AND strftime('%Y',date_sortie) LIKE ?" : "") . "AND nom_sortie LIKE ? AND visibilite = 1");
+        $resArray = [$genre];
+        if (isset($annee)) {
+            $resArray[] = $annee;
+        }
+        $resArray[] = $id . "%";
+        $querySortie->execute($resArray);
+        $sorties = $querySortie->fetchAll();
+        $res = [];
+        foreach ($sorties as $sortie) {
+            $res[] = self::getSortie($sortie['id_sortie']);
+        }
+        return $res;
+    }
+
+    static function rechercheTitre(string $id)
+    {
+        $queryTitre = BD::getInstance()->prepare("SELECT DISTINCT id_titre,id_sortie FROM TITRE NATURAL JOIN CONTIENT WHERE nom_titre LIKE ? AND id_sortie_initiale IS NULL");
+        $queryTitre->execute([$id . "%"]);
+        $titres = $queryTitre->fetchAll();
+        $res = [];
+        foreach ($titres as $titre) {
+            $res[] = self::getTitre($titre['id_titre'], $titre['id_sortie']);
         }
         return $res;
     }
@@ -637,7 +690,7 @@ class BD
         $bdd = BD::getInstance();
         $bdd->beginTransaction();
         $querryInsert = $bdd->prepare('INSERT OR REPLACE INTO AVIS(id_sortie,pseudo,note,favori) VALUES(?,?,?,?)');
-        $querryInsert->execute([$sortie->getID(),$pseudo, $newNote, $newLike]);
+        $querryInsert->execute([$sortie->getID(), $pseudo, $newNote, $newLike]);
         $bdd->commit();
     }
     static function getLike(string $pseudo, Sortie $sortie): bool
@@ -706,6 +759,15 @@ class BD
             $queryModifMdp = $bdd->prepare('UPDATE UTILISATEUR SET mdp = ? WHERE pseudo = ?');
             $queryModifMdp->execute([hash('sha256', $mdp), $pseudo]);
         }
+        $bdd->commit();
+    }
+
+    static function modifierSortie(Sortie $sortie, string $nom, string $cover, bool $visibilite)
+    {
+        $bdd = BD::getInstance();
+        $bdd->beginTransaction();
+        $queryModif = $bdd->prepare('UPDATE SORTIE SET nom_sortie = ?, cover = ?, visibilite = ? WHERE id_sortie = ?');
+        $queryModif->execute([$nom, $cover, $visibilite, $sortie->getID()]);
         $bdd->commit();
     }
 

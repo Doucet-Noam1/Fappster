@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Onzeur</title>
+    <title>fappster</title>
     <link rel="stylesheet" href="css/sortie.css">
     <script type="text/javascript" src="js/titre.js"></script>
 </head>
@@ -10,7 +10,7 @@
     <main>
         <?php
         require 'base.php';
-        use onzeur\Type\BD;
+        use fappster\Type\BD;
 
         ?>
         <div id="contenu">

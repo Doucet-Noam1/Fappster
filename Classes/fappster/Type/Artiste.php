@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace onzeur\Type;
+namespace fappster\Type;
 
 include_once 'BD.php';
 class Artiste extends Utilisateur
@@ -23,13 +23,25 @@ class Artiste extends Utilisateur
     }
     public function render(){
         echo "<div id='profil' class='artiste'>";
+        echo "<div id='nom'>";
         echo "<h1 ".($this->verifie?"class='verified'":"").">" . $this->pseudo. "</h1>";
+        echo "<a href='modifierArtiste.php?pseudo=".$this->getPseudo()."'>Modifier</a>";
+        echo "</div>";
         echo '<img src="'.$this->getPhoto().'" id="imageDeProfil">';
         echo "</div>";
         $this->renderSorties();
         $this->renderPlaylists();
         $this->renderLikes();
         $this->renderTitres();
+    }
+
+    public function renderCard(){
+        echo "<a href='profil.php?id=".$this->getPseudo()."' id='profil' class='artiste'>";
+        echo "<div id='nom'>";
+        echo "<h1 ".($this->verifie?"class='verified'":"").">" . $this->pseudo. "</h1>";
+        echo "</div>";
+        echo '<img src="'.$this->getPhoto().'" id="imageDeProfil">';
+        echo "</a>";
     }
 
     protected function renderSorties(){

@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace onzeur\Type;
+namespace fappster\Type;
 
 function loadbd()
 {
@@ -12,7 +12,7 @@ function loadbd()
 }
 function peupleBD()
 {
-    $reader = new Reader("extrait.yml");
+    $reader = new Reader("data/extrait.yml");
     $reader->getData();
     $artiste = new Artiste('naps', true);
     $artiste2 = new Artiste('gazo', true);

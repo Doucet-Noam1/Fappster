@@ -13,8 +13,8 @@
     <main>
         <?php
         require 'base.php';
-        use onzeur\Type\Titre;
-        use onzeur\Type\BD;
+        use fappster\Type\Titre;
+        use fappster\Type\BD;
 
 
         if (!isset($_SESSION['pseudo'])) {

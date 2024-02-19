@@ -1,0 +1,75 @@
+#resultats {
+    display: flex;
+    height: 100%;
+}
+
+#resultats>div {
+    flex-basis: 33%;
+}
+#contenu>div>* {
+    display: flex;
+    flex-direction: column;
+}
+
+h1,
+h2 {
+    color: white;
+    text-align: center;
+}
+
+.artiste {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.artiste:hover{
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.artiste img, .musique img{
+    width: 2em;
+    height: 2em;
+}
+
+#listeSorties {
+    display: flex;
+    overflow-y: scroll;
+    flex-wrap: wrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    color: white;
+    justify-content: center;
+}
+#titres>div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #121212;
+    width: 100%;
+}
+.musique{
+    width: 100%;
+    display: flex;
+    margin: 10px;
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #121212;
+    transition: 0.3s;
+}
+.musique:hover{
+    background-color: rgba(255, 255, 255, 0.2);
+}
+#titres *{
+    color: white;
+}
+#listeGenres{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

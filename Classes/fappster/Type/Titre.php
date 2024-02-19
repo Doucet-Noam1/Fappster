@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace onzeur\Type;
+namespace fappster\Type;
 
 class Titre implements Irender
 {
@@ -27,7 +27,7 @@ class Titre implements Irender
         echo '<div class="musique">';
         $sortie = $this->getSortie();
         if ($sortie != null) {
-            echo '<img src=">' . $sortie->getCover() . '" </img>';
+            echo '<img src=">' . $sortie->renderCover() . '" </img>';
         }
         echo "<h3>" . $this->titre . "</h3>";
         echo "<div id='artistes'>";
@@ -37,14 +37,13 @@ class Titre implements Irender
         }
         echo "</ul>";
         echo "</div>";
-        echo "<p>" . $this->dateAjout . "</p>";
         echo "<p>" . $this->getDureeFormatted() . "</p>";
         echo '</div>';
     }
     public function renderDetail()
     {
         $estOriginale = is_null(BD::getSortieInitiale($this));
-        echo "<tr class='titre' onclick='clickPlayer(this)'>";
+        echo "<tr class='titre' onclick='clickPlayer(this,\"".$this->fichier."\")'>";
         echo "<td> " . $this->getPosition() . "</td>";
         echo "<td>" . $this->titre . "</td>";
         echo "<td>";
@@ -62,15 +61,15 @@ class Titre implements Irender
             $playlists = BD::getPlaylistsBy(BD::getUtilisateur($_SESSION['pseudo']));
             if (count($playlists) == 0) {
                 echo '<p>Vous n\'avez pas de playlist</p>';
-            }else{
-            echo '<select class="selectPlaylist" name="id_playlist">';
-            foreach ($playlists as $playlist) {
-                if ($playlist != BD::getSortie($this->idsortie)) {
-                    echo '<option value="' . $playlist->getID() . '">' . $playlist->getNom() . '</option>';
+            } else {
+                echo '<select class="selectPlaylist" name="id_playlist">';
+                foreach ($playlists as $playlist) {
+                    if ($playlist != BD::getSortie($this->idsortie)) {
+                        echo '<option value="' . $playlist->getID() . '">' . $playlist->getNom() . '</option>';
+                    }
                 }
-            }
-            echo '</select>';
-            echo '<button type="submit" class="btnValider"> Valider </button>';
+                echo '</select>';
+                echo '<button type="submit" class="btnValider"> Valider </button>';
             }
             echo '<input type="hidden" name="id_titre" value="' . $this->getID() . '">';
             echo '<input type="hidden" name="id_sortie" value="' . ($estOriginale ? BD::getSortie($this->idsortie)->getID() : BD::getSortieInitiale($this)->getID()) . '"> </input>';
@@ -105,6 +104,24 @@ class Titre implements Irender
             echo "</td>";
         }
         echo "</tr>";
+    }
+
+    public function renderCard()
+    {
+        echo '<a href="sortie.php?id='.$this->getAlbum()->getID().'" class="musique">';
+        echo '<img src="' . $this->getAlbum()->renderCover() . '" </img>';
+        echo "<div class='info'>";
+        echo "<h3>" . $this->titre . "</h3>";
+        echo "<div id='artistes'>";
+        echo "<ul>";
+        foreach ($this->lstartiste as $artiste) {
+            echo "<li>" . $artiste->getPseudo() . "</li>";
+        }
+        echo "</ul>";
+        echo "</div>";
+        echo "<p>" . $this->getDureeFormatted() . "</p>";
+        echo "</div>";
+        echo '</a>';
     }
 
     public function getTitre()

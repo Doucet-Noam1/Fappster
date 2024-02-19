@@ -5,6 +5,7 @@
     justify-content: space-around;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    color: white;
 }
 
 #contenu>*>h1 {
