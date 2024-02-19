@@ -1,0 +1,16 @@
+#contenu>* {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    justify-content: space-around;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    color: white;
+}
+
+#contenu>*>h1 {
+    color: white;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+}

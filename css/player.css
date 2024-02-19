@@ -1,0 +1,18 @@
+footer{
+    width: 100%;
+    background-color: #383838;
+    height: 10%;
+}
+
+audio{
+    width: 66%;
+    border-radius: 5px;
+    align-self: center;
+}
+
+#divAudio{
+    display: flex;
+    justify-content: center;
+    align-content: space-around;
+    height: 100%;
+}

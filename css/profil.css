@@ -1,0 +1,49 @@
+h2{
+    width: 100%;
+}
+#contenu{
+    -ms-overflow-style: initial !important;
+    scrollbar-width: initial !important;
+}
+
+#contenu *{
+    color: white;
+}
+
+#contenu>*:not(#profil,h2){
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    flex-wrap: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    margin-bottom: 10px;
+}
+#contenu>*:not(#profil,h2)::-webkit-scrollbar{
+    display: none;
+}
+.sortie{
+    margin-right: 10px;
+}
+#profil{
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    border-bottom: 2px solid white;
+    margin-bottom: 10px;
+}
+#imageDeProfil{
+    width: 150px;
+    height: 150px;
+    border-radius: 25%;
+    margin: 10px;
+    margin-right: 20px;
+}
+.musique{
+    width: 150px;
+    height: 150px;
+    border-radius: 25%;
+    margin: 10px;
+}
